@@ -31,6 +31,7 @@ const Withdraw = ({ type }: DepositProps) => {
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
   const [allDeviceList, setAllDeviceList] = useState<[IDeviceType] | undefined>();
 
+  console.log(isDeviceLoading, isGameLoading, isLoading);
   useEffect(() => {
     getAllGameProviderList(setIsGameLoading, setAllGameList);
     getAllItemCodeList("MDevice", setIsDeviceLoading, setAllDeviceList);

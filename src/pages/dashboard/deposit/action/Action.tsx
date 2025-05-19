@@ -1,5 +1,4 @@
 import { Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from "antd";
-import Device from "../../../../components/Device";
 
 import { MinusCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";

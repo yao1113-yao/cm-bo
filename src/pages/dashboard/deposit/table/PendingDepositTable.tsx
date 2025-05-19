@@ -28,6 +28,8 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
 
+  console.log(isLoading);
+
   const columns: TableProps<ITransactionType>["columns"] = [
     {
       title: t("action"),

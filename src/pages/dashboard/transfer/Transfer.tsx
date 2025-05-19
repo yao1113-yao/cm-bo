@@ -36,6 +36,7 @@ const Transfer = ({ type }: DepositProps) => {
 
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
+  console.log(isDeviceLoading, isGameLoading, isLoading, creditAmount);
   useEffect(() => {
     getAllGameProviderList(setIsGameLoading, setAllGameList);
     getAllItemCodeList("MDevice", setIsDeviceLoading, setAllDeviceList);
@@ -83,7 +84,10 @@ const Transfer = ({ type }: DepositProps) => {
       ...values,
     };
     await mainApi("/insert-transfer-transaction-record", object).then(() => {
-      message.success("success");
+      messageApi.open({
+        type: "success",
+        content: "sent",
+      });
       handleGetPendingTransactionRecord("Transfer");
       form.resetFields();
     });

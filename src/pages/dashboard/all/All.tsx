@@ -10,16 +10,13 @@ import PendingWithdrawTable from "../withdraw/table/PendingWithdrawTable";
 import { mainApi } from "../../../service/CallApi";
 import { ITransactionType } from "../../../type/main.interface";
 import { useTranslation } from "react-i18next";
-import { Form } from "antd";
+import { Card, Form } from "antd";
 
 interface DepositProps extends React.HTMLAttributes<HTMLElement> {
   type: string;
 }
 
-const All = ({ type }: DepositProps) => {
-  const { t } = useTranslation();
-  const [form] = Form.useForm();
-
+const All = () => {
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
 
@@ -96,14 +93,16 @@ const All = ({ type }: DepositProps) => {
   }
   return (
     <>
-      <PendingDepositTable pendingDepositRecod={pendingDepositRecod} />
-      <DepositTable depositgRecod={depositRecod} />
-      <PendingWithdrawTable pendingWithdrawRecod={pendingWithdrawRecod} />
-      <WithdrawTable withdrawRecod={withdrawRecod} />
-      <PendingRekemenTable pendingRekemenRecod={pendingRekemenRecod} />
-      <RekemenTable rekemenRecod={rekemenRecod} />
-      <PendingTransferTable pendingTransferRecod={pendingTransferRecod} />
-      <TransferTable transferRecod={transferRecod} />
+      <Card loading={isLoading}>
+        <PendingDepositTable pendingDepositRecod={pendingDepositRecod} />
+        <DepositTable depositgRecod={depositRecod} />
+        <PendingWithdrawTable pendingWithdrawRecod={pendingWithdrawRecod} />
+        <WithdrawTable withdrawRecod={withdrawRecod} />
+        <PendingRekemenTable pendingRekemenRecod={pendingRekemenRecod} />
+        <RekemenTable rekemenRecod={rekemenRecod} />
+        <PendingTransferTable pendingTransferRecod={pendingTransferRecod} />
+        <TransferTable transferRecod={transferRecod} />
+      </Card>
     </>
   );
 };

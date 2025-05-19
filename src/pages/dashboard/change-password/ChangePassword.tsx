@@ -1,17 +1,17 @@
-import { Col, Form, Input, message, Row } from "antd";
+import { Card, Col, Form, Input, message, Row } from "antd";
 import GameProvider from "../../../components/GameProvider";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
-import { IDeviceType, IGameProviderType } from "../../../type/main.interface";
+import { IGameProviderType } from "../../../type/main.interface";
 import { getAllGameProviderList } from "../../../function/ApiFunction";
 import CommonButton from "../../../components/CommonButton";
 import { mainApi } from "../../../service/CallApi";
 import { RobotOutlined } from "@ant-design/icons";
-interface DepositProps extends React.HTMLAttributes<HTMLElement> {
-  type: string;
-}
+// interface DepositProps extends React.HTMLAttributes<HTMLElement> {
+//   type: string;
+// }
 
-const ChangePassword = ({ type }: DepositProps) => {
+const ChangePassword = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -24,6 +24,7 @@ const ChangePassword = ({ type }: DepositProps) => {
 
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
+  console.log(isGameLoading, passwordRandom);
   useEffect(() => {
     getAllGameProviderList(setIsGameLoading, setAllGameList);
   }, []);
@@ -72,26 +73,28 @@ const ChangePassword = ({ type }: DepositProps) => {
   return (
     <>
       {contextHolder}
-      <Form layout="vertical" onFinish={handleChangePlayerPassword} form={form}>
-        <Row gutter={10}>
-          <Col xs={4}>
-            <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
-          </Col>
+      <Card loading={isLoading}>
+        <Form layout="vertical" onFinish={handleChangePlayerPassword} form={form}>
+          <Row gutter={10}>
+            <Col xs={4}>
+              <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
+            </Col>
 
-          <Col xs={4}>
-            <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col xs={4}>
-            <Form.Item label={t("password")} name="password" rules={[{ required: true, message: t("pleaseSelect") }]}>
-              <Input suffix={<RobotOutlined onClick={() => generateRandomString(8)} />} />
-            </Form.Item>
-          </Col>
-        </Row>
+            <Col xs={4}>
+              <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={4}>
+              <Form.Item label={t("password")} name="password" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input suffix={<RobotOutlined onClick={() => generateRandomString(8)} />} />
+              </Form.Item>
+            </Col>
+          </Row>
 
-        <CommonButton text="submit" />
-      </Form>
+          <CommonButton text="submit" />
+        </Form>
+      </Card>
     </>
   );
 };

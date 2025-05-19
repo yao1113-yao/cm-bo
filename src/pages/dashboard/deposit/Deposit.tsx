@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Form, Input, InputNumber, message, Row, Spin } from "antd";
+import { Button, Col, Divider, Form, Input, InputNumber, message, Row } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CommonButton from "../../../components/CommonButton";
@@ -32,6 +32,7 @@ const Deposit = ({ type }: DepositProps) => {
 
   const [depositRecod, setDepositRecord] = useState<[ITransactionType] | undefined>();
   const [pendingDepositRecod, setPendingDepositRecord] = useState<[ITransactionType] | undefined>();
+  console.log(isDeviceLoading, isGameLoading, isLoading);
 
   useEffect(() => {
     getAllGameProviderList(setIsGameLoading, setAllGameList);

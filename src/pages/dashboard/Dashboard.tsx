@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Col, Divider, Row, Table } from "antd";
+import { Badge, Button, Card, Col, Divider, Row } from "antd";
 import { useDashboard } from "./hook/useDashboard";
 import "./dashboard.scss";
 import Deposit from "./deposit/Deposit";
@@ -58,7 +58,7 @@ const Dashboard = () => {
 
         <Divider style={{ margin: "0px" }}>{t("details")}</Divider>
 
-        {type === "all" ? <All type={type} /> : type === "deposit" ? <Deposit type={type} /> : type === "withdraw" ? <Withdraw type={type} /> : type === "rekemen" ? <Rekemen type={type} /> : type === "transfer" ? <Transfer type={type} /> : type === "changePassword" ? <ChangePassword type={type} /> : ""}
+        {type === "all" ? <All /> : type === "deposit" ? <Deposit type={type} /> : type === "withdraw" ? <Withdraw type={type} /> : type === "rekemen" ? <Rekemen type={type} /> : type === "transfer" ? <Transfer type={type} /> : type === "changePassword" ? <ChangePassword /> : ""}
       </Card>
 
       {/* <Divider>{t("withdrawRecord")}</Divider>

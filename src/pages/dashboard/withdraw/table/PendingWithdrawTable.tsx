@@ -20,6 +20,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod }: any) => {
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
 
+  console.log(isLoading, openBankRecord, selectedPendingDeposit, bankRecord);
   const columns: TableProps<ITransactionType>["columns"] = [
     {
       title: t("action"),

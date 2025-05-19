@@ -29,6 +29,8 @@ const Rekemen = ({ type }: DepositProps) => {
 
   const initialValues = { bonusPer: "20" };
 
+  console.log(isGameLoading, isLoading);
+
   useEffect(() => {
     getAllGameProviderList(setIsGameLoading, setAllGameList);
   }, []);
