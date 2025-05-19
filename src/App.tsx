@@ -8,7 +8,6 @@ import { useContext } from "react";
 import { Api } from "./context/ApiContext";
 import { ConfigProvider } from "antd";
 import Maybank from "./pages/bank/maybank/Maybank";
-import CimbBank from "./pages/bank/cimbbank/CimbBank";
 import RHBBank from "./pages/bank/rhbbank/RHBBank";
 
 interface IProtectedType {
@@ -35,7 +34,7 @@ function App() {
         { path: "/player/list", element: <Protected roles={[1, 2]} component={<PlayerList />} /> },
         { path: "/player/register", element: <Protected roles={[1, 2]} component={<PlayerRegister />} /> },
         { path: "/bank/maybank", element: <Protected roles={[1, 2]} component={<Maybank />} /> },
-        { path: "/bank/cimb", element: <Protected roles={[1, 2]} component={<CimbBank />} /> },
+        // { path: "/bank/cimb", element: <Protected roles={[1, 2]} component={<CimbBank />} /> },
         { path: "/bank/rhb", element: <Protected roles={[1, 2]} component={<RHBBank />} /> },
       ],
     },

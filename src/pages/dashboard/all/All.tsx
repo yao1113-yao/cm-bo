@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import DepositTable from "../deposit/table/DepositTable";
 import WithdrawTable from "../withdraw/table/WithdrawTable";
 import RekemenTable from "../rekemen/table/RekemenTable";
