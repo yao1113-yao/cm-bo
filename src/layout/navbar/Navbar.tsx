@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
 import "./navbar.scss";
-import { Dropdown, Layout, Select } from "antd";
+import { Dropdown, Layout } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined, TranslationOutlined } from "@ant-design/icons";
 import { FaUserCircle } from "react-icons/fa";
 

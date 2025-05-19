@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button, Dropdown, MenuProps, message, Space, TableProps, Tooltip } from "antd";
 import { StopOutlined, DownOutlined, EditOutlined, DollarOutlined, SyncOutlined } from "@ant-design/icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { formatDateTime, formatIndex, formatNumber, formatStatus, formatString } from "../../../../function/CommonFunction";
 import { playerApi } from "../../../../service/CallApi";
 import { IPaginationType, IPlayerType } from "../../../../type/main.interface";

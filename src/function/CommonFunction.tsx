@@ -1,6 +1,4 @@
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timeZone from "dayjs/plugin/timezone";
 import { message, Tag } from "antd";
 
 export const DATE_FORMAT = "YYYY-MM-DD";

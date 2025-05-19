@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate } from "react-router-dom";
 import { IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList } from "../../../../function/ApiFunction";
 import { playerApi } from "../../../../service/CallApi";
@@ -8,12 +7,11 @@ import { message } from "antd";
 
 export const usePlayerRegister = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+
   const [messageApi, contextHolder] = message.useMessage();
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
-  const location = useLocation();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
