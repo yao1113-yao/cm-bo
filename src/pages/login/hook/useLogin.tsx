@@ -1,0 +1,51 @@
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { Api } from "../../../context/ApiContext";
+import { userApi } from "../../../service/CallApi";
+import { useTranslation } from "react-i18next";
+import { message } from "antd";
+
+export const useLogin = () => {
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const { userInfo, setUserInfo } = useContext(Api);
+
+  console.log(userInfo);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (userInfo) {
+      console.log("first");
+      navigate("/dashboard/deposit");
+    }
+  }, []);
+
+  async function handleLogin(values: any) {
+    setIsLoading(true);
+    const object = { UserID: values?.userID, Password: values?.password };
+    await userApi("/user-login", object)
+      .then((result) => {
+        setUserInfo(result.data);
+        localStorage.setItem("userID", result.data.userID);
+        localStorage.setItem("userToken", result.data.token);
+        console.log(result.data);
+        navigate("/dashboard/deposit", { replace: true });
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        messageApi.open({
+          type: "error",
+          content: error?.response?.data?.message,
+        });
+
+        setIsLoading(false);
+      });
+    setIsLoading(false);
+  }
+
+  return { t, i18n, navigate, contextHolder, isLoading, setIsLoading, handleLogin };
+};

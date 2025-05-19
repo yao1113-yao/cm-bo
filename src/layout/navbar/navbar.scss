@@ -1,0 +1,31 @@
+.navbar {
+  background-color: #e8e8e8;
+  display: flex;
+  justify-content: space-between;
+
+  .navbar-items {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    .ant-select {
+      .ant-select-selector {
+        background-color: transparent;
+        border: 1px solid black;
+        .ant-select-selection-item {
+          font-weight: 600;
+        }
+      }
+
+      .ant-select-arrow {
+        color: black;
+      }
+    }
+
+    .item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+    }
+  }
+}
