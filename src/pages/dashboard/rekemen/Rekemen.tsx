@@ -1,4 +1,4 @@
-import { Col, Divider, Form, GetProp, Input, InputNumber, message, Row } from "antd";
+import { Col, Divider, Form, Input, InputNumber, message, Row } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import GameProvider from "../../../components/GameProvider";
 import { mainApi } from "../../../service/CallApi";

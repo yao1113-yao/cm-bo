@@ -9,12 +9,11 @@ import PendingRekemenTable from "../rekemen/table/PendingRekemenTable";
 import PendingWithdrawTable from "../withdraw/table/PendingWithdrawTable";
 import { mainApi } from "../../../service/CallApi";
 import { ITransactionType } from "../../../type/main.interface";
-import { useTranslation } from "react-i18next";
-import { Card, Form } from "antd";
+import { Card } from "antd";
 
-interface DepositProps extends React.HTMLAttributes<HTMLElement> {
-  type: string;
-}
+// interface DepositProps extends React.HTMLAttributes<HTMLElement> {
+//   type: string;
+// }
 
 const All = () => {
   const userID = localStorage.getItem("userID");
