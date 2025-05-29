@@ -2,13 +2,11 @@ import { Button, Card, Divider, Image, Modal, Table, TableProps, Tag, Tooltip } 
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { useContext, useRef, useState } from "react";
-import { Api } from "../../../../context/ApiContext";
+import { useRef, useState } from "react";
 import { FileImageOutlined } from "@ant-design/icons";
 
 const WithdrawTable = ({ withdrawRecod }: any) => {
   const { t } = useTranslation();
-  const { userInfo } = useContext(Api);
 
   const [viewReceipt, setViewReceipt] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<ITransactionType | undefined>();

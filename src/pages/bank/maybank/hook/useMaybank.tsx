@@ -31,7 +31,7 @@ export const useMaybank = () => {
     getAllItemCodeList("MBank", setIsDeviceLoading, setAllBankList);
     // handleGetBankRecordList();
   }, []);
-
+  console.log(isDeviceLoading);
   const bankRecordColumns: TableProps<ITransactionType>["columns"] = [
     {
       title: "#",

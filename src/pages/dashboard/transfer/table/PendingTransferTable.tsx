@@ -8,7 +8,7 @@ import { FaHandPaper } from "react-icons/fa";
 import { useContext, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { mainApi } from "../../../../service/CallApi";
-const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
+const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
@@ -16,7 +16,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  console.log(isLoading);
   const columns: TableProps<ITransactionType>["columns"] = [
     {
       title: t("action"),

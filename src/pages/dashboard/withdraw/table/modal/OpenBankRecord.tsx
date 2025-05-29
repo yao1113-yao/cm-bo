@@ -23,7 +23,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
   const [isDeviceLoading, setIsDeviceLoading] = useState<boolean>(false);
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
-
+  console.log(isDeviceLoading);
   useEffect(() => {
     getAllItemCodeList("MBank", setIsDeviceLoading, setAllBankList);
   }, []);

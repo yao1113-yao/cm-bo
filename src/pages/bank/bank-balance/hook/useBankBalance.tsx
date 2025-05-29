@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { MenuProps, message, TableProps } from "antd";
+import { message, TableProps } from "antd";
 import { useLocation } from "react-router-dom";
 import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
@@ -68,7 +68,7 @@ export const useBankBalance = () => {
     {
       title: t("action"),
       ellipsis: true,
-      render: (record: any) => {
+      render: () => {
         return <></>;
       },
     },
@@ -109,29 +109,29 @@ export const useBankBalance = () => {
     {
       title: t("action"),
       ellipsis: true,
-      render: (record: any) => {
+      render: () => {
         return <></>;
       },
     },
   ];
-  const statusItems: MenuProps["items"] = [
-    {
-      key: "title",
-      type: "group",
-      label: t("status"),
-      children: [
-        {
-          key: "active",
-          label: t("active"),
-        },
-        {
-          key: "inActive",
-          label: t("inActive"),
-          danger: true,
-        },
-      ],
-    },
-  ];
+  //   const statusItems: MenuProps["items"] = [
+  //     {
+  //       key: "title",
+  //       type: "group",
+  //       label: t("status"),
+  //       children: [
+  //         {
+  //           key: "active",
+  //           label: t("active"),
+  //         },
+  //         {
+  //           key: "inActive",
+  //           label: t("inActive"),
+  //           danger: true,
+  //         },
+  //       ],
+  //     },
+  //   ];
 
   async function handleGetCompanyBankList(values: any) {
     setIsLoading(true);
