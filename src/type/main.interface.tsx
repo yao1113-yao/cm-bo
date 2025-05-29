@@ -68,10 +68,12 @@ export interface ITransactionType {
   bankRemark: string;
   bankAmount: number;
   isManual: number;
+  isLater: number;
   companyID: string;
   customerBank: string;
   customerBankAccName: string;
   customerBankAccNo: string;
+  receiptUrl: string;
   toGame: string;
   toGameID: string;
   toName: string;
@@ -97,4 +99,34 @@ export interface IDeviceType {
   createBy: string;
   createDate: Date;
   sort: number;
+}
+
+export interface ICompanyType {
+  srno: number;
+  companyID: string;
+  spreedSheetID: string;
+  googleSheetUrl: string;
+  status: number;
+  createBy: string;
+  createDate: Date;
+  botSrno: number;
+}
+
+export interface ICompanyBankType {
+  srno: number;
+  companyID: string;
+  companySrno: number;
+  bankCode: string;
+  balance: number;
+  createDate: Date;
+  updateDate: Date;
+}
+
+export interface ICompanyGPType {
+  srno: number;
+  companyID: string;
+  companySrno: number;
+  balance: number;
+  createDate: Date;
+  gameName: string;
 }

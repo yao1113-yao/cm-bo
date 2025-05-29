@@ -1,13 +1,15 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
 import { Spin } from "antd";
 import { userApi } from "../service/CallApi";
-import { IUserType } from "../type/main.interface";
+import { ICompanyType, IUserType } from "../type/main.interface";
 
 interface IApiContextType {
   windowWidth: number;
   windowHeight: number;
   userInfo: IUserType | undefined;
   setUserInfo: Dispatch<SetStateAction<IUserType | undefined>>;
+  companyList: [ICompanyType] | undefined;
+  setCompanyList: Dispatch<SetStateAction<[ICompanyType] | undefined>>;
 }
 
 const initApiContext: IApiContextType = {
@@ -15,6 +17,8 @@ const initApiContext: IApiContextType = {
   windowHeight: screen.availHeight,
   userInfo: undefined,
   setUserInfo: () => {},
+  companyList: undefined,
+  setCompanyList: () => {},
 };
 
 export const Api = createContext<IApiContextType>(initApiContext);
@@ -26,6 +30,7 @@ interface IApiContextProps {
 const ApiContext = ({ children }: IApiContextProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [userInfo, setUserInfo] = useState<IUserType | undefined>(undefined);
+  const [companyList, setCompanyList] = useState<[ICompanyType] | undefined>();
 
   const [windowWidth, setWindowWidth] = useState<number>(screen.availWidth);
   const [windowHeight, setWindowHeight] = useState<number>(screen.availHeight);
@@ -51,7 +56,7 @@ const ApiContext = ({ children }: IApiContextProps) => {
     await userApi("/validate-token", object)
       .then((result) => {
         setUserInfo(result.data);
-
+        setCompanyList(result.data2);
         localStorage.setItem("userToken", result.data.token);
       })
       .catch(() => {});
@@ -62,7 +67,7 @@ const ApiContext = ({ children }: IApiContextProps) => {
     return <Spin spinning={isLoading}></Spin>;
   }
 
-  const values: IApiContextType = { windowWidth, windowHeight, userInfo, setUserInfo };
+  const values: IApiContextType = { windowWidth, windowHeight, userInfo, setUserInfo, companyList, setCompanyList };
   return <Api.Provider value={values}>{children}</Api.Provider>;
 };
 

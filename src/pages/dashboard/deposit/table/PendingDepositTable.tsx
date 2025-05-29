@@ -11,6 +11,7 @@ import { FaHandPaper } from "react-icons/fa";
 import OpenBankRecord from "./modal/OpenBankRecord";
 import OpenManualSuccess from "./modal/OpenManualSuccess";
 import Swal from "sweetalert2";
+import { MdOutlineWatchLater } from "react-icons/md";
 
 const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
@@ -25,6 +26,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
   const [openManualSuccess, setOpenManualSuccess] = useState<boolean>(false);
   const [actionType, setActionType] = useState<string>("");
+  const [isLater, setIsLater] = useState<number>(0);
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
 
@@ -38,25 +40,35 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         return (
           <>
             <Space>
-              {!record?.bankRecordSrno ? (
+              {!record?.bankRecordSrno && record?.mStatus !== "BOT PROCESSING" ? (
                 <>
                   <Tooltip title={t("assignBank")}>
                     <Button icon={<BankOutlined />} onClick={() => handleGetBankRecord(record)}></Button>
                   </Tooltip>
-
-                  <Tooltip title={t("reject")}>
-                    <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
-                  </Tooltip>
+                  {record?.isLater === 0 && (
+                    <Tooltip title={t("matchBankLater")}>
+                      <Button icon={<MdOutlineWatchLater />} onClick={() => handleMatchBankLater(record)}></Button>
+                    </Tooltip>
+                  )}
+                  {record?.mStatus !== "PROCESSING" ||
+                    (record?.mStatus !== "BOT PROCESSING" && (
+                      <Tooltip title={t("reject")}>
+                        <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                      </Tooltip>
+                    ))}
                 </>
               ) : (
                 <>
-                  <Tooltip title={t("viewBank")}>
-                    <Button icon={<EyeOutlined />} onClick={() => handleGetBankRecordDetails(record)}></Button>
-                  </Tooltip>
-                  {record?.mStatus === "WAITING" && (
+                  {record?.isLater === 0 && (
+                    <Tooltip title={t("viewBank")}>
+                      <Button icon={<EyeOutlined />} onClick={() => handleGetBankRecordDetails(record)}></Button>
+                    </Tooltip>
+                  )}
+
+                  {record?.mStatus === "PROCESSING" && (
                     <>
                       <Tooltip title={t("sendToBot")}>
-                        <Button icon={<SendOutlined />} onClick={() => handleInsertDepositTask(record)}></Button>
+                        <Button icon={<SendOutlined />} onClick={() => handleInsertDepositTask(record, "sendToBot")}></Button>
                       </Tooltip>
                       <Tooltip title={t("manualSuccess")}>
                         <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
@@ -65,6 +77,12 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                         <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
                       </Tooltip>
                     </>
+                  )}
+
+                  {record?.mStatus === "FAIL" && (
+                    <Tooltip title={t("manualSuccess")}>
+                      <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
+                    </Tooltip>
                   )}
                 </>
               )}
@@ -78,7 +96,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL DONE</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL DONE</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : text === "PROCESSING" ? "#4096ff" : text === "BOT PROCESSING" ? "#9254de" : ""}>{text}</Tag>;
       },
     },
 
@@ -274,7 +292,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
     setIsLoading(false);
   }
 
-  function handleInsertDepositTask(values: any) {
+  function handleInsertDepositTask(values: any, type: string) {
     Swal.fire({
       title: "Do you want to send the request to bot?",
       showCancelButton: true,
@@ -286,10 +304,14 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
           UserID: userID,
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
+          IsLater: type === "sendToBot" ? 0 : 1,
         };
         await mainApi("/insert-deposit-task", object)
           .then(() => {
             setOpenBankRecord(false);
+            setOpenManualSuccess(false);
+            setSelectedPendingDeposit(undefined);
+            setIsLater(0);
             handleGetPendingTransactionRecord("deposit");
             messageApi.open({
               type: "success",
@@ -307,6 +329,47 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
     });
   }
 
+  function handleMatchBankLater(values: any) {
+    Swal.fire({
+      title: "Please confirm that later will match the transaction!",
+      showCancelButton: true,
+      showDenyButton: true,
+      html: `<p style="color:red"}>*Reminder : <br>Please match bank record later</p>`,
+      confirmButtonText: "Send To Bot",
+      denyButtonText: "Manual Success",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // setIsLoading(true);
+
+        // const object = {
+        //   UserID: userID,
+        //   UserToken: userToken,
+        //   mktDetailsSrno: values?.srno,
+        //   IsLater: 1,
+        // };
+        // await mainApi("/insert-deposit-task", object)
+        //   .then(() => {
+        //     setOpenBankRecord(false);
+        //     handleGetPendingTransactionRecord("deposit");
+        //     messageApi.open({
+        //       type: "success",
+        //       content: "sent",
+        //     });
+        //   })
+        //   .catch(() => {
+        //     messageApi.open({
+        //       type: "error",
+        //       content: "",
+        //     });
+        //   });
+        setIsLoading(false);
+      } else if (result.isDenied) {
+        setIsLater(1);
+        handleOpenManualSuccessModal(values);
+      }
+    });
+  }
+
   function handleOpenManualSuccessModal(values: any) {
     setOpenManualSuccess(true);
     setSelectedPendingDeposit(values);
@@ -315,6 +378,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
   function handleCloseManualSuccessModal() {
     setOpenManualSuccess(false);
     setSelectedPendingDeposit(undefined);
+    setIsLater(0);
   }
 
   async function handleInsertManualSuccess(values: any) {
@@ -324,11 +388,13 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       UserToken: userToken,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       gameID: values?.gameID,
+      isLater: isLater,
     };
     await mainApi("/insert-manual-success", object)
       .then(() => {
         setOpenManualSuccess(false);
         setSelectedPendingDeposit(undefined);
+        setIsLater(0);
         handleGetPendingTransactionRecord("deposit");
         handleGetTransactionRecord("deposit");
         messageApi.open({

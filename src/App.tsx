@@ -7,8 +7,8 @@ import PlayerRegister from "./pages/player/register/PlayerRegister";
 import { useContext } from "react";
 import { Api } from "./context/ApiContext";
 import { ConfigProvider } from "antd";
-import Maybank from "./pages/bank/maybank/Maybank";
-import RHBBank from "./pages/bank/rhbbank/RHBBank";
+import Bank from "./pages/bank/maybank/Maybank";
+import BankBalance from "./pages/bank/bank-balance/BankBalance";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -33,9 +33,8 @@ function App() {
         { path: "/dashboard/:PageType", element: <Protected roles={[1, 2, 3]} component={<Dashboard />} /> },
         { path: "/player/list", element: <Protected roles={[1, 2]} component={<PlayerList />} /> },
         { path: "/player/register", element: <Protected roles={[1, 2]} component={<PlayerRegister />} /> },
-        { path: "/bank/maybank", element: <Protected roles={[1, 2]} component={<Maybank />} /> },
-        // { path: "/bank/cimb", element: <Protected roles={[1, 2]} component={<CimbBank />} /> },
-        { path: "/bank/rhb", element: <Protected roles={[1, 2]} component={<RHBBank />} /> },
+        { path: "/bank-transaction", element: <Protected roles={[1, 2]} component={<Bank />} /> },
+        { path: "/company-bank", element: <Protected roles={[1, 2]} component={<BankBalance />} /> },
       ],
     },
   ]);

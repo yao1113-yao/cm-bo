@@ -1,19 +1,37 @@
-import { Card, Divider, Table, TableProps, Tag } from "antd";
+import { Button, Card, Divider, Image, Modal, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { useRef } from "react";
+import { useContext, useRef, useState } from "react";
+import { Api } from "../../../../context/ApiContext";
+import { FileImageOutlined } from "@ant-design/icons";
 
 const WithdrawTable = ({ withdrawRecod }: any) => {
   const { t } = useTranslation();
+  const { userInfo } = useContext(Api);
+
+  const [viewReceipt, setViewReceipt] = useState<boolean>(false);
+  const [selectedRecord, setSelectedRecord] = useState<ITransactionType | undefined>();
 
   const columns: TableProps<ITransactionType>["columns"] = [
+    {
+      title: "action",
+      render: (record: any) => {
+        return (
+          <>
+            <Tooltip title={t("viewReceipt")}>
+              <Button icon={<FileImageOutlined />} onClick={() => handleViewReceipt(record)}></Button>
+            </Tooltip>
+          </>
+        );
+      },
+    },
     {
       title: t("status"),
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL DONE</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+        return record?.isManual === 1 && text === "SUCCESS" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "SUCCESS" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
       },
     },
     // {
@@ -135,7 +153,7 @@ const WithdrawTable = ({ withdrawRecod }: any) => {
       title: t("createDate"),
       dataIndex: "createDate",
       align: "center",
-
+      ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
       },
@@ -154,6 +172,13 @@ const WithdrawTable = ({ withdrawRecod }: any) => {
     }
   };
 
+  console.log(selectedRecord);
+
+  function handleViewReceipt(values: any) {
+    setViewReceipt(true);
+    setSelectedRecord(values);
+  }
+
   return (
     <>
       <Divider>{t("withdrawRecord")}</Divider>
@@ -161,6 +186,10 @@ const WithdrawTable = ({ withdrawRecod }: any) => {
       <Card>
         <Table columns={columns} dataSource={withdrawRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
       </Card>
+
+      <Modal open={viewReceipt} onCancel={() => setViewReceipt(false)} footer={null} closable={false}>
+        <Image src={selectedRecord?.receiptUrl} alt="receipt" />
+      </Modal>
     </>
   );
 };

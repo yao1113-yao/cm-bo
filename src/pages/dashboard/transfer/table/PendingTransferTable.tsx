@@ -1,26 +1,42 @@
-import { Button, Card, Divider, Space, Table, TableProps, Tag, Tooltip } from "antd";
+import { Button, Card, Divider, message, Space, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { CheckOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined } from "@ant-design/icons";
 import { Api } from "../../../../context/ApiContext";
-import { useContext, useRef } from "react";
-const PendingTransferTable = ({ pendingTransferRecod }: any) => {
+import { FaHandPaper } from "react-icons/fa";
+import { useContext, useRef, useState } from "react";
+import Swal from "sweetalert2";
+import { mainApi } from "../../../../service/CallApi";
+const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo } = useContext(Api);
+  const [messageApi, contextHolder] = message.useMessage();
+  const userID = localStorage.getItem("userID");
+  const userToken = localStorage.getItem("userToken");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const columns: TableProps<ITransactionType>["columns"] = [
     {
       title: t("action"),
       hidden: userInfo?.userType === 3,
-      render: () => {
+      render: (record) => {
         return (
           <>
-            <Space>
-              <Tooltip title={t("assignBank")}>
-                <Button icon={<CheckOutlined />} />
-              </Tooltip>
-            </Space>
+            {record?.inCredit === 0 && record?.mStatus === "WAITING" && (
+              <Space>
+                <Tooltip title={t("approve")}>
+                  <Button icon={<SendOutlined />} onClick={() => handleInsertTransferTask(record)}></Button>
+                </Tooltip>
+                <Tooltip title={t("manualSuccess")}>
+                  <Button icon={<FaHandPaper />}></Button>
+                </Tooltip>
+                <Tooltip title={t("reject")}>
+                  <Button icon={<CloseOutlined />}></Button>
+                </Tooltip>
+              </Space>
+            )}
           </>
         );
       },
@@ -116,6 +132,39 @@ const PendingTransferTable = ({ pendingTransferRecod }: any) => {
     },
   ];
 
+  function handleInsertTransferTask(values: any) {
+    Swal.fire({
+      title: "Do you want to send the request to bot?",
+      showCancelButton: true,
+      confirmButtonText: "Send",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+        };
+        await mainApi("/insert-withdraw-task", object)
+          .then(() => {
+            console.log("first");
+            handleGetPendingTransactionRecord("Transfer");
+            messageApi.open({
+              type: "success",
+              content: "sent",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+        setIsLoading(false);
+      }
+    });
+  }
+
   const samePrev = useRef<boolean>(false);
   const prevClass = useRef<string>("row-highlight-1");
 
@@ -131,6 +180,7 @@ const PendingTransferTable = ({ pendingTransferRecod }: any) => {
 
   return (
     <>
+      {contextHolder}
       <Divider>{t("pendingTransferRecord")}</Divider>
 
       <Card>

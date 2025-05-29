@@ -4,10 +4,13 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 import { Api } from "../../../../context/ApiContext";
-import { BankOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, UploadOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
+import OpenBankRecord from "./modal/OpenBankRecord";
+import Swal from "sweetalert2";
+import { FaHandPaper } from "react-icons/fa";
 
-const PendingWithdrawTable = ({ pendingWithdrawRecod }: any) => {
+const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
@@ -17,6 +20,8 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod }: any) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
+  const [isManual, setIsManual] = useState<number>(0);
+  const [isLater, setIsLater] = useState<number>(0);
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
 
@@ -28,13 +33,26 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod }: any) => {
       render: (record) => {
         return (
           <>
-            {record?.mStatus === "WAITING" && (
-              <Space>
-                <Tooltip title={t("assignBank")}>
-                  <Button icon={<BankOutlined />} onClick={() => handleGetBankRecord(record)}></Button>
+            <Space>
+              {record?.mStatus === "WAITING" && (
+                <>
+                  <Tooltip title={t("approve")}>
+                    <Button icon={<SendOutlined />} onClick={() => handleInsertWithdrawTask(record)}></Button>
+                  </Tooltip>
+                  <Tooltip title={t("manualSuccess")}>
+                    <Button icon={<FaHandPaper />} onClick={() => handleGetBankRecord(record, "manualSucccess")}></Button>
+                  </Tooltip>
+                  <Tooltip title={t("reject")}>
+                    <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                  </Tooltip>
+                </>
+              )}
+              {record?.mStatus === "HOLD" && (
+                <Tooltip title={t("upload")}>
+                  <Button icon={<UploadOutlined />} onClick={() => handleGetBankRecord(record, "upload")}></Button>
                 </Tooltip>
-              </Space>
-            )}
+              )}
+            </Space>
           </>
         );
       },
@@ -44,7 +62,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod }: any) => {
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL DONE</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "PROCESSING" ? "#4096ff" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
       },
     },
     // {
@@ -173,8 +191,43 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod }: any) => {
     },
   ];
 
-  async function handleGetBankRecord(values: any) {
+  function handleInsertWithdrawTask(values: any) {
+    Swal.fire({
+      title: "Do you want to send the request to bot?",
+      showCancelButton: true,
+      confirmButtonText: "Send",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+        };
+        await mainApi("/insert-withdraw-task", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("withdraw");
+            messageApi.open({
+              type: "success",
+              content: "sent",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+        setIsLoading(false);
+      }
+    });
+  }
+
+  async function handleGetBankRecord(values: any, type: string) {
     setIsLoading(true);
+    if (type === "manualSucccess") {
+      setIsManual(1);
+    }
     const object = {
       UserID: userID,
       UserToken: userToken,
@@ -194,6 +247,41 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod }: any) => {
         });
       });
     setIsLoading(false);
+  }
+
+  async function handleRejectTransaction(values: any) {
+    Swal.fire({
+      title: "Do you want to rejcet this transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Reject",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          status: 0,
+        };
+        await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("withdraw");
+            handleGetTransactionRecord("withdraw");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
   }
 
   const samePrev = useRef<boolean>(false);
@@ -217,6 +305,10 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod }: any) => {
       <Card>
         <Table columns={columns} dataSource={pendingWithdrawRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
       </Card>
+
+      <OpenBankRecord messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} isLater={isLater} setIsLater={setIsLater} isManual={isManual} setIsManual={setIsManual} />
+
+      {/* manual success */}
     </>
   );
 };

@@ -89,7 +89,17 @@ const Withdraw = ({ type }: DepositProps) => {
       UserToken: userToken,
       RecordType: "Main",
       Type: type,
-      ...values,
+      game: values?.game,
+      gameLoginID: values?.gameLoginID,
+      name: values?.name,
+      hpNo: values?.hpNo,
+      device: values?.device,
+      credit: cuciAllEnable ? 0 : values?.credit,
+      customerBank: values?.customerBank,
+      customerBankAccNo: values?.customerBankAccNo,
+      customerBankAccName: values?.customerBankAccName,
+      cashOut: values?.cashOut,
+      remark: values?.remark,
     };
     await mainApi("/insert-withdraw-transaction-record", object).then(() => {
       message.success("success");
@@ -101,6 +111,7 @@ const Withdraw = ({ type }: DepositProps) => {
 
   function handleCheckFreeCredit() {
     setCuciAllEnable(!cuciAllEnable);
+    form.setFieldValue("credit", 0);
   }
 
   return (
@@ -205,7 +216,7 @@ const Withdraw = ({ type }: DepositProps) => {
         </Form>
       )}
 
-      <PendingWithdrawTable pendingWithdrawRecod={pendingWithdrawRecod} />
+      <PendingWithdrawTable pendingWithdrawRecod={pendingWithdrawRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
       <WithdrawTable withdrawRecod={withdrawRecod} />
     </>
   );

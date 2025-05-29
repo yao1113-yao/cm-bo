@@ -11,9 +11,7 @@ export const useLogin = () => {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const { userInfo, setUserInfo } = useContext(Api);
-
-  console.log(userInfo);
+  const { userInfo, setUserInfo, setCompanyList } = useContext(Api);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -30,6 +28,7 @@ export const useLogin = () => {
     await userApi("/user-login", object)
       .then((result) => {
         setUserInfo(result.data);
+        setCompanyList(result.data2);
         localStorage.setItem("userID", result.data.userID);
         localStorage.setItem("userToken", result.data.token);
         console.log(result.data);

@@ -1,25 +1,47 @@
-import { Button, Card, Divider, Space, Table, TableProps, Tag, Tooltip } from "antd";
+import { Button, Card, Divider, message, Space, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { useContext, useRef } from "react";
-import { CheckOutlined } from "@ant-design/icons";
+import { useContext, useRef, useState } from "react";
+import { SendOutlined, CloseOutlined } from "@ant-design/icons";
 import { Api } from "../../../../context/ApiContext";
+import Swal from "sweetalert2";
+import { FaHandPaper } from "react-icons/fa";
+import { mainApi } from "../../../../service/CallApi";
 
-const PendingRekemenTable = ({ pendingRekemenRecod }: any) => {
+const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo } = useContext(Api);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const userID = localStorage.getItem("userID");
+  const userToken = localStorage.getItem("userToken");
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const columns: TableProps<ITransactionType>["columns"] = [
     {
       title: t("action"),
       hidden: userInfo?.userType === 3,
-      render: () => {
+      render: (record) => {
         return (
           <>
             <Space>
-              <Tooltip title={t("assignBank")}>
-                <Button icon={<CheckOutlined />} />
+              {record?.mStatus === "WAITING" ? (
+                <>
+                  <Tooltip title={t("sendToBot")}>
+                    <Button icon={<SendOutlined />} onClick={() => handleInsertDepositTask(record)}></Button>
+                  </Tooltip>
+                  <Tooltip title={t("manualSuccess")}>
+                    <Button icon={<FaHandPaper />} onClick={() => handleInsertManualSuccess(record)}></Button>
+                  </Tooltip>
+                </>
+              ) : (
+                ""
+              )}
+
+              <Tooltip title={t("reject")}>
+                <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
               </Tooltip>
             </Space>
           </>
@@ -149,6 +171,106 @@ const PendingRekemenTable = ({ pendingRekemenRecod }: any) => {
     },
   ];
 
+  function handleInsertDepositTask(values: any) {
+    Swal.fire({
+      title: "Do you want to send the request to bot?",
+      showCancelButton: true,
+      confirmButtonText: "Send",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+        };
+        await mainApi("/insert-rekemen-task", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("Rekemen");
+            messageApi.open({
+              type: "success",
+              content: "sent",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+        setIsLoading(false);
+      }
+    });
+  }
+
+  async function handleInsertManualSuccess(values: any) {
+    Swal.fire({
+      title: "Do you want to manual success the transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Send",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+        };
+        await mainApi("/insert-rekemen-manual-success", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("rekemen");
+            handleGetTransactionRecord("rekemen");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+        setIsLoading(false);
+      }
+    });
+  }
+
+  async function handleRejectTransaction(values: any) {
+    Swal.fire({
+      title: "Do you want to rejcet this transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Reject",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          status: 0,
+        };
+        await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("rekemen");
+            handleGetTransactionRecord("rekemen");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
   const samePrev = useRef<boolean>(false);
   const prevClass = useRef<string>("row-highlight-1");
 
@@ -164,6 +286,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod }: any) => {
 
   return (
     <>
+      {contextHolder}
       <Divider>{t("pendingRekemenRecord")}</Divider>
 
       <Card>

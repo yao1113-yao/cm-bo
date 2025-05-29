@@ -23,7 +23,7 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, ...re
       <Row gutter={10}>
         <Col xs={4}>
           <Form.Item label={t("game")} name={[name, "game"]} rules={[{ required: true }]}>
-            <Select>
+            <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("game")} optionFilterProp="label">
               {allGameList?.map((items: any) => (
                 <Select.Option value={items.gameName} key={items.gameName}>
                   {items?.gameName}
@@ -52,7 +52,7 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, ...re
 
         <Col xs={4}>
           <Form.Item label={t("device")} name={[name, "device"]} rules={[{ required: true }]}>
-            <Select>
+            <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("device")} optionFilterProp="label">
               {allDeviceList?.map((items: any) => (
                 <Select.Option value={items.item} key={items.item}>
                   {items?.item}

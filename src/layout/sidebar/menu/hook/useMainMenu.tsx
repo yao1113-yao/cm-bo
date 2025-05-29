@@ -42,18 +42,11 @@ export const useMainMenu = () => {
       type: "group",
       hidden: userInfo && userInfo.userType > 2,
       children: [
-        {
-          label: t("player"),
-          key: "/player",
-          hidden: userInfo && userInfo.userType > 2,
-          icon: <FileSearchOutlined />,
-          children: [
-            { label: t("registerPlayer"), key: "/player/register", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
-            { label: t("playerList"), key: "/player/list", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
-          ],
-        },
+        { label: t("registerPlayer"), key: "/player/register", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
+        { label: t("playerList"), key: "/player/list", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
       ],
     },
+
     {
       label: t("bank"),
       key: "bank",
@@ -61,16 +54,16 @@ export const useMainMenu = () => {
       hidden: userInfo && userInfo.userType > 2,
       children: [
         {
-          label: t("bank"),
-          key: "/bank",
-          hidden: userInfo && userInfo.userType > 2,
+          label: t("Bank Transaction"),
+          key: "/bank-transaction",
           icon: <FileSearchOutlined />,
-          children: [
-            { label: t("maybank"), key: "/bank/maybank", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
-            { label: t("cimbBank"), key: "/bank/cimb", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
-            { label: t("rhbBank"), key: "/bank/rhb", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
-            { label: t("hongLeongBank"), key: "/bank/hlb", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
-          ],
+          hidden: userInfo && userInfo.userType > 2,
+        },
+        {
+          label: t("Bank And Kiosk Balance"),
+          key: "/company-bank",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
         },
       ],
     },
