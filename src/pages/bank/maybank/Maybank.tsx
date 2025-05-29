@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Form, Row, Select, Space, Spin, Table } from "antd";
+import { Button, Col, Divider, Form, Row, Select, Spin, Table } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import { useMaybank } from "./hook/useMaybank";
 import Device from "../../../components/Device";

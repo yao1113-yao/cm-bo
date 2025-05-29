@@ -18,7 +18,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  console.log(isLoading);
   const columns: TableProps<ITransactionType>["columns"] = [
     {
       title: t("action"),
