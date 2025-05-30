@@ -1,10 +1,10 @@
-import { Button, Col, Divider, Form, Row, Select, Spin, Table } from "antd";
+import { Button, Col, Divider, Form, Row, Spin, Table } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import { useMaybank } from "./hook/useMaybank";
 import Device from "../../../components/Device";
 
 const Maybank = () => {
-  const { form, contextHolder, companyList, isLoading, setBankSelected, selectedCompany, handleOnChangeSelectedCompany, bankRecordColumns, allBankList, bankRecordList, handleInsertBankTransaction, handleGetBankRecordList } = useMaybank();
+  const { form, contextHolder, isLoading, setBankSelected, selectedCompany, bankRecordColumns, allBankList, bankRecordList, handleInsertBankTransaction, handleGetBankRecordList } = useMaybank();
 
   return (
     <Spin spinning={isLoading}>

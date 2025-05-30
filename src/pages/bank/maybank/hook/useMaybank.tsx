@@ -176,7 +176,7 @@ export const useMaybank = () => {
     setIsLoading(false);
   }
 
-  function handleOnChangeSelectedCompany(values: any) {}
+  function handleOnChangeSelectedCompany() {}
 
   async function handleChangeDebitCredit(values: any) {
     setIsLoading(true);
