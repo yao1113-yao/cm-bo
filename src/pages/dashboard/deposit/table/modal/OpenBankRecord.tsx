@@ -11,6 +11,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, actionType, bankRe
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  console.log(userID, userToken);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -73,13 +74,13 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, actionType, bankRe
 
   async function handleAssignBank(values: any) {
     setIsLoading(true);
-    const object = {
-      UserID: userID,
-      UserToken: userToken,
-      MktDetailsSrno: selectedPendingDeposit?.srno,
-      BankRecordSrno: values?.bankRecordSrno,
-    };
-    await mainApi("/assign-bank", object)
+    const formData = new FormData();
+    formData.append("userID", userID as string);
+    formData.append("userToken", userToken as string);
+    formData.append("mktDetailsSrno", selectedPendingDeposit?.srno);
+    formData.append("bankRecordSrno", values?.bankRecordSrno);
+
+    await mainApi("/assign-bank", formData)
       .then(() => {
         setOpenBankRecord(false);
         handleGetPendingTransactionRecord("deposit");

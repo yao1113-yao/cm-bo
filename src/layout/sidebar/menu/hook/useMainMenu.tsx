@@ -65,6 +65,12 @@ export const useMainMenu = () => {
           icon: <FileSearchOutlined />,
           hidden: userInfo && userInfo.userType > 2,
         },
+        {
+          label: t("Bank Record"),
+          key: "/bank-marketing",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
+        },
       ],
     },
   ];

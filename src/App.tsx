@@ -9,6 +9,7 @@ import { Api } from "./context/ApiContext";
 import { ConfigProvider } from "antd";
 import Bank from "./pages/bank/maybank/Maybank";
 import BankBalance from "./pages/bank/bank-balance/BankBalance";
+import BankRecord from "./pages/bank/bank-record/BankRecord";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -35,6 +36,7 @@ function App() {
         { path: "/player/register", element: <Protected roles={[1, 2]} component={<PlayerRegister />} /> },
         { path: "/bank-transaction", element: <Protected roles={[1, 2]} component={<Bank />} /> },
         { path: "/company-bank", element: <Protected roles={[1, 2]} component={<BankBalance />} /> },
+        { path: "/bank-marketing", element: <Protected roles={[1, 2]} component={<BankRecord />} /> },
       ],
     },
   ]);

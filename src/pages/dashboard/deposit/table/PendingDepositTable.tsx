@@ -96,7 +96,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL DONE</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : text === "PROCESSING" ? "#4096ff" : text === "BOT PROCESSING" ? "#9254de" : ""}>{text}</Tag>;
+        return record?.isManual === 1 && text === "SUCCESS" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : text === "PROCESSING" ? "#4096ff" : text === "BOT PROCESSING" ? "#9254de" : ""}>{text}</Tag>;
       },
     },
 
@@ -339,29 +339,29 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       denyButtonText: "Manual Success",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        // setIsLoading(true);
+        setIsLoading(true);
 
-        // const object = {
-        //   UserID: userID,
-        //   UserToken: userToken,
-        //   mktDetailsSrno: values?.srno,
-        //   IsLater: 1,
-        // };
-        // await mainApi("/insert-deposit-task", object)
-        //   .then(() => {
-        //     setOpenBankRecord(false);
-        //     handleGetPendingTransactionRecord("deposit");
-        //     messageApi.open({
-        //       type: "success",
-        //       content: "sent",
-        //     });
-        //   })
-        //   .catch(() => {
-        //     messageApi.open({
-        //       type: "error",
-        //       content: "",
-        //     });
-        //   });
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          IsLater: 1,
+        };
+        await mainApi("/insert-deposit-task", object)
+          .then(() => {
+            setOpenBankRecord(false);
+            handleGetPendingTransactionRecord("deposit");
+            messageApi.open({
+              type: "success",
+              content: "sent",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
         setIsLoading(false);
       } else if (result.isDenied) {
         setIsLater(1);

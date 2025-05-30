@@ -130,3 +130,19 @@ export interface ICompanyGPType {
   createDate: Date;
   gameName: string;
 }
+export interface IBankRecordMarketingType {
+  srno: number;
+  companyID: string;
+  companySrno: number;
+  bankCode: string;
+  bankDate: string;
+  bankRemark: string;
+  bankAmount: number;
+  debit: number;
+  credit: number;
+  status: number;
+  createBy: number;
+  receiptUrl: string;
+  createDate: Date;
+  gameName: string;
+}

@@ -30,6 +30,10 @@ export const useMaybank = () => {
   useEffect(() => {
     getAllItemCodeList("MBank", setIsDeviceLoading, setAllBankList);
     // handleGetBankRecordList();
+    const temp = companyList?.filter((items: any) => items.companyID === "BEST1");
+    if (temp !== undefined) {
+      setSelectedCompany(temp[0]);
+    }
   }, []);
   console.log(isDeviceLoading);
   const bankRecordColumns: TableProps<ITransactionType>["columns"] = [
@@ -172,12 +176,7 @@ export const useMaybank = () => {
     setIsLoading(false);
   }
 
-  function handleOnChangeSelectedCompany(values: any) {
-    const temp = companyList?.filter((items: any) => items.companyID === values);
-    if (temp !== undefined) {
-      setSelectedCompany(temp[0]);
-    }
-  }
+  function handleOnChangeSelectedCompany(values: any) {}
 
   async function handleChangeDebitCredit(values: any) {
     setIsLoading(true);

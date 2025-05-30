@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { message, TableProps } from "antd";
+import { Button, Form, message, TableProps, Tooltip } from "antd";
 import { useLocation } from "react-router-dom";
 import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { ICompanyBankType, ICompanyGPType } from "../../../../type/main.interface";
-
+import { WalletOutlined } from "@ant-design/icons";
 export const useBankBalance = () => {
   const { t } = useTranslation();
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const location = useLocation();
+  const [form] = Form.useForm();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openEditBankBalance, setOpenEditBankBalance] = useState<boolean>(false);
+  const [selectedRecord, setSelectedRecord] = useState<ICompanyBankType | undefined>();
   const [apiData, setApiData] = useState<ICompanyBankType[] | undefined>();
   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
   const initialValues = location?.state?.userInput !== undefined ? { loginID: location?.state?.userInput?.loginID, status: location?.state.userInput.status, page: location?.state.userInput.page, pageSize: location?.state.userInput.pageSize } : { loginID: "", status: 9, page: 1, pageSize: 10 };
@@ -68,8 +71,14 @@ export const useBankBalance = () => {
     {
       title: t("action"),
       ellipsis: true,
-      render: () => {
-        return <></>;
+      render: (record) => {
+        return (
+          <>
+            <Tooltip>
+              <Button icon={<WalletOutlined />} onClick={() => handleOpenModalEditBankBalance(record)}></Button>
+            </Tooltip>
+          </>
+        );
       },
     },
   ];
@@ -114,24 +123,23 @@ export const useBankBalance = () => {
       },
     },
   ];
-  //   const statusItems: MenuProps["items"] = [
-  //     {
-  //       key: "title",
-  //       type: "group",
-  //       label: t("status"),
-  //       children: [
-  //         {
-  //           key: "active",
-  //           label: t("active"),
-  //         },
-  //         {
-  //           key: "inActive",
-  //           label: t("inActive"),
-  //           danger: true,
-  //         },
-  //       ],
-  //     },
-  //   ];
+
+  function handleOpenModalEditBankBalance(values: ICompanyBankType) {
+    setSelectedRecord(values);
+    setOpenEditBankBalance(true);
+  }
+
+  function handleCloseModalEditBankBalance() {
+    form.resetFields();
+
+    setSelectedRecord(undefined);
+    setOpenEditBankBalance(false);
+  }
+
+  function handleOnChangeAmount(values: any) {
+    const balance = selectedRecord?.balance;
+    form.setFieldValue("finalBalance", balance + values);
+  }
 
   async function handleGetCompanyBankList(values: any) {
     setIsLoading(true);
@@ -173,5 +181,5 @@ export const useBankBalance = () => {
     setIsLoading(false);
   }
 
-  return { t, isLoading, apiData, apiData2, setApiData, initialValues, columns, columnsCompanyGP, handleGetCompanyBankList };
+  return { t, isLoading, form, openEditBankBalance, handleCloseModalEditBankBalance, handleOnChangeAmount, selectedRecord, apiData, apiData2, setApiData, initialValues, columns, columnsCompanyGP, handleGetCompanyBankList };
 };
