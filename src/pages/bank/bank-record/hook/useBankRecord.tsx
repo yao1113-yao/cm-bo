@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
-import { Image, message, TableProps } from "antd";
-import { formatDateTime, formatIndex, formatNumber, formatStatus, formatString } from "../../../../function/CommonFunction";
+import { Button, Form, Image, message, Space, TableProps, Tag } from "antd";
+import { formatDateTime, formatIndex, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { IBankRecordMarketingType, IDeviceType } from "../../../../type/main.interface";
 import { getAllItemCodeList } from "../../../../function/ApiFunction";
 
+import { EditOutlined } from "@ant-design/icons";
+
 export const useBankRecord = () => {
   const { t } = useTranslation();
-
+  const [form] = Form.useForm();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
 
@@ -20,12 +22,13 @@ export const useBankRecord = () => {
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
 
   const initialValues = {
-    searchDate: [dayjs(), dayjs()],
-    bankCode: "",
+    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    bank: "all",
     remark: "",
   };
   useEffect(() => {
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
+    handleGetBankRecordMarketingList(initialValues);
   }, []);
 
   const columns: TableProps<IBankRecordMarketingType>["columns"] = [
@@ -89,7 +92,7 @@ export const useBankRecord = () => {
       dataIndex: "status",
       ellipsis: true,
       render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatStatus(text, t)}</div>;
+        return <div style={{ fontWeight: "600" }}>{text === 1 ? <Tag color="#389e0d">{t("Done")}</Tag> : <Tag color="#f50">{t("Havent")}</Tag>}</div>;
       },
     },
     {
@@ -104,6 +107,7 @@ export const useBankRecord = () => {
       title: t("createDate"),
       dataIndex: "createDate",
       ellipsis: true,
+      sorter: (a: any, b: any) => dayjs(a.createDate).diff(dayjs(b.createDate)),
       render: (text: Date) => {
         return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
       },
@@ -112,7 +116,13 @@ export const useBankRecord = () => {
       title: t("action"),
       ellipsis: true,
       render: () => {
-        return <></>;
+        return (
+          <Space>
+            <Button>
+              <EditOutlined />
+            </Button>
+          </Space>
+        );
       },
     },
   ];
@@ -124,8 +134,8 @@ export const useBankRecord = () => {
       UserID: userID,
       UserToken: userToken,
       companyID: "BEST1",
-      startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD"),
-      endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD"),
+      startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
+      endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       bankCode: values?.bank,
       remark: values?.remark,
     };
@@ -139,6 +149,16 @@ export const useBankRecord = () => {
       });
     setIsLoading(false);
   }
+  function handleSearchByFilter(values: any) {
+    console.log(values);
+    if (values === "day") {
+      form.setFieldValue("searchDate", searchDateRange(values));
+      handleGetBankRecordMarketingList({ searchDate: searchDateRange(values), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });
+    } else {
+      form.setFieldValue("searchDate", [dayjs().startOf("day").add(-1, "day"), dayjs().endOf("day").add(-1, "day")]);
+      handleGetBankRecordMarketingList({ searchDate: [dayjs().startOf("day").add(-1, "day"), dayjs().endOf("day").add(-1, "day")], bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });
+    }
+  }
 
-  return { t, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList };
+  return { t, form, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter };
 };

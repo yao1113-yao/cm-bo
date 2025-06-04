@@ -24,7 +24,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
       render: (record) => {
         return (
           <>
-            {record?.inCredit === 0 && record?.mStatus === "WAITING" && (
+            {(record?.isFreeCredit === 1 && record?.mStatus === "WAITING") || (record?.inCredit === 0 && record?.mStatus === "WAITING") ? (
               <Space>
                 <Tooltip title={t("approve")}>
                   <Button icon={<SendOutlined />} onClick={() => handleInsertTransferTask(record)}></Button>
@@ -36,6 +36,8 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
                   <Button icon={<CloseOutlined />}></Button>
                 </Tooltip>
               </Space>
+            ) : (
+              ""
             )}
           </>
         );

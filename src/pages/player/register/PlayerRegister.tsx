@@ -17,6 +17,12 @@ const PlayerRegister = () => {
             </Col>
 
             <Col xs={4}>
+              <Form.Item label={t("score")} name="score" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <InputNumber style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+
+            <Col xs={4}>
               <Form.Item
                 label={t("countPlayer")}
                 name="countPlayer"

@@ -1,15 +1,15 @@
 import CommonButton from "../../../components/CommonButton";
-import Device from "../../../components/Device";
-import { useBankRecord } from "./hook/useBankRecord";
 import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Table } from "antd";
+import { useRekemenRecord } from "./hook/useRekemenRecord";
+import GameProvider from "../../../components/GameProvider";
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
-const BankRecord = () => {
-  const { t, form, isLoading, allBankList, apiData, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter } = useBankRecord();
+const RekemenRecord = () => {
+  const { t, form, isLoading, allGameList, apiData, columns, initialValues, handleGetRekemenRecordMarketing, handleSearchByFilter } = useRekemenRecord();
   return (
     <Card>
-      <Form layout="vertical" onFinish={handleGetBankRecordMarketingList} initialValues={initialValues} form={form}>
+      <Form layout="vertical" onFinish={handleGetRekemenRecordMarketing} initialValues={initialValues} form={form}>
         <Row gutter={20}>
           <Col xs={6}>
             <Form.Item label={t("searchDate")} name="searchDate">
@@ -18,11 +18,21 @@ const BankRecord = () => {
           </Col>
 
           <Col xs={6}>
-            <Device list={allBankList} label="bank" selectAll required />
+            <GameProvider list={allGameList} required={true} selectAll label="gameName" />
           </Col>
 
           <Col xs={6}>
-            <Form.Item label={t("remark")} name="remark">
+            <Form.Item label={t("gameLoginID")} name="gameLoginID">
+              <Input />
+            </Form.Item>
+          </Col>
+
+          <Col xs={6}>
+            <GameProvider list={allGameList} required={true} selectAll label="toGameName" />
+          </Col>
+
+          <Col xs={6}>
+            <Form.Item label={t("toGameLoginID")} name="toGameLoginID">
               <Input />
             </Form.Item>
           </Col>
@@ -38,7 +48,7 @@ const BankRecord = () => {
         </Button>
       </Form>
 
-      <Divider>Bank Record</Divider>
+      <Divider>Rekemen Record</Divider>
 
       <Card loading={isLoading}>
         <Table columns={columns} dataSource={apiData} rowKey="srno" scroll={{ x: true }} />
@@ -47,4 +57,4 @@ const BankRecord = () => {
   );
 };
 
-export default BankRecord;
+export default RekemenRecord;

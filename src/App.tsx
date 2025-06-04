@@ -10,6 +10,8 @@ import { ConfigProvider } from "antd";
 import Bank from "./pages/bank/maybank/Maybank";
 import BankBalance from "./pages/bank/bank-balance/BankBalance";
 import BankRecord from "./pages/bank/bank-record/BankRecord";
+import RekemenRecord from "./pages/bank/rekemen-record/RekemenRecord";
+import TransferRecord from "./pages/bank/transfer-record/TransferRecord";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -37,6 +39,8 @@ function App() {
         { path: "/bank-transaction", element: <Protected roles={[1, 2]} component={<Bank />} /> },
         { path: "/company-bank", element: <Protected roles={[1, 2]} component={<BankBalance />} /> },
         { path: "/bank-marketing", element: <Protected roles={[1, 2]} component={<BankRecord />} /> },
+        { path: "/rekemen-record", element: <Protected roles={[1, 2]} component={<RekemenRecord />} /> },
+        { path: "/transfer-record", element: <Protected roles={[1, 2]} component={<TransferRecord />} /> },
       ],
     },
   ]);

@@ -66,8 +66,20 @@ export const useMainMenu = () => {
           hidden: userInfo && userInfo.userType > 2,
         },
         {
-          label: t("Bank Record"),
+          label: t("Deposit Withdraw Record"),
           key: "/bank-marketing",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
+        },
+        {
+          label: t("Rekemen Record"),
+          key: "/rekemen-record",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
+        },
+        {
+          label: t("Transfer Record"),
+          key: "/transfer-record",
           icon: <FileSearchOutlined />,
           hidden: userInfo && userInfo.userType > 2,
         },
