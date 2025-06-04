@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
-import { Button, Form, message, Space, TableProps, Tag } from "antd";
+import { Form, message, TableProps, Tag } from "antd";
 import { formatDateTime, formatIndex, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { IDeviceType, IGameProviderType, ITransactionType } from "../../../../type/main.interface";
