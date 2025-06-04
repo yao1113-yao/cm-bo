@@ -39,7 +39,7 @@ const TransferRecord = () => {
         </Row>
         <CommonButton text="Submit" />
         &nbsp;
-        <Button icon={<LeftCircleOutlined />} type="primary" style={{ background: "blue" }} onClick={() => handleSearchByFilter(" ")}>
+        <Button icon={<LeftCircleOutlined />} type="primary" style={{ background: "blue" }} onClick={() => handleSearchByFilter("day")}>
           {t("today")}
         </Button>
         &nbsp;
