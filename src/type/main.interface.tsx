@@ -147,3 +147,16 @@ export interface IBankRecordMarketingType {
   createDate: Date;
   gameName: string;
 }
+
+export interface ILogType {
+  srno: number;
+  companyGameProviderSrno: number;
+  type: string;
+  staffID: string;
+  beforeBalance: number;
+  balance: number;
+  afterBalance: number;
+  remark: string;
+  gameName: string;
+  createBy: string;
+}

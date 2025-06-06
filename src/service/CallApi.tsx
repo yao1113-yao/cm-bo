@@ -43,3 +43,16 @@ export async function bankApi(url: string, object: object) {
 
   return result;
 }
+
+export async function staffApi(url: string, object: object) {
+  const response = await ApiBaseUrl(api1).post("/api/staff" + url, object);
+  const result = response.data;
+
+  return result;
+}
+export async function LogApi(url: string, object: object) {
+  const response = await ApiBaseUrl(api1).post("/api/log" + url, object);
+  const result = response.data;
+
+  return result;
+}

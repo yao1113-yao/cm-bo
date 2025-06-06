@@ -12,6 +12,9 @@ import BankBalance from "./pages/bank/bank-balance/BankBalance";
 import BankRecord from "./pages/bank/bank-record/BankRecord";
 import RekemenRecord from "./pages/bank/rekemen-record/RekemenRecord";
 import TransferRecord from "./pages/bank/transfer-record/TransferRecord";
+import KioskBalance from "./pages/bank/kiosk-balance/KioskBalance";
+import KioskErrorReport from "./pages/bank/error-report/kiosk/KioskErrorReport";
+import BankErrorReport from "./pages/bank/error-report/bank/BankErrorReport";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -38,9 +41,12 @@ function App() {
         { path: "/player/register", element: <Protected roles={[1, 2]} component={<PlayerRegister />} /> },
         { path: "/bank-transaction", element: <Protected roles={[1, 2]} component={<Bank />} /> },
         { path: "/company-bank", element: <Protected roles={[1, 2]} component={<BankBalance />} /> },
+        { path: "/kiosk-balance", element: <Protected roles={[1, 2]} component={<KioskBalance />} /> },
         { path: "/bank-marketing", element: <Protected roles={[1, 2]} component={<BankRecord />} /> },
         { path: "/rekemen-record", element: <Protected roles={[1, 2]} component={<RekemenRecord />} /> },
         { path: "/transfer-record", element: <Protected roles={[1, 2]} component={<TransferRecord />} /> },
+        { path: "/kiosk-error", element: <Protected roles={[1, 2]} component={<KioskErrorReport />} /> },
+        { path: "/bank-error", element: <Protected roles={[1, 2]} component={<BankErrorReport />} /> },
       ],
     },
   ]);

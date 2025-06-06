@@ -60,8 +60,14 @@ export const useMainMenu = () => {
           hidden: userInfo && userInfo.userType > 2,
         },
         {
-          label: t("Bank And Kiosk Balance"),
+          label: t("Bank Balance"),
           key: "/company-bank",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
+        },
+        {
+          label: t("Kiosk Balance"),
+          key: "/kiosk-balance",
           icon: <FileSearchOutlined />,
           hidden: userInfo && userInfo.userType > 2,
         },
@@ -80,6 +86,26 @@ export const useMainMenu = () => {
         {
           label: t("Transfer Record"),
           key: "/transfer-record",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
+        },
+      ],
+    },
+    {
+      label: t("errorReport"),
+      key: "errorReport",
+      type: "group",
+      hidden: userInfo && userInfo.userType > 2,
+      children: [
+        {
+          label: t("Bank Error Report"),
+          key: "/bank-error",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
+        },
+        {
+          label: t("Kiosk Error Report"),
+          key: "/kiosk-error",
           icon: <FileSearchOutlined />,
           hidden: userInfo && userInfo.userType > 2,
         },

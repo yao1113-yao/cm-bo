@@ -17,6 +17,7 @@ export const useMaybank = () => {
   const { companyList } = useContext(Api);
 
   const [form] = Form.useForm();
+  const [form2] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -156,7 +157,8 @@ export const useMaybank = () => {
           .then(() => {
             form.resetFields();
             setIsLoading(false);
-            // handleGetBankRecordList(banks);
+            handleGetBankRecordList({ bank: handleGetBankRecordList });
+            form2.setFieldValue("bank", bankSelected);
             messageApi.open({
               type: "success",
               content: "Success",
@@ -203,5 +205,5 @@ export const useMaybank = () => {
     setIsLoading(false);
   }
 
-  return { form, contextHolder, companyList, isLoading, selectedCompany, setSelectedCompany, bankSelected, setBankSelected, handleOnChangeSelectedCompany, allBankList, bankRecordColumns, bankRecordList, handleInsertBankTransaction, handleGetBankRecordList };
+  return { form, form2, contextHolder, companyList, isLoading, selectedCompany, setSelectedCompany, bankSelected, setBankSelected, handleOnChangeSelectedCompany, allBankList, bankRecordColumns, bankRecordList, handleInsertBankTransaction, handleGetBankRecordList };
 };

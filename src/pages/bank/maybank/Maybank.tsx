@@ -2,9 +2,9 @@ import { Button, Col, Divider, Form, Row, Spin, Table } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import { useMaybank } from "./hook/useMaybank";
 import Device from "../../../components/Device";
-
+import "./maybank.scss";
 const Maybank = () => {
-  const { form, contextHolder, isLoading, setBankSelected, selectedCompany, bankRecordColumns, allBankList, bankRecordList, handleInsertBankTransaction, handleGetBankRecordList } = useMaybank();
+  const { form, form2, contextHolder, isLoading, setBankSelected, selectedCompany, bankRecordColumns, allBankList, bankRecordList, handleInsertBankTransaction, handleGetBankRecordList } = useMaybank();
 
   return (
     <Spin spinning={isLoading}>
@@ -35,7 +35,7 @@ const Maybank = () => {
             return (
               <Col xs={3} key={items.srno}>
                 <Form.Item>
-                  <Button htmlType="submit" style={{ width: "100%" }} onClick={() => setBankSelected(items.item)}>
+                  <Button htmlType="submit" className={`bank-button-${items.item}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected(items.item)}>
                     {items.item}
                   </Button>
                 </Form.Item>
@@ -47,7 +47,7 @@ const Maybank = () => {
 
       <Divider>Bank Record</Divider>
 
-      <Form onFinish={handleGetBankRecordList}>
+      <Form onFinish={handleGetBankRecordList} form={form2}>
         <Row>
           <Col xs={6}>
             <Device list={allBankList} label="bank" selectAll={false} required />
