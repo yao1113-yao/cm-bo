@@ -1,7 +1,5 @@
-import { Card, Col, Divider, Form, Input, InputNumber, Row, Table } from "antd";
+import { Card, Table } from "antd";
 import { useKioskBalance } from "./hook/useKioskBalance";
-import GameProvider from "../../../components/GameProvider";
-import CommonButton from "../../../components/CommonButton";
 
 const KioskBalance = () => {
   const { t, isLoading, apiData2, columnsCompanyGP } = useKioskBalance();
