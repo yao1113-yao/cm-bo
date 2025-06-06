@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Button, Form, message, TableProps, Tooltip } from "antd";
+import { Form, message, TableProps } from "antd";
 import { useLocation } from "react-router-dom";
-import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
-import { ICompanyBankType, ICompanyGPType, IGameProviderType } from "../../../../type/main.interface";
-import { WalletOutlined } from "@ant-design/icons";
+import { ICompanyGPType, IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList } from "../../../../function/ApiFunction";
 
 export const useKioskBalance = () => {
