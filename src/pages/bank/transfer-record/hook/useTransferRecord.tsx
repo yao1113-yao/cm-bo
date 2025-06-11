@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
 import { Form, message, TableProps, Tag } from "antd";
-import { formatDateTime, formatIndex, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { IDeviceType, IGameProviderType, ITransactionType } from "../../../../type/main.interface";
 import { getAllGameProviderList, getAllItemCodeList } from "../../../../function/ApiFunction";

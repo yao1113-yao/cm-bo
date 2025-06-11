@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Form, message, TableProps } from "antd";
 import { IGameProviderType, ILogType, IUserType } from "../../../../../type/main.interface";
 import { getAllGameProviderList, getAllStaffList } from "../../../../../function/ApiFunction";
-import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 
 export const useKioskErrorReport = () => {
