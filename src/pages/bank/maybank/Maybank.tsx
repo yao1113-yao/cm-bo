@@ -57,7 +57,15 @@ const Maybank = () => {
         </Row>
       </Form>
 
-      <Table dataSource={bankRecordList} columns={bankRecordColumns} />
+      <Table
+        dataSource={bankRecordList}
+        columns={bankRecordColumns}
+        pagination={{
+          current: 1,
+          showTotal: (total) => `Total ${total} Items`,
+          pageSize: 30,
+        }}
+      />
       {/* </> */}
     </Spin>
   );

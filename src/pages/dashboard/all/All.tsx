@@ -30,6 +30,21 @@ const All = () => {
   const [pendingTransferRecod, setPendingTransferRecod] = useState<[ITransactionType] | undefined>();
 
   useEffect(() => {
+    // const intervalId = setInterval(() => {
+    //   handleGetTransactionRecord("Main", "Deposit");
+    //   handleGetTransactionRecord("Main", "Deposit");
+    //   handleGetTransactionRecord("Main", "Withdraw");
+    //   handleGetTransactionRecord("Rekemen", "Rekemen");
+    //   handleGetTransactionRecord("Transfer", "Transfer");
+    //   handleGetPendingTransactionRecord("Main", "Deposit");
+    //   handleGetPendingTransactionRecord("Main", "Withdraw");
+    //   handleGetPendingTransactionRecord("Rekemen", "Rekemen");
+    //   handleGetPendingTransactionRecord("Transfer", "Transfer");
+    // }, 10000);
+
+    // return () => {
+    //   clearInterval(intervalId); // Clear the interval on unmount
+    // };
     handleGetTransactionRecord("Main", "Deposit");
     handleGetTransactionRecord("Main", "Withdraw");
     handleGetTransactionRecord("Rekemen", "Rekemen");
@@ -94,12 +109,12 @@ const All = () => {
     <>
       <Card loading={isLoading}>
         <PendingDepositTable pendingDepositRecod={pendingDepositRecod} />
-        <DepositTable depositgRecod={depositRecod} />
         <PendingWithdrawTable pendingWithdrawRecod={pendingWithdrawRecod} />
-        <WithdrawTable withdrawRecod={withdrawRecod} />
         <PendingRekemenTable pendingRekemenRecod={pendingRekemenRecod} />
-        <RekemenTable rekemenRecod={rekemenRecod} />
         <PendingTransferTable pendingTransferRecod={pendingTransferRecod} />
+        <DepositTable depositgRecod={depositRecod} />
+        <WithdrawTable withdrawRecod={withdrawRecod} />
+        <RekemenTable rekemenRecod={rekemenRecod} />
         <TransferTable transferRecod={transferRecod} />
       </Card>
     </>

@@ -1,24 +1,50 @@
-import { Card, Divider, Table, TableProps, Tag } from "antd";
+import { Button, Card, Divider, message, Space, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { useRef } from "react";
+import { useContext, useRef, useState } from "react";
 
-const DepositTable = ({ depositRecord }: any) => {
+import { CheckOutlined } from "@ant-design/icons";
+import Swal from "sweetalert2";
+import { mainApi } from "../../../../service/CallApi";
+import { Api } from "../../../../context/ApiContext";
+
+const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
+  const { userInfo } = useContext(Api);
+
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const userID = localStorage.getItem("userID");
+  const userToken = localStorage.getItem("userToken");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const columns: TableProps<ITransactionType>["columns"] = [
     {
-      title: "#",
-      dataIndex: "srno",
+      title: "action",
       align: "center",
+      render: (record) => {
+        return (
+          <Space>
+            {userInfo?.userType === 3 && record?.mStatus === "SUCCESS" ? (
+              <Tooltip title={t("Noted")}>
+                <Button onClick={() => handleNotedTransaction(record)}>
+                  <CheckOutlined />
+                </Button>
+              </Tooltip>
+            ) : (
+              ""
+            )}
+          </Space>
+        );
+      },
     },
     {
       title: t("status"),
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL TOP UP</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+        return record?.isManual === 1 && text === "SUCCESS" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
       },
     },
     // {
@@ -40,6 +66,13 @@ const DepositTable = ({ depositRecord }: any) => {
     {
       title: t("gameID"),
       dataIndex: "gameID",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("password"),
+      dataIndex: "password",
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
@@ -152,6 +185,41 @@ const DepositTable = ({ depositRecord }: any) => {
     },
   ];
 
+  async function handleNotedTransaction(values: any) {
+    Swal.fire({
+      title: "Confirm to noted the transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Noted",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          status: 1,
+        };
+        await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("deposit");
+            handleGetTransactionRecord("deposit");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
   const samePrev = useRef<boolean>(false);
   const prevClass = useRef<string>("row-highlight-1");
 
@@ -167,9 +235,10 @@ const DepositTable = ({ depositRecord }: any) => {
 
   return (
     <>
+      {contextHolder}
       <Divider>{t("depositRecord")}</Divider>
 
-      <Card>
+      <Card loading={isLoading}>
         <Table columns={columns} dataSource={depositRecord} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
       </Card>
     </>

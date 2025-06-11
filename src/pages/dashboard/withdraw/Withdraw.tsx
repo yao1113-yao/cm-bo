@@ -217,7 +217,7 @@ const Withdraw = ({ type }: DepositProps) => {
       )}
 
       <PendingWithdrawTable pendingWithdrawRecod={pendingWithdrawRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
-      <WithdrawTable withdrawRecod={withdrawRecod} />
+      <WithdrawTable withdrawRecod={withdrawRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
     </>
   );
 };

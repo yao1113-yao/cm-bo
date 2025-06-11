@@ -167,7 +167,7 @@ const Deposit = ({ type }: DepositProps) => {
       )}
 
       <PendingDepositTable pendingDepositRecod={pendingDepositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
-      <DepositTable depositRecord={depositRecod} />
+      <DepositTable depositRecord={depositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
     </>
   );
 };

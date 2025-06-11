@@ -21,6 +21,10 @@ const OpenManualSuccess = ({ openManualSuccess, handleCloseManualSuccessModal, s
             <Input />
           </Form.Item>
 
+          <Form.Item label={t("hpNo")} name="hpNo">
+            <Input />
+          </Form.Item>
+
           <Form.Item label={t("total")} name="total">
             <Input />
           </Form.Item>

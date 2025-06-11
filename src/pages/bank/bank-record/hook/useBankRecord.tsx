@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
-import { Button, Form, Image, message, Space, TableProps, Tag } from "antd";
-import { formatDateTime, formatIndex, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
+import { Form, message, TableProps, Tag } from "antd";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
-import { IBankRecordMarketingType, IDeviceType } from "../../../../type/main.interface";
+import { IDeviceType, ITransactionType } from "../../../../type/main.interface";
 import { getAllItemCodeList } from "../../../../function/ApiFunction";
-
-import { EditOutlined } from "@ant-design/icons";
 
 export const useBankRecord = () => {
   const { t } = useTranslation();
@@ -17,7 +15,7 @@ export const useBankRecord = () => {
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [apiData, setApiData] = useState<IBankRecordMarketingType[] | undefined>();
+  const [apiData, setApiData] = useState<ITransactionType[]>([]);
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
 
@@ -31,101 +29,169 @@ export const useBankRecord = () => {
     handleGetBankRecordMarketingList(initialValues);
   }, []);
 
-  const columns: TableProps<IBankRecordMarketingType>["columns"] = [
+  const columns: TableProps<ITransactionType>["columns"] = [
     {
-      title: "#",
-      render: (_any: any, _text: any, index: number) => {
-        return formatIndex(index);
-      },
-    },
-
-    {
-      title: t("bankCode"),
-      dataIndex: "bankCode",
+      title: t("createDate"),
+      dataIndex: "createDate",
+      align: "center",
       ellipsis: true,
       render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
-      },
-    },
-    {
-      title: t("bankDate"),
-      dataIndex: "bankDate",
-      ellipsis: true,
-      render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
-      },
-    },
-    {
-      title: t("bankRemark"),
-      dataIndex: "bankRemark",
-      ellipsis: true,
-      render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
-      },
-    },
-    {
-      title: t("bankAmount"),
-      dataIndex: "bankAmount",
-      ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
-      },
-    },
-    {
-      title: t("debit"),
-      dataIndex: "debit",
-      ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
-      },
-    },
-    {
-      title: t("credit"),
-      dataIndex: "credit",
-      ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
       },
     },
     {
       title: t("status"),
       dataIndex: "status",
-      ellipsis: true,
+      align: "center",
       render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{text === 1 ? <Tag color="#389e0d">{t("Done")}</Tag> : <Tag color="#f50">{t("Havent")}</Tag>}</div>;
+        return text === 1 ? <Tag color="#87d068">Assign</Tag> : <Tag color="#f50">Haven't</Tag>;
       },
     },
     {
-      title: t("receiptUrl"),
-      dataIndex: "receiptUrl",
-      ellipsis: true,
+      title: t("staff"),
+      dataIndex: "mStaff",
+      align: "center",
       render: (text: string) => {
-        return <Image src={text} alt="receipt" />;
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
-      title: t("createDate"),
-      dataIndex: "createDate",
-      ellipsis: true,
-      sorter: (a: any, b: any) => dayjs(a.createDate).diff(dayjs(b.createDate)),
-      render: (text: Date) => {
-        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      title: t("game"),
+      dataIndex: "mGame",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
-      title: t("action"),
-      ellipsis: true,
-      render: () => {
-        return (
-          <Space>
-            <Button>
-              <EditOutlined />
-            </Button>
-          </Space>
-        );
+      title: t("gameID"),
+      dataIndex: "gameID",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("password"),
+      dataIndex: "password",
+      hidden: false,
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("name"),
+      dataIndex: "name",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("hpNo"),
+      dataIndex: "hpNo",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("device"),
+      dataIndex: "mDevice",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("bankIn"),
+      dataIndex: "credit",
+      align: "center",
+      render: (text: number, record, index: number) => {
+        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[index - 1]?.mktSrno) return <div>-</div>;
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("bankOut"),
+      dataIndex: "debit",
+      align: "center",
+      render: (text: number, record, index: number) => {
+        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[index - 1]?.mktSrno) return <div>-</div>;
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("bank"),
+      dataIndex: "mBank",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("remark"),
+      dataIndex: "remark",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("bonus") + "%",
+      dataIndex: "bonusPer",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("bonus"),
+      dataIndex: "bonus",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("total"),
+      dataIndex: "total",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("freeCredit"),
+      dataIndex: "freeCredit",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("cuci"),
+      dataIndex: "cuci",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
   ];
+
+  const samePrev = useRef<boolean>(false);
+  const prevClass = useRef<string>("row-highlight-1");
+
+  const rowClassName = (record: any, index: number) => {
+    samePrev.current = index > 0 ? record.mktSrno === apiData[index - 1]?.mktSrno : true;
+    if (index === 0) prevClass.current = "row-highlight-1";
+    if (samePrev.current) return prevClass.current;
+    else {
+      prevClass.current = prevClass.current === "row-highlight-1" ? "row-highlight-2" : "row-highlight-1";
+      return prevClass.current;
+    }
+  };
 
   async function handleGetBankRecordMarketingList(values: any) {
     setIsLoading(true);
@@ -160,5 +226,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, form, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter };
+  return { t, form, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
 };

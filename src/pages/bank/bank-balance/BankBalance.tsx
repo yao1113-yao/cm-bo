@@ -3,7 +3,8 @@ import { Card, Table } from "antd";
 import EditBankBalance from "./modal/EditBankBalance";
 
 const BankBalance = () => {
-  const { t, isLoading, form, openEditBankBalance, handleCloseModalEditBankBalance, handleOnChangeAmount, selectedRecord, apiData, columns } = useBankBalance();
+  const { t, isLoading, form, openEditBankBalance, setOpenEditBankBalance, handleCloseModalEditBankBalance, selectedRecord, apiData, columns, handleGetCompanyBankList } = useBankBalance();
+
   return (
     <div>
       {/* <Form>
@@ -25,7 +26,7 @@ const BankBalance = () => {
         <Table columns={columnsCompanyGP} dataSource={apiData2} rowKey="srno" scroll={{ x: true }}></Table>
       </Card> */}
 
-      {openEditBankBalance && <EditBankBalance form={form} openEditBankBalance={openEditBankBalance} selectedRecord={selectedRecord} handleOnChangeAmount={handleOnChangeAmount} handleCloseModalEditBankBalance={handleCloseModalEditBankBalance} />}
+      {openEditBankBalance && <EditBankBalance form={form} openEditBankBalance={openEditBankBalance} setOpenEditBankBalance={setOpenEditBankBalance} selectedRecord={selectedRecord} handleCloseModalEditBankBalance={handleCloseModalEditBankBalance} handleGetCompanyBankList={handleGetCompanyBankList} />}
     </div>
   );
 };

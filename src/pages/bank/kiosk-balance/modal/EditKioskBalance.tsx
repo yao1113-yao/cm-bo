@@ -3,45 +3,46 @@ import { useTranslation } from "react-i18next";
 import { LogApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
 
-const EditBankBalance = ({ isLoading, form, openEditBankBalance, setOpenEditBankBalance, selectedRecord, handleCloseModalEditBankBalance, handleGetCompanyBankList }: any) => {
+const EditKioskBalance = ({ isLoading, openEditKioskBalance, setOpenEditKioskBalance, selectedRecord, handleCloseModalEditBankBalance, handleGetCompanyGPList }: any) => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
 
-  async function handleBankOpeningBalance(values: any) {
+  async function handleKioskOpeningBalance(values: any) {
     const object = {
       UserID: userID,
       UserToken: userToken,
       companyID: "BEST1",
-      CompanyBankSrno: selectedRecord?.srno,
+      CompanyGPSrno: selectedRecord?.srno,
       balance: values?.amount,
     };
-    await LogApi("/bank-opening-balance", object)
+    await LogApi("/kiosk-opening-balance", object)
       .then(() => {
-        form.resetFields();
+        console.log("first");
         messageApi.open({
           type: "success",
           content: "Insert Success",
         });
-        setOpenEditBankBalance(false);
-        handleGetCompanyBankList({ bank: "" });
+        setOpenEditKioskBalance(false);
+        handleGetCompanyGPList({ gameName: "" });
       })
       .catch(() => {
+        console.log("first");
         messageApi.open({
           type: "error",
-          content: "player ID not found",
+          content: "api error",
         });
       });
   }
   return (
     <>
       {contextHolder}
-      <Modal open={openEditBankBalance} onCancel={() => handleCloseModalEditBankBalance()} footer={null} closable={false} title={t("editBankBalance")} loading={isLoading}>
-        <Form layout="vertical" form={form} onFinish={handleBankOpeningBalance}>
-          <Form.Item label={t("bankCode")}>
-            <Input disabled value={selectedRecord?.bankCode} />
+      <Modal open={openEditKioskBalance} onCancel={() => handleCloseModalEditBankBalance()} footer={null} closable={false} title={t("editBankBalance")} loading={isLoading}>
+        <Form layout="vertical" onFinish={handleKioskOpeningBalance}>
+          <Form.Item label={t("gameName")}>
+            <Input disabled value={selectedRecord?.gameName} />
           </Form.Item>
 
           <Form.Item label={t("amount")} name="amount">
@@ -55,4 +56,4 @@ const EditBankBalance = ({ isLoading, form, openEditBankBalance, setOpenEditBank
   );
 };
 
-export default EditBankBalance;
+export default EditKioskBalance;

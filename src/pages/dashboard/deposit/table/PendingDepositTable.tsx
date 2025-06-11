@@ -50,6 +50,10 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                       <Button icon={<MdOutlineWatchLater />} onClick={() => handleMatchBankLater(record)}></Button>
                     </Tooltip>
                   )}
+
+                  <Tooltip title={t("reject")}>
+                    <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                  </Tooltip>
                   {record?.mStatus !== "PROCESSING" ||
                     (record?.mStatus !== "BOT PROCESSING" && (
                       <Tooltip title={t("reject")}>
@@ -120,6 +124,13 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       title: t("gameID"),
       dataIndex: "gameID",
       align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("password"),
+      dataIndex: "password",
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
@@ -388,6 +399,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       UserToken: userToken,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       gameID: values?.gameID,
+      hpNo: values?.hpNo,
       isLater: isLater,
     };
     await mainApi("/insert-manual-success", object)

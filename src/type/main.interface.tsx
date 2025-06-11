@@ -127,6 +127,7 @@ export interface ICompanyGPType {
   srno: number;
   companyID: string;
   companySrno: number;
+  balanceGP: number;
   balance: number;
   createDate: Date;
   gameName: string;
@@ -159,4 +160,5 @@ export interface ILogType {
   remark: string;
   gameName: string;
   createBy: string;
+  createDate: Date;
 }

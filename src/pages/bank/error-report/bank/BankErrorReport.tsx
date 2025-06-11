@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Form, Input, InputNumber, Row, Table } from "antd";
+import { Card, Col, Divider, Form, Input, InputNumber, Row, Select, Table } from "antd";
 import CommonButton from "../../../../components/CommonButton";
 import Staff from "../../../../components/Staff";
 import { useBankErrorReport } from "./hook/useBankErrorReport";
@@ -10,15 +10,23 @@ const BankErrorReport = () => {
   return (
     <div>
       {contextHolder}
-      <Card title={t("addBankError")} loading={isLoading}>
+      <Card title={t("addBankAdjustment")} loading={isLoading}>
         <Form layout="vertical" form={form} onFinish={handleInsertBankError}>
           <Row gutter={20}>
+            <Col xs={6}>
+              <Form.Item label={t("type")} name="type" rules={[{ required: true }]}>
+                <Select defaultActiveFirstOption={true} filterOption={(inputValue: any, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("type")} optionFilterProp="label">
+                  <Select.Option value="Payment">Payment</Select.Option>
+                  <Select.Option value="Error">Error</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
             <Col xs={6}>
               <Device list={allBankList} label="bank" selectAll={false} required />
             </Col>
 
             <Col xs={6}>
-              <Staff list={allStaffList} required={true} selectAll={false} label="staffSrno" />
+              <Staff list={allStaffList} selectAll={false} label="staffSrno" required={false} />
             </Col>
             <Col xs={6}>
               <Form.Item label={t("point")} name="point" required>
@@ -39,7 +47,7 @@ const BankErrorReport = () => {
           <CommonButton text="Add" />
         </Form>
       </Card>
-      <Divider> Bank Error Report</Divider>
+      <Divider> Bank Adjustment Report</Divider>
       <Card loading={isKioskReportLoading}>
         <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankErrorReport}>
           <Row gutter={20}>

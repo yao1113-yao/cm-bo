@@ -90,6 +90,13 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       },
     },
     {
+      title: t("password"),
+      dataIndex: "password",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("name"),
       dataIndex: "name",
       align: "center",

@@ -219,7 +219,7 @@ const Transfer = ({ type }: DepositProps) => {
       )}
 
       <PendingTransferTable pendingTransferRecod={pendingTransferRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />
-      <TransferTable depositRecod={depositRecod} />
+      <TransferTable depositRecod={depositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
     </>
   );
 };

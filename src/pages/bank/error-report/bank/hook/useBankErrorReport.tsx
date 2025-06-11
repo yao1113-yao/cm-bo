@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Form, message, TableProps } from "antd";
 import { IDeviceType, ILogType, IUserType } from "../../../../../type/main.interface";
 import { getAllItemCodeList, getAllStaffList } from "../../../../../function/ApiFunction";
-import { formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
+import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 
 export const useBankErrorReport = () => {
@@ -34,9 +34,19 @@ export const useBankErrorReport = () => {
 
   const columns: TableProps<ILogType>["columns"] = [
     {
-      title: "#",
-      render: (_any: any, _text: any, index: number) => {
-        return formatIndex(index);
+      title: "createDate",
+      dataIndex: "createDate",
+      hidden: false,
+      render: (text: any) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+    {
+      title: t("type"),
+      dataIndex: "type",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
@@ -103,6 +113,7 @@ export const useBankErrorReport = () => {
       UserID: userID,
       UserToken: userToken,
       companyID: "BEST1",
+      type: values?.type,
       staffSrno: values?.staffSrno,
       bankCode: values?.bank,
       point: values?.point,

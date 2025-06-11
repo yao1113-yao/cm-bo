@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Form, message, TableProps } from "antd";
+import { Button, Form, message, TableProps, Tooltip } from "antd";
 import { useLocation } from "react-router-dom";
 import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { ICompanyGPType, IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList } from "../../../../function/ApiFunction";
 
+import { WalletOutlined } from "@ant-design/icons";
 export const useKioskBalance = () => {
   const { t } = useTranslation();
 
@@ -17,7 +18,10 @@ export const useKioskBalance = () => {
   const [form] = Form.useForm();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openEditKioskBalance, setOpenEditKioskBalance] = useState<boolean>(false);
   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
+  const [selectedRecord, setSelectedRecord] = useState<ICompanyGPType | undefined>();
+
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
   const initialValues = location?.state?.userInput !== undefined ? { loginID: location?.state?.userInput?.loginID, status: location?.state.userInput.status, page: location?.state.userInput.page, pageSize: location?.state.userInput.pageSize } : { loginID: "", status: 9, page: 1, pageSize: 10 };
@@ -45,7 +49,15 @@ export const useKioskBalance = () => {
       },
     },
     {
-      title: t("balance"),
+      title: t("balanceGP"),
+      dataIndex: "balanceGP",
+      ellipsis: true,
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("balanceSystem"),
       dataIndex: "balance",
       ellipsis: true,
       render: (text: number) => {
@@ -55,8 +67,14 @@ export const useKioskBalance = () => {
     {
       title: t("action"),
       ellipsis: true,
-      render: () => {
-        return <></>;
+      render: (record) => {
+        return (
+          <>
+            <Tooltip>
+              <Button icon={<WalletOutlined />} onClick={() => handleOpenModalEditBankBalance(record)}></Button>
+            </Tooltip>
+          </>
+        );
       },
     },
   ];
@@ -81,5 +99,17 @@ export const useKioskBalance = () => {
     setIsLoading(false);
   }
 
-  return { t, isLoading, form, allGameList, apiData2, initialValues, columnsCompanyGP };
+  function handleOpenModalEditBankBalance(values: ICompanyGPType) {
+    setSelectedRecord(values);
+    setOpenEditKioskBalance(true);
+  }
+
+  function handleCloseModalEditBankBalance() {
+    form.resetFields();
+
+    setSelectedRecord(undefined);
+    setOpenEditKioskBalance(false);
+  }
+
+  return { t, isLoading, form, allGameList, selectedRecord, handleCloseModalEditBankBalance, openEditKioskBalance, setOpenEditKioskBalance, apiData2, initialValues, columnsCompanyGP, handleGetCompanyGPList };
 };

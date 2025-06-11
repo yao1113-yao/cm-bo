@@ -4,7 +4,7 @@ import { Button, Form, message, Space, TableProps, Tooltip } from "antd";
 import { ICompanyType, IDeviceType, ITransactionType } from "../../../../type/main.interface";
 import { getAllItemCodeList } from "../../../../function/ApiFunction";
 import { Api } from "../../../../context/ApiContext";
-import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useTranslation } from "react-i18next";
 import { RightOutlined, LeftOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
@@ -39,10 +39,11 @@ export const useMaybank = () => {
   console.log(isDeviceLoading);
   const bankRecordColumns: TableProps<ITransactionType>["columns"] = [
     {
-      title: "#",
+      title: "createDate",
+      dataIndex: "createDate",
       hidden: false,
-      render: (_any: any, _text: any, index: number) => {
-        return formatIndex(index);
+      render: (text: any) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
       },
     },
     {

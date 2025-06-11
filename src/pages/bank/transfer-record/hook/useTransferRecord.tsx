@@ -37,26 +37,27 @@ export const useTransferRecord = () => {
 
   const columns: TableProps<ITransactionType>["columns"] = [
     {
-      title: "#",
-      render: (_any: any, _text: any, index: number) => {
-        return formatIndex(index);
-      },
-    },
-
-    {
-      title: t("staff"),
-      dataIndex: "mStaff",
+      title: t("createDate"),
+      dataIndex: "createDate",
       ellipsis: true,
-      render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
       },
     },
     {
-      title: t("companyID"),
-      dataIndex: "companyID",
+      title: t("status"),
+      dataIndex: "mStatus",
       ellipsis: true,
-      render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      render: (text: string, record) => {
+        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL DONE</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+      },
+    },
+    {
+      title: t("freeCredit"),
+      dataIndex: "isFreeCredit",
+      ellipsis: true,
+      render: (text) => {
+        return text === 1 ? <Tag color="#108ee9">Free Credit</Tag> : "-";
       },
     },
     {
@@ -71,6 +72,13 @@ export const useTransferRecord = () => {
       title: t("gameID"),
       dataIndex: "gameID",
       ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("password"),
+      dataIndex: "password",
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
@@ -91,22 +99,7 @@ export const useTransferRecord = () => {
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
-    {
-      title: t("status"),
-      dataIndex: "mStatus",
-      ellipsis: true,
-      render: (text: string, record) => {
-        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL DONE</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
-      },
-    },
-    {
-      title: t("createDate"),
-      dataIndex: "createDate",
-      ellipsis: true,
-      render: (text: Date) => {
-        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
-      },
-    },
+
     // {
     //   title: t("action"),
     //   ellipsis: true,

@@ -98,14 +98,14 @@ export const useMainMenu = () => {
       hidden: userInfo && userInfo.userType > 2,
       children: [
         {
-          label: t("Bank Error Report"),
-          key: "/bank-error",
+          label: t("Bank Adjustment Report"),
+          key: "/bank-adjustment",
           icon: <FileSearchOutlined />,
           hidden: userInfo && userInfo.userType > 2,
         },
         {
-          label: t("Kiosk Error Report"),
-          key: "/kiosk-error",
+          label: t("Kiosk Adjustment Report"),
+          key: "/kiosk-adjustment",
           icon: <FileSearchOutlined />,
           hidden: userInfo && userInfo.userType > 2,
         },

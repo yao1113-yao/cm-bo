@@ -45,8 +45,8 @@ function App() {
         { path: "/bank-marketing", element: <Protected roles={[1, 2]} component={<BankRecord />} /> },
         { path: "/rekemen-record", element: <Protected roles={[1, 2]} component={<RekemenRecord />} /> },
         { path: "/transfer-record", element: <Protected roles={[1, 2]} component={<TransferRecord />} /> },
-        { path: "/kiosk-error", element: <Protected roles={[1, 2]} component={<KioskErrorReport />} /> },
-        { path: "/bank-error", element: <Protected roles={[1, 2]} component={<BankErrorReport />} /> },
+        { path: "/kiosk-adjustment", element: <Protected roles={[1, 2]} component={<KioskErrorReport />} /> },
+        { path: "/bank-adjustment", element: <Protected roles={[1, 2]} component={<BankErrorReport />} /> },
       ],
     },
   ]);

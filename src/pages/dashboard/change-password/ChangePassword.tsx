@@ -1,12 +1,16 @@
-import { Card, Col, Form, Input, message, Row } from "antd";
+import { Button, Card, Col, Divider, Form, Input, message, Row, Table, TableProps, Tag, Tooltip } from "antd";
 import GameProvider from "../../../components/GameProvider";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import { IGameProviderType } from "../../../type/main.interface";
+import { useContext, useEffect, useRef, useState } from "react";
+import { IGameProviderType, ITransactionType } from "../../../type/main.interface";
 import { getAllGameProviderList } from "../../../function/ApiFunction";
 import CommonButton from "../../../components/CommonButton";
 import { mainApi } from "../../../service/CallApi";
 import { RobotOutlined } from "@ant-design/icons";
+import { formatDateTime, formatString } from "../../../function/CommonFunction";
+import Swal from "sweetalert2";
+import { Api } from "../../../context/ApiContext";
+import { CheckOutlined } from "@ant-design/icons";
 // interface DepositProps extends React.HTMLAttributes<HTMLElement> {
 //   type: string;
 // }
@@ -14,6 +18,8 @@ import { RobotOutlined } from "@ant-design/icons";
 const ChangePassword = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+  const { userInfo } = useContext(Api);
+
   const [messageApi, contextHolder] = message.useMessage();
 
   const userID = localStorage.getItem("userID");
@@ -22,11 +28,13 @@ const ChangePassword = () => {
   const [isGameLoading, setIsGameLoading] = useState<boolean>(false);
   const [passwordRandom, setPasswordRandom] = useState<string>("");
 
+  const [apiData, setApiData] = useState<ITransactionType[]>([]);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
   console.log(isGameLoading, passwordRandom);
   useEffect(() => {
     getAllGameProviderList(setIsGameLoading, setAllGameList);
+    handleGetPendingTransactionRecord("ChangePassword");
   }, []);
 
   async function handleChangePlayerPassword(values: any) {
@@ -34,11 +42,14 @@ const ChangePassword = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      companyID: "BEST1",
       ...values,
     };
     await mainApi("/change-player-password", object)
       .then(() => {
         form.resetFields();
+        handleGetPendingTransactionRecord("ChangePassword");
+
         messageApi.open({
           type: "success",
           content: "Waiting Bot",
@@ -70,6 +81,153 @@ const ChangePassword = () => {
     form.setFieldValue("password", bigPart + smallPart + numberPart);
   }
 
+  const columns: TableProps<ITransactionType>["columns"] = [
+    {
+      title: "action",
+      render: (record: any) => {
+        return (
+          <>
+            {userInfo?.userType === 3 && record?.mStatus === "SUCCESS" ? (
+              <Tooltip title={t("Noted")}>
+                <Button onClick={() => handleNotedTransaction(record)}>
+                  <CheckOutlined />
+                </Button>
+              </Tooltip>
+            ) : (
+              ""
+            )}
+          </>
+        );
+      },
+    },
+    {
+      title: t("status"),
+      dataIndex: "mStatus",
+      align: "center",
+      render: (text: string) => {
+        return text === "PROCESSING" ? <Tag color="#4096ff">PROCESSING</Tag> : <Tag color="#87d068">DONE</Tag>;
+      },
+    },
+    // {
+    //   title: t("staff"),
+    //   dataIndex: "mStaff",
+    //   align: "center",
+    //   render: (text: string) => {
+    //     return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+    //   },
+    // },
+    {
+      title: t("game"),
+      dataIndex: "mGame",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("gameID"),
+      dataIndex: "gameID",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("password"),
+      dataIndex: "password",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("name"),
+      dataIndex: "name",
+
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("hpNo"),
+      dataIndex: "hpNo",
+
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("createDate"),
+      dataIndex: "createDate",
+      align: "center",
+
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+  ];
+
+  async function handleNotedTransaction(values: any) {
+    Swal.fire({
+      title: "Confirm to noted the transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Noted",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          status: 1,
+        };
+        await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("ChangePassword");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
+  async function handleGetPendingTransactionRecord(type: string) {
+    setIsLoading(true);
+    const object = {
+      UserID: userID,
+      UserToken: userToken,
+      type: type,
+      RecordType: "ChangePassword",
+    };
+    await mainApi("/pending-transaction-record", object).then((result) => {
+      setApiData(result.data);
+    });
+    setIsLoading(false);
+  }
+
+  const samePrev = useRef<boolean>(false);
+  const prevClass = useRef<string>("row-highlight-1");
+
+  const rowClassName = (record: any, index: number) => {
+    samePrev.current = index > 0 ? record.mktSrno === apiData[index - 1]?.mktSrno : true;
+    if (index === 0) prevClass.current = "row-highlight-1";
+    if (samePrev.current) return prevClass.current;
+    else {
+      prevClass.current = prevClass.current === "row-highlight-1" ? "row-highlight-2" : "row-highlight-1";
+      return prevClass.current;
+    }
+  };
   return (
     <>
       {contextHolder}
@@ -94,6 +252,12 @@ const ChangePassword = () => {
 
           <CommonButton text="submit" />
         </Form>
+
+        <Divider>{t("changePasswordRecord")}</Divider>
+
+        <Card>
+          <Table columns={columns} dataSource={apiData} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
+        </Card>
       </Card>
     </>
   );

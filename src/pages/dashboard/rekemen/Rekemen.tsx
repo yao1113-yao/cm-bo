@@ -166,7 +166,7 @@ const Rekemen = ({ type }: DepositProps) => {
         </Form>
       )}
       <PendingRekemenTable pendingRekemenRecod={pendingWithdrawRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
-      <RekemenTable depositRecord={depositRecod} />
+      <RekemenTable depositRecord={depositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
     </>
   );
 };

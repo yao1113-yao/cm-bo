@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Form, Input, InputNumber, Row, Table } from "antd";
+import { Card, Col, Divider, Form, Input, InputNumber, Row, Select, Table } from "antd";
 import { useKioskErrorReport } from "./hook/useKioskErrorReport";
 import GameProvider from "../../../../components/GameProvider";
 import CommonButton from "../../../../components/CommonButton";
@@ -10,15 +10,23 @@ const KioskErrorReport = () => {
   return (
     <div>
       {contextHolder}
-      <Card title={t("addKioskError")} loading={isLoading}>
+      <Card title={t("addKioskAdjustment")} loading={isLoading}>
         <Form layout="vertical" form={form} onFinish={handleInsertKioskError}>
           <Row gutter={20}>
+            <Col xs={6}>
+              <Form.Item label={t("type")} name="type" rules={[{ required: true }]}>
+                <Select defaultActiveFirstOption={true} filterOption={(inputValue: any, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("type")} optionFilterProp="label">
+                  <Select.Option value="Edit Point">Edit Point</Select.Option>
+                  <Select.Option value="Error">Error</Select.Option>
+                </Select>
+              </Form.Item>
+            </Col>
             <Col xs={6}>
               <GameProvider list={allGameList} required={true} selectAll={false} label="gameName" />
             </Col>
 
             <Col xs={6}>
-              <Staff list={allStaffList} required={true} selectAll={false} label="staffSrno" />
+              <Staff list={allStaffList} required={false} selectAll={false} label="staffSrno" />
             </Col>
             <Col xs={6}>
               <Form.Item label={t("point")} name="point" required>
@@ -39,7 +47,7 @@ const KioskErrorReport = () => {
           <CommonButton text="Add" />
         </Form>
       </Card>
-      <Divider>Kiosk Error Report</Divider>
+      <Divider>Kiosk Adjustment Report</Divider>
       <Card loading={isKioskReportLoading}>
         <Form layout="vertical" initialValues={initialValues} onFinish={handleGetKioskErrorReport}>
           <Row gutter={20}>
