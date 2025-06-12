@@ -69,6 +69,7 @@ export interface ITransactionType {
   bankAmount: number;
   isManual: number;
   isLater: number;
+  isSeen: number;
   isFreeCredit: number;
   companyID: string;
   customerBank: string;

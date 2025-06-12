@@ -4,7 +4,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 
-import { CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { mainApi } from "../../../../service/CallApi";
 import { Api } from "../../../../context/ApiContext";
@@ -26,14 +26,20 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       render: (record) => {
         return (
           <Space>
-            {userInfo?.userType === 3 && record?.mStatus === "SUCCESS" ? (
-              <Tooltip title={t("Noted")}>
-                <Button onClick={() => handleNotedTransaction(record)}>
-                  <CheckOutlined />
+            {userInfo?.userType === 3 && record?.mStatus === "DONE" ? (
+              record?.isSeen === 0 && (
+                <Tooltip title={t("Noted")}>
+                  <Button onClick={() => handleNotedTransaction(record)}>
+                    <CheckOutlined />
+                  </Button>
+                </Tooltip>
+              )
+            ) : (
+              <Tooltip title={t("ShowRecordToMkt")}>
+                <Button onClick={() => handleShowRecord(record)}>
+                  <ClockCircleOutlined />
                 </Button>
               </Tooltip>
-            ) : (
-              ""
             )}
           </Space>
         );
@@ -44,7 +50,7 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isManual === 1 && text === "SUCCESS" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+        return record?.isSeen === 1 ? <Tag color="#87d068">DONE</Tag> : record?.isManual === 1 && text === "SUCCESS" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text === "DONE" ? "SUCCESS" : text}</Tag>;
       },
     },
     // {
@@ -200,6 +206,40 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
           status: 1,
         };
         await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("deposit");
+            handleGetTransactionRecord("deposit");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
+  async function handleShowRecord(values: any) {
+    Swal.fire({
+      title: "Confirm show the record to MKT?",
+      showCancelButton: true,
+      confirmButtonText: "Show",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+        };
+        await mainApi("/show-record", object)
           .then(() => {
             handleGetPendingTransactionRecord("deposit");
             handleGetTransactionRecord("deposit");

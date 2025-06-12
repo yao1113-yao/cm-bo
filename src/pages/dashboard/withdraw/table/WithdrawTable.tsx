@@ -6,7 +6,7 @@ import { useContext, useRef, useState } from "react";
 import { FileImageOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { Api } from "../../../../context/ApiContext";
-import { CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 
 const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
@@ -30,14 +30,20 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
               <Button icon={<FileImageOutlined />} onClick={() => handleViewReceipt(record)}></Button>
             </Tooltip>
 
-            {userInfo?.userType === 3 && record?.mStatus === "SUCCESS" ? (
-              <Tooltip title={t("Noted")}>
-                <Button onClick={() => handleNotedTransaction(record)}>
-                  <CheckOutlined />
+            {userInfo?.userType === 3 && record?.mStatus === "DONE" ? (
+              record?.isSeen === 0 && (
+                <Tooltip title={t("Noted")}>
+                  <Button onClick={() => handleNotedTransaction(record)}>
+                    <CheckOutlined />
+                  </Button>
+                </Tooltip>
+              )
+            ) : (
+              <Tooltip title={t("ShowRecordToMkt")}>
+                <Button onClick={() => handleShowRecord(record)}>
+                  <ClockCircleOutlined />
                 </Button>
               </Tooltip>
-            ) : (
-              ""
             )}
           </>
         );
@@ -196,7 +202,39 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
     }
   };
 
-  console.log(selectedRecord);
+  async function handleShowRecord(values: any) {
+    Swal.fire({
+      title: "Confirm show the record to MKT?",
+      showCancelButton: true,
+      confirmButtonText: "Show",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+        };
+        await mainApi("/show-record", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("transfer");
+            handleGetTransactionRecord("transfer");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
 
   function handleViewReceipt(values: any) {
     setViewReceipt(true);

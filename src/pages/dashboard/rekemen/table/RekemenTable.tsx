@@ -1,11 +1,11 @@
-import { Button, Card, Divider, message, Table, TableProps, Tag, Tooltip } from "antd";
+import { Button, Card, Divider, message, Space, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { Api } from "../../../../context/ApiContext";
-import { CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 
 const RekemenTable = ({ depositRecord, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
@@ -22,15 +22,23 @@ const RekemenTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       render: (record: any) => {
         return (
           <>
-            {userInfo?.userType === 3 && record?.mStatus === "SUCCESS" ? (
-              <Tooltip title={t("Noted")}>
-                <Button onClick={() => handleNotedTransaction(record)}>
-                  <CheckOutlined />
-                </Button>
-              </Tooltip>
-            ) : (
-              ""
-            )}
+            <Space>
+              {userInfo?.userType === 3 && record?.mStatus === "DONE" ? (
+                record?.isSeen === 0 && (
+                  <Tooltip title={t("Noted")}>
+                    <Button onClick={() => handleNotedTransaction(record)}>
+                      <CheckOutlined />
+                    </Button>
+                  </Tooltip>
+                )
+              ) : (
+                <Tooltip title={t("ShowRecordToMkt")}>
+                  <Button onClick={() => handleShowRecord(record)}>
+                    <ClockCircleOutlined />
+                  </Button>
+                </Tooltip>
+              )}
+            </Space>
           </>
         );
       },
@@ -209,6 +217,41 @@ const RekemenTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       setIsLoading(false);
     });
   }
+
+  async function handleShowRecord(values: any) {
+    Swal.fire({
+      title: "Confirm show the record to MKT?",
+      showCancelButton: true,
+      confirmButtonText: "Show",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+        };
+        await mainApi("/show-record", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("rekemen");
+            handleGetTransactionRecord("rekemen");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
   const samePrev = useRef<boolean>(false);
   const prevClass = useRef<string>("row-highlight-1");
 
