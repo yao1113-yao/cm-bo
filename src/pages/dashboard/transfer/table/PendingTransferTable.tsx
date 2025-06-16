@@ -1,4 +1,4 @@
-import { Button, Card, Divider, message, Space, Table, TableProps, Tag, Tooltip } from "antd";
+import { Button, Card, Divider, message, Space, Spin, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
@@ -16,7 +16,6 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  console.log(isLoading);
   const columns: TableProps<ITransactionType>["columns"] = [
     {
       title: t("action"),
@@ -189,12 +188,14 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
 
   return (
     <>
-      {contextHolder}
-      <Divider>{t("pendingTransferRecord")}</Divider>
+      <Spin spinning={isLoading}>
+        {contextHolder}
+        <Divider>{t("pendingTransferRecord")}</Divider>
 
-      <Card>
-        <Table columns={columns} dataSource={pendingTransferRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
-      </Card>
+        <Card>
+          <Table columns={columns} dataSource={pendingTransferRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
+        </Card>
+      </Spin>
     </>
   );
 };

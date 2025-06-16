@@ -61,6 +61,7 @@ export interface ITransactionType {
   cuci: number;
   status: number;
   createBy: string;
+  sysRemark1: string;
   createDate: Date;
   recordType: string;
   bankRecordSrno: number;

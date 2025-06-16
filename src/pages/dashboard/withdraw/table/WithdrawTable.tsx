@@ -280,7 +280,7 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
       {contextHolder}
       <Divider>{t("withdrawRecord")}</Divider>
 
-      <Card loading={isLoading}>
+      <Card>
         <Table columns={columns} dataSource={withdrawRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
       </Card>
 

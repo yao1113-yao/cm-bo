@@ -1,4 +1,4 @@
-import { Checkbox, Col, Divider, Form, Input, InputNumber, message, Row, Space } from "antd";
+import { Checkbox, Col, Divider, Form, Input, InputNumber, message, Row, Space, Spin } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import Device from "../../../components/Device";
 import GameProvider from "../../../components/GameProvider";
@@ -22,19 +22,28 @@ const Withdraw = ({ type }: DepositProps) => {
   const userToken = localStorage.getItem("userToken");
   const { userInfo } = useContext(Api);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
 
-  const [isGameLoading, setIsGameLoading] = useState<boolean>(false);
-  const [isDeviceLoading, setIsDeviceLoading] = useState<boolean>(false);
   const [cuciAllEnable, setCuciAllEnable] = useState<boolean>(false);
   const [withdrawRecod, setWithdrawRecord] = useState<[ITransactionType] | undefined>();
   const [pendingWithdrawRecod, setPendingWithdrawRecord] = useState<[ITransactionType] | undefined>();
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
   const [allDeviceList, setAllDeviceList] = useState<[IDeviceType] | undefined>();
 
-  console.log(isDeviceLoading, isGameLoading, isLoading);
   useEffect(() => {
-    getAllGameProviderList(setIsGameLoading, setAllGameList);
-    getAllItemCodeList("MDevice", setIsDeviceLoading, setAllDeviceList);
+    getAllGameProviderList(setIsLoading, setAllGameList);
+    getAllItemCodeList("MDevice", setIsLoading, setAllDeviceList);
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      handleGetTransactionRecord("Withdraw");
+      handleGetPendingTransactionRecord("Withdraw");
+    }, 10000);
+
+    return () => {
+      clearInterval(intervalId); // Clear the interval on unmount
+    };
   }, []);
 
   function handleOnChangeBonus(current: any, all: any) {
@@ -77,13 +86,8 @@ const Withdraw = ({ type }: DepositProps) => {
     setIsLoading(false);
   }
 
-  useEffect(() => {
-    handleGetTransactionRecord("Withdraw");
-    handleGetPendingTransactionRecord("Withdraw");
-  }, []);
-
   async function handleInsertGetTransactionRecord(values: any) {
-    setIsLoading(true);
+    setIsActionLoading(true);
     const object = {
       UserID: userID,
       UserToken: userToken,
@@ -106,7 +110,7 @@ const Withdraw = ({ type }: DepositProps) => {
       form.resetFields();
       handleGetPendingTransactionRecord("Withdraw");
     });
-    setIsLoading(false);
+    setIsActionLoading(false);
   }
 
   function handleCheckFreeCredit() {
@@ -116,108 +120,110 @@ const Withdraw = ({ type }: DepositProps) => {
 
   return (
     <>
-      {userInfo?.userType !== 2 && (
-        <Form layout="vertical" form={form} onValuesChange={handleOnChangeBonus} onFinish={handleInsertGetTransactionRecord}>
-          <Row gutter={10}>
-            <Col xs={3}>
-              <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
-            </Col>
+      <Spin spinning={isActionLoading}>
+        {userInfo?.userType !== 2 && (
+          <Form layout="vertical" form={form} onValuesChange={handleOnChangeBonus} onFinish={handleInsertGetTransactionRecord}>
+            <Row gutter={10}>
+              <Col xs={3}>
+                <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
+              </Col>
 
-            <Col xs={3}>
-              <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
-              </Form.Item>
-            </Col>
+              <Col xs={3}>
+                <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input />
+                </Form.Item>
+              </Col>
 
-            <Col xs={3}>
-              <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
-              </Form.Item>
-            </Col>
+              <Col xs={3}>
+                <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input />
+                </Form.Item>
+              </Col>
 
-            <Col xs={3}>
-              <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
-              </Form.Item>
-            </Col>
+              <Col xs={3}>
+                <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input />
+                </Form.Item>
+              </Col>
 
-            <Col xs={3}>
-              <Device list={allDeviceList} required={true} selectAll={false} label="device" />
-            </Col>
+              <Col xs={3}>
+                <Device list={allDeviceList} required={true} selectAll={false} label="device" />
+              </Col>
 
-            <Col xs={3}>
-              <Form.Item
-                label={
-                  <Space>
-                    {t("credit")}
-                    <Checkbox onChange={handleCheckFreeCredit}>
-                      <div>&nbsp;Cuci All</div>
-                    </Checkbox>
-                  </Space>
-                }
-                name="credit"
-                rules={[{ required: !cuciAllEnable, message: t("pleaseSelect") }]}
-              >
-                <InputNumber style={{ width: "100%" }} disabled={cuciAllEnable} />
-              </Form.Item>
-            </Col>
-          </Row>
+              <Col xs={3}>
+                <Form.Item
+                  label={
+                    <Space>
+                      {t("credit")}
+                      <Checkbox onChange={handleCheckFreeCredit}>
+                        <div>&nbsp;Cuci All</div>
+                      </Checkbox>
+                    </Space>
+                  }
+                  name="credit"
+                  rules={[{ required: !cuciAllEnable, message: t("pleaseSelect") }]}
+                >
+                  <InputNumber style={{ width: "100%" }} disabled={cuciAllEnable} />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Divider style={{ margin: "0px" }}>{t("bankDetails")}</Divider>
+            <Divider style={{ margin: "0px" }}>{t("bankDetails")}</Divider>
 
-          <Row gutter={10}>
-            <Col xs={3}>
-              <Form.Item label={t("customerBank")} name="customerBank" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                <Input />
-              </Form.Item>
-            </Col>
+            <Row gutter={10}>
+              <Col xs={3}>
+                <Form.Item label={t("customerBank")} name="customerBank" rules={[{ required: true, message: t("pleaseEnter") }]}>
+                  <Input />
+                </Form.Item>
+              </Col>
 
-            <Col xs={3}>
-              <Form.Item label={t("customerBankAccNo")} name="customerBankAccNo" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                <Input />
-              </Form.Item>
-            </Col>
+              <Col xs={3}>
+                <Form.Item label={t("customerBankAccNo")} name="customerBankAccNo" rules={[{ required: true, message: t("pleaseEnter") }]}>
+                  <Input />
+                </Form.Item>
+              </Col>
 
-            <Col xs={3}>
-              <Form.Item label={t("customerBankAccName")} name="customerBankAccName" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                <Input />
-              </Form.Item>
-            </Col>
+              <Col xs={3}>
+                <Form.Item label={t("customerBankAccName")} name="customerBankAccName" rules={[{ required: true, message: t("pleaseEnter") }]}>
+                  <Input />
+                </Form.Item>
+              </Col>
 
-            {/* <Col xs={3}>
+              {/* <Col xs={3}>
             <Form.Item label={t("hpNo")} name="customerHpNo" rules={[{ required: true, message: t("pleaseEnter") }]}>
               <Input />
             </Form.Item>
           </Col> */}
 
-            <Col xs={3}>
-              <Form.Item
-                label={t("cashOut")}
-                name="cashOut"
-                rules={[
-                  { required: true, message: t("pleaseSelect") },
-                  { min: 0, type: "number", message: t("cannotLessThan0") },
-                ]}
-              >
-                <InputNumber style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
+              <Col xs={3}>
+                <Form.Item
+                  label={t("cashOut")}
+                  name="cashOut"
+                  rules={[
+                    { required: true, message: t("pleaseSelect") },
+                    { min: 0, type: "number", message: t("cannotLessThan0") },
+                  ]}
+                >
+                  <InputNumber style={{ width: "100%" }} />
+                </Form.Item>
+              </Col>
 
-            <Col xs={3}>
-              <Form.Item label={t("remark")} name="remark" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                <Input />
-              </Form.Item>
-            </Col>
-          </Row>
+              <Col xs={3}>
+                <Form.Item label={t("remark")} name="remark" rules={[{ required: true, message: t("pleaseEnter") }]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Row>
-            <CommonButton text="submit" />
-          </Row>
-        </Form>
-      )}
+            <Row>
+              <CommonButton text="submit" />
+            </Row>
+          </Form>
+        )}
 
-      <PendingWithdrawTable pendingWithdrawRecod={pendingWithdrawRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
-      <WithdrawTable withdrawRecod={withdrawRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+        <PendingWithdrawTable isPendingLoading={isLoading} pendingWithdrawRecod={pendingWithdrawRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+        <WithdrawTable isPendingLoading={isLoading} withdrawRecod={withdrawRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+      </Spin>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { Button, Col, Divider, Form, Input, InputNumber, message, Row } from "antd";
+import { Button, Col, Divider, Form, Input, InputNumber, message, Row, Spin } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CommonButton from "../../../components/CommonButton";
@@ -24,25 +24,32 @@ const Deposit = ({ type }: DepositProps) => {
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isGameLoading, setIsGameLoading] = useState<boolean>(false);
-  const [isDeviceLoading, setIsDeviceLoading] = useState<boolean>(false);
+  const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
+
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
   const [allDeviceList, setAllDeviceList] = useState<[IDeviceType] | undefined>();
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
 
   const [depositRecod, setDepositRecord] = useState<[ITransactionType] | undefined>();
   const [pendingDepositRecod, setPendingDepositRecord] = useState<[ITransactionType] | undefined>();
-  console.log(isDeviceLoading, isGameLoading, isLoading);
 
   useEffect(() => {
-    getAllGameProviderList(setIsGameLoading, setAllGameList);
-    getAllItemCodeList("MDevice", setIsDeviceLoading, setAllDeviceList);
-    getAllItemCodeList("MBank", setIsDeviceLoading, setAllBankList);
+    getAllGameProviderList(setIsLoading, setAllGameList);
+    getAllItemCodeList("MDevice", setIsLoading, setAllDeviceList);
+    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
   }, []);
 
   useEffect(() => {
     handleGetTransactionRecord("deposit");
     handleGetPendingTransactionRecord("deposit");
+    const intervalId = setInterval(() => {
+      handleGetTransactionRecord("deposit");
+      handleGetPendingTransactionRecord("deposit");
+    }, 10000);
+
+    return () => {
+      clearInterval(intervalId); // Clear the interval on unmount
+    };
   }, []);
 
   async function handleGetTransactionRecord(type: string) {
@@ -74,8 +81,7 @@ const Deposit = ({ type }: DepositProps) => {
   }
 
   async function handleInsertGetTransactionRecord(values: any) {
-    console.log(values);
-    setIsLoading(true);
+    setIsActionLoading(true);
     const object = {
       UserID: userID,
       UserToken: userToken,
@@ -88,7 +94,7 @@ const Deposit = ({ type }: DepositProps) => {
       handleGetPendingTransactionRecord("deposit");
       form.resetFields();
     });
-    setIsLoading(false);
+    setIsActionLoading(false);
   }
 
   const onChange = (e: any, key: any, type: any) => {
@@ -115,59 +121,74 @@ const Deposit = ({ type }: DepositProps) => {
 
   return (
     <>
-      {userInfo?.userType !== 2 && (
-        <Form name="dynamic_form_nest_item" autoComplete="off" layout="vertical" onFinish={handleInsertGetTransactionRecord} initialValues={{ users: [{}] }} form={form}>
-          <Form.List name="users">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map(({ key, name, ...restField }) => (
-                  <>
-                    <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} {...restField} />
-                  </>
-                ))}
-                <Form.Item>
-                  <Button type="dashed" onClick={() => add()}>
-                    Add field
-                  </Button>
+      <Spin spinning={isActionLoading}>
+        {userInfo?.userType !== 2 && (
+          <Form name="dynamic_form_nest_item" autoComplete="off" layout="vertical" onFinish={handleInsertGetTransactionRecord} initialValues={{ users: [{}] }} form={form}>
+            <Form.List name="users">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <>
+                      <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} {...restField} />
+                    </>
+                  ))}
+                  <Form.Item>
+                    <Button type="dashed" onClick={() => add()}>
+                      Add field
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+            <Row gutter={20}>
+              <Col xs={3}>
+                <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input />
                 </Form.Item>
-              </>
-            )}
-          </Form.List>
+              </Col>
 
-          <Divider style={{ margin: "0px" }}>{t("bankDetails")}</Divider>
+              <Col xs={3}>
+                <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <Row gutter={10}>
-            <Col xs={3}>
-              <Device list={allBankList} required={true} selectAll={false} label="bank" />
-            </Col>
+            <Divider style={{ margin: "0px" }}>{t("bankDetails")}</Divider>
 
-            <Col xs={3}>
-              <Form.Item
-                label={t("cashIn")}
-                name="cashIn"
-                rules={[
-                  { required: true, message: t("pleaseSelect") },
-                  { min: 0, type: "number", message: t("cannotLessThan0") },
-                ]}
-              >
-                <InputNumber style={{ width: "100%" }} disabled />
-              </Form.Item>
-            </Col>
+            <Row gutter={10}>
+              <Col xs={3}>
+                <Device list={allBankList} required={true} selectAll={false} label="bank" />
+              </Col>
 
-            <Col xs={3}>
-              <Form.Item label={t("remark")} name="remark" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <CommonButton text="submit" />
-          </Row>
-        </Form>
-      )}
+              <Col xs={3}>
+                <Form.Item
+                  label={t("cashIn")}
+                  name="cashIn"
+                  rules={[
+                    { required: true, message: t("pleaseSelect") },
+                    { min: 0, type: "number", message: t("cannotLessThan0") },
+                  ]}
+                >
+                  <InputNumber style={{ width: "100%" }} disabled />
+                </Form.Item>
+              </Col>
 
-      <PendingDepositTable pendingDepositRecod={pendingDepositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
-      <DepositTable depositRecord={depositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+              <Col xs={3}>
+                <Form.Item label={t("remark")} name="remark" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input style={{ width: "100%" }} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <CommonButton text="submit" />
+            </Row>
+          </Form>
+        )}
+
+        <PendingDepositTable isPendingLoading={isLoading} pendingDepositRecod={pendingDepositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+        <DepositTable isPendingLoading={isLoading} depositRecord={depositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+      </Spin>
     </>
   );
 };

@@ -22,21 +22,19 @@ export const useMaybank = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [isDeviceLoading, setIsDeviceLoading] = useState<boolean>(false);
   const [bankSelected, setBankSelected] = useState<string>("");
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
   const [selectedCompany, setSelectedCompany] = useState<ICompanyType | undefined>();
   const [bankRecordList, setBankRecordList] = useState<[ITransactionType] | undefined>();
 
   useEffect(() => {
-    getAllItemCodeList("MBank", setIsDeviceLoading, setAllBankList);
+    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
     // handleGetBankRecordList();
     const temp = companyList?.filter((items: any) => items.companyID === "BEST1");
     if (temp !== undefined) {
       setSelectedCompany(temp[0]);
     }
   }, []);
-  console.log(isDeviceLoading);
   const bankRecordColumns: TableProps<ITransactionType>["columns"] = [
     {
       title: "createDate",
@@ -158,7 +156,7 @@ export const useMaybank = () => {
           .then(() => {
             form.resetFields();
             setIsLoading(false);
-            handleGetBankRecordList({ bank: handleGetBankRecordList });
+            handleGetBankRecordList({ bank: bankSelected });
             form2.setFieldValue("bank", bankSelected);
             messageApi.open({
               type: "success",

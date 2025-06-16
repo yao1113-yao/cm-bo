@@ -1,4 +1,4 @@
-import { Button, Card, Divider, message, Space, Table, TableProps, Tag, Tooltip } from "antd";
+import { Button, Card, Divider, message, Space, Spin, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
@@ -266,12 +266,14 @@ const RekemenTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
   };
   return (
     <>
-      {contextHolder}
-      <Divider>{t("rekemenRecord")}</Divider>
+      <Spin spinning={isLoading}>
+        {contextHolder}
+        <Divider>{t("rekemenRecord")}</Divider>
 
-      <Card loading={isLoading}>
-        <Table columns={columns} dataSource={depositRecord} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
-      </Card>
+        <Card>
+          <Table columns={columns} dataSource={depositRecord} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
+        </Card>
+      </Spin>
     </>
   );
 };

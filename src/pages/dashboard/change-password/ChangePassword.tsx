@@ -25,16 +25,23 @@ const ChangePassword = () => {
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isGameLoading, setIsGameLoading] = useState<boolean>(false);
-  const [passwordRandom, setPasswordRandom] = useState<string>("");
 
+  const [passwordRandom, setPasswordRandom] = useState<string>("");
+  console.log(passwordRandom);
   const [apiData, setApiData] = useState<ITransactionType[]>([]);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
-  console.log(isGameLoading, passwordRandom);
   useEffect(() => {
-    getAllGameProviderList(setIsGameLoading, setAllGameList);
+    getAllGameProviderList(setIsLoading, setAllGameList);
     handleGetPendingTransactionRecord("ChangePassword");
+
+    const intervalId = setInterval(() => {
+      handleGetPendingTransactionRecord("ChangePassword");
+    }, 10000);
+
+    return () => {
+      clearInterval(intervalId); // Clear the interval on unmount
+    };
   }, []);
 
   async function handleChangePlayerPassword(values: any) {
@@ -152,6 +159,14 @@ const ChangePassword = () => {
       title: t("hpNo"),
       dataIndex: "hpNo",
 
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("systemRemark"),
+      dataIndex: "sysRemark1",
       align: "center",
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;

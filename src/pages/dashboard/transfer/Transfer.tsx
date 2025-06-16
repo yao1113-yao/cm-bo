@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, Divider, Form, Input, InputNumber, message, Row, Select } from "antd";
+import { Button, Checkbox, Col, Divider, Form, Input, InputNumber, message, Row, Select, Spin } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import GameProvider from "../../../components/GameProvider";
 import { mainApi } from "../../../service/CallApi";
@@ -25,11 +25,10 @@ const Transfer = ({ type }: DepositProps) => {
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isGameLoading, setIsGameLoading] = useState<boolean>(false);
-  const [isDeviceLoading, setIsDeviceLoading] = useState<boolean>(false);
+  const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
   const [freeCredit, setFreeCredit] = useState<boolean>(false);
 
-  const [creditAmount, setCreditAmount] = useState<number>(0);
+  // const [creditAmount, setCreditAmount] = useState<number>(0);
 
   const [depositRecod, setDepositRecord] = useState<[ITransactionType] | undefined>();
   const [pendingTransferRecod, setPendingTransferRecod] = useState<[ITransactionType] | undefined>();
@@ -37,15 +36,20 @@ const Transfer = ({ type }: DepositProps) => {
 
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
-  console.log(isDeviceLoading, isGameLoading, isLoading, creditAmount);
   useEffect(() => {
-    getAllGameProviderList(setIsGameLoading, setAllGameList);
-    getAllItemCodeList("MDevice", setIsDeviceLoading, setAllDeviceList);
+    getAllGameProviderList(setIsLoading, setAllGameList);
+    getAllItemCodeList("MDevice", setIsLoading, setAllDeviceList);
   }, []);
 
   useEffect(() => {
-    handleGetTransactionRecord("Transfer");
-    handleGetPendingTransactionRecord("Transfer");
+    const intervalId = setInterval(() => {
+      handleGetTransactionRecord("Transfer");
+      handleGetPendingTransactionRecord("Transfer");
+    }, 10000);
+
+    return () => {
+      clearInterval(intervalId); // Clear the interval on unmount
+    };
   }, []);
 
   async function handleGetTransactionRecord(type: string) {
@@ -76,7 +80,7 @@ const Transfer = ({ type }: DepositProps) => {
   }
 
   async function handleInsertGetTransactionRecord(values: any) {
-    setIsLoading(true);
+    setIsActionLoading(true);
     const object = {
       UserID: userID,
       UserToken: userToken,
@@ -93,7 +97,7 @@ const Transfer = ({ type }: DepositProps) => {
       handleGetPendingTransactionRecord("Transfer");
       form.resetFields();
     });
-    setIsLoading(false);
+    setIsActionLoading(false);
     console.log(values);
   }
 
@@ -131,95 +135,98 @@ const Transfer = ({ type }: DepositProps) => {
     form.resetFields();
   }
   function handleOnChangeCreditAmount(values: any) {
-    setCreditAmount(values);
+    console.log(values);
+    // setCreditAmount(values);
   }
   return (
     <>
-      {contextHolder}
-      {userInfo?.userType !== 2 && (
-        <Form
-          name="dynamic_form_nest_item"
-          // onFinish={onFinish}
-          autoComplete="off"
-          layout="vertical"
-          onFinish={handleInsertGetTransactionRecord}
-          initialValues={{ users: [{}] }}
-          form={form}
-        >
-          {!freeCredit && (
-            <Row gutter={10}>
-              <Col xs={3}>
-                <Form.Item label={t("device")} name="device" rules={[{ required: true }]}>
-                  <Select>
-                    {allDeviceList?.map((items: any) => (
-                      <Select.Option value={items.item} key={items.item}>
-                        {items?.item}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col xs={3}>
-                <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
-              </Col>
+      <Spin spinning={isActionLoading}>
+        {contextHolder}
+        {userInfo?.userType !== 2 && (
+          <Form
+            name="dynamic_form_nest_item"
+            // onFinish={onFinish}
+            autoComplete="off"
+            layout="vertical"
+            onFinish={handleInsertGetTransactionRecord}
+            initialValues={{ users: [{}] }}
+            form={form}
+          >
+            {!freeCredit && (
+              <Row gutter={10}>
+                <Col xs={3}>
+                  <Form.Item label={t("device")} name="device" rules={[{ required: true }]}>
+                    <Select>
+                      {allDeviceList?.map((items: any) => (
+                        <Select.Option value={items.item} key={items.item}>
+                          {items?.item}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col xs={3}>
+                  <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
+                </Col>
 
-              <Col xs={3}>
-                <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input />
-                </Form.Item>
-              </Col>
+                <Col xs={3}>
+                  <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
 
-              <Col xs={3}>
-                <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input />
-                </Form.Item>
-              </Col>
+                <Col xs={3}>
+                  <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
 
-              <Col xs={3}>
-                <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input />
-                </Form.Item>
-              </Col>
+                <Col xs={3}>
+                  <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                    <Input />
+                  </Form.Item>
+                </Col>
 
-              <Col xs={3}>
-                <Form.Item label={t("credit")} name="credit" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <InputNumber style={{ width: "100%" }} prefix="-" onChange={handleOnChangeCreditAmount} />
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
-
-          <Divider>{t("toID")}</Divider>
-
-          <Checkbox onChange={handleOnChangeFreeCredit}>
-            <div>&nbsp;Free Credit</div>
-          </Checkbox>
-
-          <Form.List name="users">
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map(({ key, name, ...restField }) => (
-                  <>
-                    <Action onChange={onChange} allGameList={allGameList} key={key} name={name} remove={remove} {...restField} />
-                  </>
-                ))}
-                <Form.Item>
-                  <Button type="dashed" onClick={() => add()}>
-                    Add field
-                  </Button>
-                </Form.Item>
-              </>
+                <Col xs={3}>
+                  <Form.Item label={t("credit")} name="credit" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                    <InputNumber style={{ width: "100%" }} prefix="-" onChange={handleOnChangeCreditAmount} />
+                  </Form.Item>
+                </Col>
+              </Row>
             )}
-          </Form.List>
 
-          <Row>
-            <CommonButton text="submit" />
-          </Row>
-        </Form>
-      )}
+            <Divider>{t("toID")}</Divider>
 
-      <PendingTransferTable pendingTransferRecod={pendingTransferRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />
-      <TransferTable depositRecod={depositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+            <Checkbox onChange={handleOnChangeFreeCredit}>
+              <div>&nbsp;Free Credit</div>
+            </Checkbox>
+
+            <Form.List name="users">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <>
+                      <Action onChange={onChange} allGameList={allGameList} key={key} name={name} remove={remove} {...restField} />
+                    </>
+                  ))}
+                  <Form.Item>
+                    <Button type="dashed" onClick={() => add()}>
+                      Add field
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+
+            <Row>
+              <CommonButton text="submit" />
+            </Row>
+          </Form>
+        )}
+
+        <PendingTransferTable isPendingLoading={isLoading} pendingTransferRecod={pendingTransferRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />
+        <TransferTable isPendingLoading={isLoading} depositRecod={depositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+      </Spin>
     </>
   );
 };

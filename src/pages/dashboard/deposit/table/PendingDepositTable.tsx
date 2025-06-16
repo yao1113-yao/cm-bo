@@ -1,4 +1,4 @@
-import { Button, Card, Divider, message, Space, Table, TableProps, Tag, Tooltip } from "antd";
+import { Button, Card, Divider, message, Space, Spin, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
@@ -29,8 +29,6 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
   const [isLater, setIsLater] = useState<number>(0);
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
-
-  console.log(isLoading);
 
   const columns: TableProps<ITransactionType>["columns"] = [
     {
@@ -462,18 +460,20 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
 
   return (
     <>
-      {contextHolder}
-      <Divider>{t("pendingDepositTable")}</Divider>
+      <Spin spinning={isLoading}>
+        {contextHolder}
+        <Divider>{t("pendingDepositTable")}</Divider>
 
-      <Card>
-        <Table columns={columns} dataSource={pendingDepositRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
-      </Card>
+        <Card>
+          <Table columns={columns} dataSource={pendingDepositRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
+        </Card>
 
-      {/* open bank list assign bank */}
-      <OpenBankRecord messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} actionType={actionType} bankRecord={bankRecord} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />
+        {/* open bank list assign bank */}
+        <OpenBankRecord messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} actionType={actionType} bankRecord={bankRecord} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />
 
-      {/* manual success */}
-      <OpenManualSuccess openManualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />
+        {/* manual success */}
+        <OpenManualSuccess openMa nualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />
+      </Spin>
     </>
   );
 };
