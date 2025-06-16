@@ -34,6 +34,8 @@ const Rekemen = ({ type }: DepositProps) => {
   }, []);
 
   useEffect(() => {
+    handleGetTransactionRecord("Rekemen");
+    handleGetPendingTransactionRecord("Rekemen");
     const intervalId = setInterval(() => {
       handleGetTransactionRecord("Rekemen");
       handleGetPendingTransactionRecord("Rekemen");

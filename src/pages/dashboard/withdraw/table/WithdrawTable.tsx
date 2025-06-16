@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Image, message, Modal, Table, TableProps, Tag, Tooltip } from "antd";
+import { Button, Card, Divider, Image, message, Modal, Spin, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
@@ -55,6 +55,14 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
       align: "center",
       render: (text: string, record) => {
         return record?.isManual === 1 && text === "SUCCESS" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "SUCCESS" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+      },
+    },
+    {
+      title: t("systemRemark"),
+      dataIndex: "sysRemark1",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     // {
@@ -277,16 +285,18 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
   }
   return (
     <>
-      {contextHolder}
-      <Divider>{t("withdrawRecord")}</Divider>
+      <Spin spinning={isLoading}>
+        {contextHolder}
+        <Divider>{t("withdrawRecord")}</Divider>
 
-      <Card>
-        <Table columns={columns} dataSource={withdrawRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
-      </Card>
+        <Card>
+          <Table columns={columns} dataSource={withdrawRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
+        </Card>
 
-      <Modal open={viewReceipt} onCancel={() => setViewReceipt(false)} footer={null} closable={false}>
-        <Image src={selectedRecord?.receiptUrl} alt="receipt" />
-      </Modal>
+        <Modal open={viewReceipt} onCancel={() => setViewReceipt(false)} footer={null} closable={false}>
+          <Image src={selectedRecord?.receiptUrl} alt="receipt" />
+        </Modal>
+      </Spin>
     </>
   );
 };

@@ -36,6 +36,8 @@ const Withdraw = ({ type }: DepositProps) => {
   }, []);
 
   useEffect(() => {
+    handleGetTransactionRecord("Withdraw");
+    handleGetPendingTransactionRecord("Withdraw");
     const intervalId = setInterval(() => {
       handleGetTransactionRecord("Withdraw");
       handleGetPendingTransactionRecord("Withdraw");

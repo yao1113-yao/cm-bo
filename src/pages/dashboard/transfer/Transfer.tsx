@@ -42,6 +42,8 @@ const Transfer = ({ type }: DepositProps) => {
   }, []);
 
   useEffect(() => {
+    handleGetTransactionRecord("Transfer");
+    handleGetPendingTransactionRecord("Transfer");
     const intervalId = setInterval(() => {
       handleGetTransactionRecord("Transfer");
       handleGetPendingTransactionRecord("Transfer");
