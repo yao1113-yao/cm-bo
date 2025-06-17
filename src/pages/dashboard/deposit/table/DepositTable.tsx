@@ -4,7 +4,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 
-import { CheckOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { CheckOutlined, ClockCircleOutlined, EditOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { mainApi } from "../../../../service/CallApi";
 import { Api } from "../../../../context/ApiContext";
@@ -23,23 +23,32 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
     {
       title: "action",
       align: "center",
+      hidden: userInfo?.userType === 3,
+      render: (record) => {
+        return (
+          <Tooltip title={t("ShowRecordToMkt")}>
+            <Button onClick={() => handleShowRecord(record)}>
+              <ClockCircleOutlined />
+            </Button>
+          </Tooltip>
+        );
+      },
+    },
+    {
+      title: "action",
+      align: "center",
+      hidden: userInfo?.userType !== 3,
       render: (record) => {
         return (
           <Space>
-            {userInfo?.userType === 3 && record?.mStatus === "DONE" ? (
-              record?.isSeen === 0 && (
+            {record?.mStatus !== "DONE" && record?.isSeen === 0 && (
+              <>
                 <Tooltip title={t("Noted")}>
                   <Button onClick={() => handleNotedTransaction(record)}>
                     <CheckOutlined />
                   </Button>
                 </Tooltip>
-              )
-            ) : (
-              <Tooltip title={t("ShowRecordToMkt")}>
-                <Button onClick={() => handleShowRecord(record)}>
-                  <ClockCircleOutlined />
-                </Button>
-              </Tooltip>
+              </>
             )}
           </Space>
         );

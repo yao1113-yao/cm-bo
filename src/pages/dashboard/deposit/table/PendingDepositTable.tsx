@@ -5,7 +5,7 @@ import { formatDateTime, formatNumber, formatString } from "../../../../function
 import { useContext, useRef, useState } from "react";
 import { Api } from "../../../../context/ApiContext";
 
-import { BankOutlined, EyeOutlined, SendOutlined, CloseOutlined } from "@ant-design/icons";
+import { BankOutlined, SendOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 import { FaHandPaper } from "react-icons/fa";
 import OpenBankRecord from "./modal/OpenBankRecord";
@@ -25,12 +25,35 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
   const [openManualSuccess, setOpenManualSuccess] = useState<boolean>(false);
-  const [actionType, setActionType] = useState<string>("");
+  const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
+
   const [isLater, setIsLater] = useState<number>(0);
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
-  const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
 
   const columns: TableProps<ITransactionType>["columns"] = [
+    {
+      title: t("action"),
+      hidden: userInfo?.userType !== 3,
+      render: (record: any) => {
+        return (
+          <Space>
+            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && (
+              <>
+                <Tooltip title={t("reject")}>
+                  <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                </Tooltip>
+
+                <Tooltip title={t("editDetails")}>
+                  <Button onClick={() => handleInsertManualSuccess(record)}>
+                    <EditOutlined />
+                  </Button>
+                </Tooltip>
+              </>
+            )}
+          </Space>
+        );
+      },
+    },
     {
       title: t("action"),
       hidden: userInfo?.userType === 3,
@@ -41,7 +64,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
               {!record?.bankRecordSrno && record?.mStatus !== "BOT PROCESSING" ? (
                 <>
                   <Tooltip title={t("assignBank")}>
-                    <Button icon={<BankOutlined />} onClick={() => handleGetBankRecord(record)}></Button>
+                    <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)}></Button>
                   </Tooltip>
                   {record?.isLater === 0 && (
                     <Tooltip title={t("matchBankLater")}>
@@ -61,14 +84,11 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                 </>
               ) : (
                 <>
-                  {record?.isLater === 0 && (
-                    <Tooltip title={t("viewBank")}>
-                      <Button icon={<EyeOutlined />} onClick={() => handleGetBankRecordDetails(record)}></Button>
-                    </Tooltip>
-                  )}
-
                   {record?.mStatus === "PROCESSING" && (
                     <>
+                      <Tooltip title={t("assignBank")}>
+                        <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)}></Button>
+                      </Tooltip>
                       <Tooltip title={t("sendToBot")}>
                         <Button icon={<SendOutlined />} onClick={() => handleInsertDepositTask(record, "sendToBot")}></Button>
                       </Tooltip>
@@ -254,51 +274,9 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
     }
   };
 
-  async function handleGetBankRecord(values: any) {
-    setIsLoading(true);
-    setActionType("assign");
-    const object = {
-      UserID: userID,
-      UserToken: userToken,
-      Type: "Deposit",
-      Bank: values?.mBank,
-    };
-    await mainApi("/bank-record", object)
-      .then((result: any) => {
-        setSelectedPendingDeposit(values);
-        setOpenBankRecord(true);
-        setBankRecord(result.data);
-      })
-      .catch(() => {
-        messageApi.open({
-          type: "error",
-          content: "player ID not found",
-        });
-      });
-    setIsLoading(false);
-  }
-
-  async function handleGetBankRecordDetails(values: any) {
-    setIsLoading(true);
-    setActionType("details");
-    const object = {
-      UserID: userID,
-      UserToken: userToken,
-      bankRecordSrno: values?.bankRecordSrno,
-    };
-    await mainApi("/bank-record-details", object)
-      .then((result: any) => {
-        setSelectedPendingDeposit(values);
-        setOpenBankRecord(true);
-        setBankRecord([result.data]);
-      })
-      .catch(() => {
-        messageApi.open({
-          type: "error",
-          content: "",
-        });
-      });
-    setIsLoading(false);
+  function OpenModalBankRecord(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenBankRecord(!openBankRecord);
   }
 
   function handleInsertDepositTask(values: any, type: string) {
@@ -469,7 +447,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         </Card>
 
         {/* open bank list assign bank */}
-        <OpenBankRecord messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} actionType={actionType} bankRecord={bankRecord} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />
+        {openBankRecord && <OpenBankRecord messageApi={messageApi} isCheckAllAmount={isCheckAllAmount} setIsCheckAllAmount={setIsCheckAllAmount} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />}
 
         {/* manual success */}
         <OpenManualSuccess openMa nualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />
