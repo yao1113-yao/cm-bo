@@ -4,7 +4,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 
-import { CheckOutlined, ClockCircleOutlined, EditOutlined } from "@ant-design/icons";
+import { CheckOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { mainApi } from "../../../../service/CallApi";
 import { Api } from "../../../../context/ApiContext";
