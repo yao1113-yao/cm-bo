@@ -41,7 +41,7 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       render: (record) => {
         return (
           <Space>
-            {record?.mStatus !== "DONE" && record?.isSeen === 0 && (
+            {record?.mStatus !== "SUCCESS" && record?.isSeen === 0 && (
               <>
                 <Tooltip title={t("Noted")}>
                   <Button onClick={() => handleNotedTransaction(record)}>

@@ -12,6 +12,8 @@ import OpenBankRecord from "./modal/OpenBankRecord";
 import OpenManualSuccess from "./modal/OpenManualSuccess";
 import Swal from "sweetalert2";
 import { MdOutlineWatchLater } from "react-icons/md";
+import EditTransaction from "./modal/EditTransaction";
+import { handleEditingTransaction } from "../../../../function/ApiFunction";
 
 const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
@@ -25,6 +27,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
   const [openManualSuccess, setOpenManualSuccess] = useState<boolean>(false);
+  const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
   const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
 
   const [isLater, setIsLater] = useState<number>(0);
@@ -44,7 +47,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                 </Tooltip>
 
                 <Tooltip title={t("editDetails")}>
-                  <Button onClick={() => handleInsertManualSuccess(record)}>
+                  <Button onClick={() => OpenModalEditTransaction(record)}>
                     <EditOutlined />
                   </Button>
                 </Tooltip>
@@ -130,6 +133,14 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
     //     return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
     //   },
     // },
+    {
+      title: t("systemRemark"),
+      dataIndex: "sysRemark1",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
     {
       title: t("game"),
       dataIndex: "mGame",
@@ -277,6 +288,12 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
   function OpenModalBankRecord(values: any) {
     setSelectedPendingDeposit(values);
     setOpenBankRecord(!openBankRecord);
+  }
+
+  function OpenModalEditTransaction(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenEditTransaction(true);
+    handleEditingTransaction(values, 1);
   }
 
   function handleInsertDepositTask(values: any, type: string) {
@@ -449,8 +466,11 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         {/* open bank list assign bank */}
         {openBankRecord && <OpenBankRecord messageApi={messageApi} isCheckAllAmount={isCheckAllAmount} setIsCheckAllAmount={setIsCheckAllAmount} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />}
 
+        {/* edit transaction */}
+        {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />}
+
         {/* manual success */}
-        <OpenManualSuccess openMa nualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />
+        <OpenManualSuccess openManualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />
       </Spin>
     </>
   );

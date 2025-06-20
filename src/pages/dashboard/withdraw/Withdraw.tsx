@@ -93,7 +93,7 @@ const Withdraw = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      RecordType: "Main",
+      RecordType: "Withdraw",
       Type: type,
       game: values?.game,
       gameLoginID: values?.gameLoginID,
@@ -202,11 +202,11 @@ const Withdraw = ({ type }: DepositProps) => {
                   label={t("cashOut")}
                   name="cashOut"
                   rules={[
-                    { required: true, message: t("pleaseSelect") },
+                    { required: !cuciAllEnable, message: t("pleaseSelect") },
                     { min: 0, type: "number", message: t("cannotLessThan0") },
                   ]}
                 >
-                  <InputNumber style={{ width: "100%" }} />
+                  <InputNumber style={{ width: "100%" }} disabled={cuciAllEnable} />
                 </Form.Item>
               </Col>
 

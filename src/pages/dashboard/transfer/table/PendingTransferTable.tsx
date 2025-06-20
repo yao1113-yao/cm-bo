@@ -2,13 +2,15 @@ import { Button, Card, Divider, message, Space, Spin, Table, TableProps, Tag, To
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { SendOutlined, CloseOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
 import { Api } from "../../../../context/ApiContext";
 import { FaHandPaper } from "react-icons/fa";
 import { useContext, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { mainApi } from "../../../../service/CallApi";
-const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactionRecord }: any) => {
+import EditTransaction from "./modal/EditTransaction";
+import { handleEditingTransaction } from "../../../../function/ApiFunction";
+const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
@@ -16,7 +18,32 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
+  const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const columns: TableProps<ITransactionType>["columns"] = [
+    {
+      title: t("action"),
+      hidden: userInfo?.userType !== 3,
+      render: (record: any) => {
+        return (
+          <Space>
+            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "REJECT" && (
+              <>
+                <Tooltip title={t("reject")}>
+                  <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                </Tooltip>
+
+                <Tooltip title={t("editDetails")}>
+                  <Button onClick={() => OpenModalEditTransaction(record)}>
+                    <EditOutlined />
+                  </Button>
+                </Tooltip>
+              </>
+            )}
+          </Space>
+        );
+      },
+    },
     {
       title: t("action"),
       hidden: userInfo?.userType === 3,
@@ -140,6 +167,12 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
     },
   ];
 
+  function OpenModalEditTransaction(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenEditTransaction(true);
+    handleEditingTransaction(values, 1);
+  }
+
   function handleInsertTransferTask(values: any) {
     Swal.fire({
       title: "Do you want to send the request to bot?",
@@ -173,6 +206,41 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
     });
   }
 
+  async function handleRejectTransaction(values: any) {
+    Swal.fire({
+      title: "Do you want to rejcet this transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Reject",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          status: 0,
+        };
+        await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("rekemen");
+            handleGetTransactionRecord("rekemen");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
   const samePrev = useRef<boolean>(false);
   const prevClass = useRef<string>("row-highlight-1");
 
@@ -195,6 +263,8 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
         <Card>
           <Table columns={columns} dataSource={pendingTransferRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
         </Card>
+
+        {openEditTransaction && <EditTransaction messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openEditTransaction={openEditTransaction} setOpenEditTransaction={setOpenEditTransaction} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />}
       </Spin>
     </>
   );

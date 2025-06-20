@@ -1,5 +1,5 @@
 import { message } from "antd";
-import { deviceApi, gameProviderApi, staffApi } from "../service/CallApi";
+import { deviceApi, gameProviderApi, mainApi, staffApi } from "../service/CallApi";
 
 export async function getAllGameProviderList(setIsGameLoading: any, setAllGameList: any) {
   setIsGameLoading(true);
@@ -67,4 +67,16 @@ export async function getAllStaffList(setIsLoading: any, companyID: string, setA
       message.error(error?.response?.data?.message);
       setIsLoading(false);
     });
+}
+
+export async function handleEditingTransaction(values: any, status: number) {
+  const userID = localStorage.getItem("userID");
+  const userToken = localStorage.getItem("userToken");
+  const object = {
+    UserID: userID,
+    UserToken: userToken,
+    mktDetailsSrno: values?.srno,
+    status: status,
+  };
+  await mainApi("/update-editing-transaction", object);
 }

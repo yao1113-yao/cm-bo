@@ -3,11 +3,13 @@ import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
-import { SendOutlined, CloseOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
 import { Api } from "../../../../context/ApiContext";
 import Swal from "sweetalert2";
 import { FaHandPaper } from "react-icons/fa";
 import { mainApi } from "../../../../service/CallApi";
+import EditTransaction from "./modal/EditTransaction";
+import { handleEditingTransaction } from "../../../../function/ApiFunction";
 
 const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
@@ -18,8 +20,32 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
+  const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const columns: TableProps<ITransactionType>["columns"] = [
+    {
+      title: t("action"),
+      hidden: userInfo?.userType !== 3,
+      render: (record: any) => {
+        return (
+          <Space>
+            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "REJECT" && (
+              <>
+                <Tooltip title={t("reject")}>
+                  <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                </Tooltip>
+
+                <Tooltip title={t("editDetails")}>
+                  <Button onClick={() => OpenModalEditTransaction(record)}>
+                    <EditOutlined />
+                  </Button>
+                </Tooltip>
+              </>
+            )}
+          </Space>
+        );
+      },
+    },
     {
       title: t("action"),
       hidden: userInfo?.userType === 3,
@@ -178,6 +204,12 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
     },
   ];
 
+  function OpenModalEditTransaction(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenEditTransaction(true);
+    handleEditingTransaction(values, 1);
+  }
+
   function handleInsertDepositTask(values: any) {
     Swal.fire({
       title: "Do you want to send the request to bot?",
@@ -300,6 +332,8 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
         <Card>
           <Table columns={columns} dataSource={pendingRekemenRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
         </Card>
+
+        {openEditTransaction && <EditTransaction messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openEditTransaction={openEditTransaction} setOpenEditTransaction={setOpenEditTransaction} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />}
       </Spin>
     </>
   );

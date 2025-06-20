@@ -1,14 +1,16 @@
-import { Button, Card, Divider, message, Space, Table, TableProps, Tag, Tooltip } from "antd";
+import { Button, Card, Divider, message, Space, Spin, Table, TableProps, Tag, Tooltip } from "antd";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 import { Api } from "../../../../context/ApiContext";
-import { SendOutlined, CloseOutlined, UploadOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, UploadOutlined, EditOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 import OpenBankRecord from "./modal/OpenBankRecord";
 import Swal from "sweetalert2";
 import { FaHandPaper } from "react-icons/fa";
+import EditTransaction from "./modal/EditTransaction";
+import { handleEditingTransaction } from "../../../../function/ApiFunction";
 
 const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
@@ -20,13 +22,36 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
+  const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
   const [isManual, setIsManual] = useState<number>(0);
   const [isLater, setIsLater] = useState<number>(0);
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
-
-  console.log(isLoading, openBankRecord, selectedPendingDeposit, bankRecord);
+  console.log(bankRecord);
   const columns: TableProps<ITransactionType>["columns"] = [
+    {
+      title: t("action"),
+      hidden: userInfo?.userType !== 3,
+      render: (record: any) => {
+        return (
+          <Space>
+            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "REJECT" && (
+              <>
+                <Tooltip title={t("reject")}>
+                  <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                </Tooltip>
+
+                <Tooltip title={t("editDetails")}>
+                  <Button onClick={() => OpenModalEditTransaction(record)}>
+                    <EditOutlined />
+                  </Button>
+                </Tooltip>
+              </>
+            )}
+          </Space>
+        );
+      },
+    },
     {
       title: t("action"),
       hidden: userInfo?.userType === 3,
@@ -197,6 +222,11 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       },
     },
   ];
+  function OpenModalEditTransaction(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenEditTransaction(true);
+    handleEditingTransaction(values, 1);
+  }
 
   function handleInsertWithdrawTask(values: any) {
     Swal.fire({
@@ -306,16 +336,21 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
 
   return (
     <>
-      {contextHolder}
-      <Divider>{t("pendingWithdrawRecord")}</Divider>
+      <Spin spinning={isLoading}>
+        {contextHolder}
+        <Divider>{t("pendingWithdrawRecord")}</Divider>
 
-      <Card>
-        <Table columns={columns} dataSource={pendingWithdrawRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
-      </Card>
+        <Card>
+          <Table columns={columns} dataSource={pendingWithdrawRecod} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />
+        </Card>
 
-      <OpenBankRecord messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} isLater={isLater} setIsLater={setIsLater} isManual={isManual} setIsManual={setIsManual} />
+        <OpenBankRecord messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} isLater={isLater} setIsLater={setIsLater} isManual={isManual} setIsManual={setIsManual} />
 
-      {/* manual success */}
+        {/* edit transaction */}
+        <EditTransaction messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openEditTransaction={openEditTransaction} setOpenEditTransaction={setOpenEditTransaction} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+
+        {/* manual success */}
+      </Spin>
     </>
   );
 };
