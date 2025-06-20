@@ -53,7 +53,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
             {(record?.isFreeCredit === 1 && record?.mStatus === "WAITING") || (record?.inCredit === 0 && record?.mStatus === "WAITING") ? (
               <Space>
                 <Tooltip title={t("approve")}>
-                  <Button icon={<SendOutlined />} onClick={() => handleInsertTransferTask(record)}></Button>
+                  <Button icon={<SendOutlined />} onClick={() => handleInsertTransferTask(record)} disabled={record?.isEditing === 1}></Button>
                 </Tooltip>
                 <Tooltip title={t("manualSuccess")}>
                   <Button icon={<FaHandPaper />}></Button>

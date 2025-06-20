@@ -67,11 +67,11 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
               {!record?.bankRecordSrno && record?.mStatus !== "BOT PROCESSING" ? (
                 <>
                   <Tooltip title={t("assignBank")}>
-                    <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)}></Button>
+                    <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
                   </Tooltip>
                   {record?.isLater === 0 && (
                     <Tooltip title={t("matchBankLater")}>
-                      <Button icon={<MdOutlineWatchLater />} onClick={() => handleMatchBankLater(record)}></Button>
+                      <Button icon={<MdOutlineWatchLater />} onClick={() => handleMatchBankLater(record)} disabled={record?.isEditing === 1}></Button>
                     </Tooltip>
                   )}
 
@@ -90,13 +90,13 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                   {record?.mStatus === "PROCESSING" && (
                     <>
                       <Tooltip title={t("assignBank")}>
-                        <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)}></Button>
+                        <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
                       </Tooltip>
                       <Tooltip title={t("sendToBot")}>
-                        <Button icon={<SendOutlined />} onClick={() => handleInsertDepositTask(record, "sendToBot")}></Button>
+                        <Button icon={<SendOutlined />} onClick={() => handleInsertDepositTask(record, "sendToBot")} disabled={record?.isEditing === 1}></Button>
                       </Tooltip>
                       <Tooltip title={t("manualSuccess")}>
-                        <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
+                        <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)} disabled={record?.isEditing === 1}></Button>
                       </Tooltip>
                       <Tooltip title={t("reject")}>
                         <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>

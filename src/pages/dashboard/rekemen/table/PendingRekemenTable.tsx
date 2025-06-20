@@ -56,10 +56,10 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
               {record?.mStatus === "WAITING" ? (
                 <>
                   <Tooltip title={t("sendToBot")}>
-                    <Button icon={<SendOutlined />} onClick={() => handleInsertDepositTask(record)}></Button>
+                    <Button icon={<SendOutlined />} onClick={() => handleInsertDepositTask(record)} disabled={record?.isEditing === 1}></Button>
                   </Tooltip>
                   <Tooltip title={t("manualSuccess")}>
-                    <Button icon={<FaHandPaper />} onClick={() => handleInsertManualSuccess(record)}></Button>
+                    <Button icon={<FaHandPaper />} onClick={() => handleInsertManualSuccess(record)} disabled={record?.isEditing === 1}></Button>
                   </Tooltip>
                 </>
               ) : (

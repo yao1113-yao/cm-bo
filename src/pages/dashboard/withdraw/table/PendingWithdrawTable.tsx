@@ -62,10 +62,10 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
               {record?.mStatus === "WAITING" && (
                 <>
                   <Tooltip title={t("approve")}>
-                    <Button icon={<SendOutlined />} onClick={() => handleInsertWithdrawTask(record)}></Button>
+                    <Button icon={<SendOutlined />} onClick={() => handleInsertWithdrawTask(record)} disabled={record?.isEditing === 1}></Button>
                   </Tooltip>
                   <Tooltip title={t("manualSuccess")}>
-                    <Button icon={<FaHandPaper />} onClick={() => handleGetBankRecord(record, "manualSucccess")}></Button>
+                    <Button icon={<FaHandPaper />} onClick={() => handleGetBankRecord(record, "manualSucccess")} disabled={record?.isEditing === 1}></Button>
                   </Tooltip>
                   <Tooltip title={t("reject")}>
                     <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>

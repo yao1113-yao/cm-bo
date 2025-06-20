@@ -72,6 +72,7 @@ export interface ITransactionType {
   isLater: number;
   isSeen: number;
   isFreeCredit: number;
+  isEditing: number;
   companyID: string;
   customerBank: string;
   customerBankAccName: string;
