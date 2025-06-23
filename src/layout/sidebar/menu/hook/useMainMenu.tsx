@@ -72,6 +72,12 @@ export const useMainMenu = () => {
           hidden: userInfo && userInfo.userType > 2,
         },
         {
+          label: t("Match Bank Later Record"),
+          key: "/match-bank-later",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
+        },
+        {
           label: t("Deposit Withdraw Record"),
           key: "/bank-marketing",
           icon: <FileSearchOutlined />,
