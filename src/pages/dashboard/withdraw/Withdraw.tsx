@@ -110,6 +110,7 @@ const Withdraw = ({ type }: DepositProps) => {
     await mainApi("/insert-withdraw-transaction-record", object).then(() => {
       message.success("success");
       form.resetFields();
+      setCuciAllEnable(false);
       handleGetPendingTransactionRecord("Withdraw");
     });
     setIsActionLoading(false);
@@ -202,11 +203,11 @@ const Withdraw = ({ type }: DepositProps) => {
                   label={t("cashOut")}
                   name="cashOut"
                   rules={[
-                    { required: !cuciAllEnable, message: t("pleaseSelect") },
+                    { required: true, message: t("pleaseSelect") },
                     { min: 0, type: "number", message: t("cannotLessThan0") },
                   ]}
                 >
-                  <InputNumber style={{ width: "100%" }} disabled={cuciAllEnable} />
+                  <InputNumber style={{ width: "100%" }} />
                 </Form.Item>
               </Col>
 

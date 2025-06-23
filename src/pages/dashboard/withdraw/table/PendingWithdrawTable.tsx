@@ -35,7 +35,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "REJECT" && (
+            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "HOLD" ? (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -47,6 +47,8 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                   </Button>
                 </Tooltip>
               </>
+            ) : (
+              ""
             )}
           </Space>
         );
