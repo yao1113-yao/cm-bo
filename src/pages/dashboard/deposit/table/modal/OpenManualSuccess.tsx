@@ -2,12 +2,13 @@ import { Form, Input, Modal } from "antd";
 import CommonButton from "../../../../../components/CommonButton";
 import { useTranslation } from "react-i18next";
 
-const OpenManualSuccess = ({ openManualSuccess, handleCloseManualSuccessModal, selectedPendingDeposit, handleInsertManualSuccess }: any) => {
+const OpenManualSuccess = ({ isLoading, openManualSuccess, handleCloseManualSuccessModal, selectedPendingDeposit, handleInsertManualSuccess }: any) => {
   const { t } = useTranslation();
 
+  console.log(selectedPendingDeposit);
   return (
     <>
-      <Modal open={openManualSuccess} onCancel={handleCloseManualSuccessModal} footer={null} closable={false}>
+      <Modal open={openManualSuccess} onCancel={handleCloseManualSuccessModal} footer={null} closable={false} loading={isLoading}>
         <Form layout="vertical" initialValues={selectedPendingDeposit} onFinish={handleInsertManualSuccess}>
           <Form.Item label={t("game")} name="mGame">
             <Input />

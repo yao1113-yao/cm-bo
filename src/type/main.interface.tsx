@@ -52,6 +52,7 @@ export interface ITransactionType {
   srno: number;
   companySrno: number;
   mktSrno: number;
+  mktDetailsSrno: number;
   mBank: string;
   iNValue: number;
   oUTValue: number;

@@ -40,7 +40,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && (
+            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "BOT FAIL" && (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -104,10 +104,16 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                     </>
                   )}
 
-                  {record?.mStatus === "FAIL" && (
-                    <Tooltip title={t("manualSuccess")}>
-                      <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
-                    </Tooltip>
+                  {record?.mStatus === "BOT FAIL" && (
+                    <>
+                      <Tooltip title={t("manualSuccess")}>
+                        <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
+                      </Tooltip>
+
+                      <Tooltip title={t("reject")}>
+                        <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                      </Tooltip>
+                    </>
                   )}
                 </>
               )}
@@ -470,7 +476,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />}
 
         {/* manual success */}
-        <OpenManualSuccess openManualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />
+        {openManualSuccess && <OpenManualSuccess isLoading={isLoading} openManualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />}
       </Spin>
     </>
   );

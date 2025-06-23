@@ -2,15 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
-import { Form, message, TableProps, Tag } from "antd";
+import { Button, Form, message, Space, TableProps, Tag, Tooltip } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
-import { bankApi } from "../../../../service/CallApi";
+import { bankApi, mainApi } from "../../../../service/CallApi";
 import { IDeviceType, ITransactionType } from "../../../../type/main.interface";
 import { getAllItemCodeList } from "../../../../function/ApiFunction";
+import { CloseOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import Swal from "sweetalert2";
 
 export const useBankRecord = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+
+  const [messageApi, contextHolder] = message.useMessage();
+
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
 
@@ -31,6 +36,28 @@ export const useBankRecord = () => {
 
   const columns: TableProps<ITransactionType>["columns"] = [
     {
+      title: t("action"),
+      align: "center",
+      ellipsis: true,
+      render: (record) => {
+        return (
+          record?.status === 1 && (
+            <Space>
+              <Tooltip title={t("takeOutBank")}>
+                <Button icon={<CloseOutlined />} onClick={() => handleTakeOutBankTransaction(record)}></Button>
+              </Tooltip>
+
+              <Tooltip title={t("ShowRecordToMkt")}>
+                <Button onClick={() => handleShowRecord(record)}>
+                  <ClockCircleOutlined />
+                </Button>
+              </Tooltip>
+            </Space>
+          )
+        );
+      },
+    },
+    {
       title: t("createDate"),
       dataIndex: "createDate",
       align: "center",
@@ -45,6 +72,14 @@ export const useBankRecord = () => {
       align: "center",
       render: (text: number) => {
         return text === 1 ? <Tag color="#87d068">Assign</Tag> : <Tag color="#f50">Haven't</Tag>;
+      },
+    },
+    {
+      title: t("recordType"),
+      dataIndex: "recordType",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{text === "Main" ? "DEPOSIT" : formatString(text)}</div>;
       },
     },
     {
@@ -180,6 +215,72 @@ export const useBankRecord = () => {
     },
   ];
 
+  async function handleShowRecord(values: any) {
+    Swal.fire({
+      title: "Confirm show the record to MKT?",
+      showCancelButton: true,
+      confirmButtonText: "Show",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.mktDetailsSrno,
+        };
+        await mainApi("/show-record", object)
+          .then(() => {
+            handleGetBankRecordMarketingList(initialValues);
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
+  async function handleTakeOutBankTransaction(values: any) {
+    Swal.fire({
+      title: "Do you want to take out the bank?",
+      showCancelButton: true,
+      confirmButtonText: "Take out",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktSrno: values?.mktSrno,
+        };
+        await bankApi("/take-out-bank", object)
+          .then(() => {
+            handleGetBankRecordMarketingList(initialValues);
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
   const samePrev = useRef<boolean>(false);
   const prevClass = useRef<string>("row-highlight-1");
 
@@ -226,5 +327,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, form, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
+  return { t, form, contextHolder, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
 };
