@@ -10,7 +10,7 @@ import CommonButton from "../../../../components/CommonButton";
 
 const { RangePicker } = DatePicker;
 
-const OpenBankRecord = ({ messageApi, isCheckAllAmount, initialValuesMatchBank, setIsCheckAllAmount, selectedPendingDeposit, openBankRecord, setOpenBankRecord, handleGetMatchBankLaterList }: any) => {
+const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, selectedPendingDeposit, openBankRecord, setOpenBankRecord, handleGetMatchBankLaterList }: any) => {
   const { t } = useTranslation();
 
   const userID = localStorage.getItem("userID");
