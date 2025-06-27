@@ -99,7 +99,7 @@ export const useBankBalance = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       bankCode: values?.bank,
     };
     await bankApi("/company-bank-list", object)

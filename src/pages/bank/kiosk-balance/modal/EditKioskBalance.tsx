@@ -14,7 +14,7 @@ const EditKioskBalance = ({ isLoading, openEditKioskBalance, setOpenEditKioskBal
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       CompanyGPSrno: selectedRecord?.srno,
       balance: values?.amount,
     };

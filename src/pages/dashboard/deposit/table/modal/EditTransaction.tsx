@@ -25,7 +25,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       mktDetailsSrno: selectedPendingDeposit?.srno,
       ...values,
     };

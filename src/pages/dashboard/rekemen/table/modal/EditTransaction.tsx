@@ -25,7 +25,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       mktDetailsSrno: selectedPendingDeposit?.srno,
       ...values,
     };
@@ -132,7 +132,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
 
             <Col xs={4}>
               <Form.Item label={t("hpNo")} name="toHpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input type="number" />
               </Form.Item>
             </Col>
             <Col xs={4}>

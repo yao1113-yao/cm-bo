@@ -149,7 +149,7 @@ const Deposit = ({ type }: DepositProps) => {
 
               <Col xs={3}>
                 <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input />
+                  <Input type="number" />
                 </Form.Item>
               </Col>
             </Row>

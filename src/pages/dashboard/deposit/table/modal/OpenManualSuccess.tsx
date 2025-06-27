@@ -10,23 +10,27 @@ const OpenManualSuccess = ({ isLoading, openManualSuccess, handleCloseManualSucc
     <>
       <Modal open={openManualSuccess} onCancel={handleCloseManualSuccessModal} footer={null} closable={false} loading={isLoading}>
         <Form layout="vertical" initialValues={selectedPendingDeposit} onFinish={handleInsertManualSuccess}>
-          <Form.Item label={t("game")} name="mGame">
+          <Form.Item label={t("game")} name="mGame" required>
+            <Input disabled />
+          </Form.Item>
+
+          <Form.Item label={t("gameID")} name="gameID" required>
             <Input />
           </Form.Item>
 
-          <Form.Item label={t("gameID")} name="gameID">
+          <Form.Item label={t("password")} name="password" required>
             <Input />
           </Form.Item>
 
-          <Form.Item label={t("name")} name="name">
+          <Form.Item label={t("name")} name="name" required>
             <Input />
           </Form.Item>
 
-          <Form.Item label={t("hpNo")} name="hpNo">
-            <Input />
+          <Form.Item label={t("hpNo")} name="hpNo" required>
+            <Input type="number" />
           </Form.Item>
 
-          <Form.Item label={t("total")} name="total">
+          <Form.Item label={t("total")} name="total" required>
             <Input />
           </Form.Item>
 

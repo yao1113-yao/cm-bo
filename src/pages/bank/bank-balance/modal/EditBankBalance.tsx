@@ -14,7 +14,7 @@ const EditBankBalance = ({ isLoading, form, openEditBankBalance, setOpenEditBank
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       CompanyBankSrno: selectedRecord?.srno,
       balance: values?.amount,
     };

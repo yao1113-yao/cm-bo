@@ -107,6 +107,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
     await mainApi("/assign-bank", formData)
       .then(() => {
         setOpenBankRecord(false);
+        setIsCheckAllAmount(false);
         handleGetPendingTransactionRecord("deposit");
         messageApi.open({
           type: "success",
@@ -116,7 +117,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
       .catch(() => {
         messageApi.open({
           type: "error",
-          content: "player ID not found",
+          content: "assign bank error",
         });
       });
     setIsLoading(false);
@@ -138,7 +139,6 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       Amount: isCheckAllAmount === true ? -1 : values?.amount,
     };
-    console.log(object);
     await mainApi("/bank-record", object)
       .then((result: any) => {
         setBankRecord(result.data);
@@ -146,7 +146,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
       .catch(() => {
         messageApi.open({
           type: "error",
-          content: "player ID not found",
+          content: "get bank record error",
         });
       });
     setIsLoading(false);

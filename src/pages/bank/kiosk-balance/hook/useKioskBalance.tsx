@@ -85,7 +85,7 @@ export const useKioskBalance = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       gameName: values?.gameName,
     };
     await bankApi("/company-gp-list", object)

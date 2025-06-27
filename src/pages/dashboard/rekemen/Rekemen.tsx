@@ -157,7 +157,7 @@ const Rekemen = ({ type }: DepositProps) => {
 
               <Col xs={3}>
                 <Form.Item label={t("hpNo")} name="toHpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input />
+                  <Input type="number" />
                 </Form.Item>
               </Col>
               <Col xs={3}>

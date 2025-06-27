@@ -18,6 +18,7 @@ import { CheckOutlined } from "@ant-design/icons";
 const ChangePassword = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
   const { userInfo } = useContext(Api);
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -25,7 +26,7 @@ const ChangePassword = () => {
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  console.log(isLoading);
   const [passwordRandom, setPasswordRandom] = useState<string>("");
   console.log(passwordRandom);
   const [apiData, setApiData] = useState<ITransactionType[]>([]);
@@ -49,12 +50,39 @@ const ChangePassword = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       ...values,
     };
     await mainApi("/change-player-password", object)
       .then(() => {
         form.resetFields();
+        handleGetPendingTransactionRecord("ChangePassword");
+
+        messageApi.open({
+          type: "success",
+          content: "Waiting Bot",
+        });
+      })
+      .catch(() => {
+        messageApi.open({
+          type: "error",
+          content: "player ID not found",
+        });
+      });
+    setIsLoading(false);
+  }
+
+  async function handleCheckPlayerBalance(values: any) {
+    setIsLoading(true);
+    const object = {
+      UserID: userID,
+      UserToken: userToken,
+      companyID: "BEST8",
+      ...values,
+    };
+    await mainApi("/check-player-balance", object)
+      .then(() => {
+        form1.resetFields();
         handleGetPendingTransactionRecord("ChangePassword");
 
         messageApi.open({
@@ -108,11 +136,19 @@ const ChangePassword = () => {
       },
     },
     {
+      title: t("recordType"),
+      dataIndex: "recordType",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("status"),
       dataIndex: "mStatus",
       align: "center",
       render: (text: string) => {
-        return text === "PROCESSING" ? <Tag color="#4096ff">PROCESSING</Tag> : <Tag color="#87d068">DONE</Tag>;
+        return text === "PROCESSING" ? <Tag color="#4096ff">PROCESSING</Tag> : <Tag color="#87d068">{text}</Tag>;
       },
     },
     // {
@@ -147,9 +183,16 @@ const ChangePassword = () => {
       },
     },
     {
+      title: t("balance"),
+      dataIndex: "balance",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("name"),
       dataIndex: "name",
-
       align: "center",
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
@@ -246,7 +289,8 @@ const ChangePassword = () => {
   return (
     <>
       {contextHolder}
-      <Card loading={isLoading}>
+      <Divider>{t("change player password")}</Divider>
+      <Card>
         <Form layout="vertical" onFinish={handleChangePlayerPassword} form={form}>
           <Row gutter={10}>
             <Col xs={4}>
@@ -268,7 +312,23 @@ const ChangePassword = () => {
           <CommonButton text="submit" />
         </Form>
 
-        <Divider>{t("changePasswordRecord")}</Divider>
+        <Divider>{t("check game balance")}</Divider>
+        <Form layout="vertical" onFinish={handleCheckPlayerBalance} form={form1}>
+          <Row gutter={10}>
+            <Col xs={4}>
+              <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
+            </Col>
+
+            <Col xs={4}>
+              <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+
+          <CommonButton text="submit" />
+        </Form>
+        <Divider>{t("record")}</Divider>
 
         <Card>
           <Table columns={columns} dataSource={apiData} scroll={{ x: true }} pagination={false} rowClassName={rowClassName} rowHoverable={false} />

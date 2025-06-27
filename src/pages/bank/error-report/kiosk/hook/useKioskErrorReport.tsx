@@ -28,7 +28,7 @@ export const useKioskErrorReport = () => {
   };
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
-    getAllStaffList(setIsLoading, "BEST1", setAllStaffList);
+    getAllStaffList(setIsLoading, "BEST8", setAllStaffList);
     handleGetKioskErrorReport(initialValues);
   }, []);
 
@@ -104,7 +104,7 @@ export const useKioskErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       ...values,
     };
     await LogApi("/insert-error-report", object)
@@ -131,7 +131,7 @@ export const useKioskErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       staffSrno: values?.staffSrno,
       gameName: values?.gameName,
       remark: values?.remark,

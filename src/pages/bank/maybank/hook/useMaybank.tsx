@@ -30,7 +30,7 @@ export const useMaybank = () => {
   useEffect(() => {
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
     // handleGetBankRecordList();
-    const temp = companyList?.filter((items: any) => items.companyID === "BEST1");
+    const temp = companyList?.filter((items: any) => items.companyID === "BEST8");
     if (temp !== undefined) {
       setSelectedCompany(temp[0]);
     }

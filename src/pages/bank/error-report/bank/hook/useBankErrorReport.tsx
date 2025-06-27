@@ -28,7 +28,7 @@ export const useBankErrorReport = () => {
   };
   useEffect(() => {
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
-    getAllStaffList(setIsLoading, "BEST1", setAllStaffList);
+    getAllStaffList(setIsLoading, "BEST8", setAllStaffList);
     handleGetBankErrorReport(initialValues);
   }, []);
 
@@ -112,7 +112,7 @@ export const useBankErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       type: values?.type,
       staffSrno: values?.staffSrno,
       bankCode: values?.bank,
@@ -143,7 +143,7 @@ export const useBankErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST1",
+      companyID: "BEST8",
       staffSrno: values?.staffSrno,
       bankCode: values?.bank,
       remark: values?.remark,

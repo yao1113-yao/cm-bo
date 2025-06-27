@@ -1,4 +1,4 @@
-import { Badge, Button, Card, Col, Divider, Row } from "antd";
+import { Button, Card, Col, Divider, Row } from "antd";
 import { useDashboard } from "./hook/useDashboard";
 import "./dashboard.scss";
 import Deposit from "./deposit/Deposit";
@@ -18,34 +18,29 @@ const Dashboard = () => {
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "all" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("all")}>
               {t("all")}
-              <Badge count={2}></Badge>
             </Button>
           </Col>
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "deposit" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("deposit")}>
               {t("deposit")}
-              <Badge count={2}></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "withdraw" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("withdraw")}>
               {t("withdraw")}
-              <Badge count={3}></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "rekemen" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("rekemen")}>
               {t("rekemen")}
-              <Badge count={4}></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "transfer" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("transfer")}>
               {t("transfer")}
-              <Badge count={1}></Badge>
             </Button>
           </Col>
 
