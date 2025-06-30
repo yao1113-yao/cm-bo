@@ -23,19 +23,19 @@ const Action = ({ onChange, allGameList, key, name, remove, ...rest }: any) => {
 
         <Col xs={3}>
           <Form.Item label={t("toGameLoginID")} name={[name, "gameLoginID"]} rules={[{ required: true, message: t("pleaseSelect") }]}>
-            <Input />
+            <Input autoComplete="off" />
           </Form.Item>
         </Col>
 
         <Col xs={3}>
           <Form.Item label={t("toName")} name={[name, "name"]} rules={[{ required: true, message: t("pleaseSelect") }]}>
-            <Input />
+            <Input autoComplete="off" />
           </Form.Item>
         </Col>
 
         <Col xs={3}>
           <Form.Item label={t("toHpNo")} name={[name, "hpNo"]} rules={[{ required: true, message: t("pleaseSelect") }]}>
-            <Input />
+            <Input autoComplete="off" />
           </Form.Item>
         </Col>
         <Col xs={3}>

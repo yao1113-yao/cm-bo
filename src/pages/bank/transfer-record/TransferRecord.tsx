@@ -23,7 +23,7 @@ const TransferRecord = () => {
 
           <Col xs={6}>
             <Form.Item label={t("gameLoginID")} name="gameLoginID">
-              <Input />
+              <Input autoComplete="off" />
             </Form.Item>
           </Col>
 
@@ -33,7 +33,7 @@ const TransferRecord = () => {
 
           <Col xs={6}>
             <Form.Item label={t("toGameLoginID")} name="toGameLoginID">
-              <Input />
+              <Input autoComplete="off" />
             </Form.Item>
           </Col>
         </Row>

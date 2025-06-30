@@ -46,7 +46,7 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, ...re
             name={[name, "gameLoginID"]}
             rules={[{ required: !newIDEnable, message: t("pleaseSelect") }]}
           >
-            <Input disabled={newIDEnable} />
+            <Input disabled={newIDEnable} autoComplete="off" />
           </Form.Item>
         </Col>
 

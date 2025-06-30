@@ -173,19 +173,19 @@ const Transfer = ({ type }: DepositProps) => {
 
                 <Col xs={3}>
                   <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                    <Input />
+                    <Input autoComplete="off" />
                   </Form.Item>
                 </Col>
 
                 <Col xs={3}>
                   <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                    <Input />
+                    <Input autoComplete="off" />
                   </Form.Item>
                 </Col>
 
                 <Col xs={3}>
                   <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                    <Input type="number" />
+                    <Input type="number" autoComplete="off" />
                   </Form.Item>
                 </Col>
 

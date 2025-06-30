@@ -299,7 +299,7 @@ const ChangePassword = () => {
 
             <Col xs={4}>
               <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
             <Col xs={4}>
@@ -321,7 +321,7 @@ const ChangePassword = () => {
 
             <Col xs={4}>
               <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
           </Row>

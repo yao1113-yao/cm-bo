@@ -69,7 +69,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
             </Col>
             <Col xs={6}>
               <Form.Item label={t("gameLoginID")} name="gameID">
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
             {/* <Col xs={6}>

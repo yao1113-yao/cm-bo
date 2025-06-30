@@ -76,19 +76,19 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
             </Col>
             <Col xs={4}>
               <Form.Item label={t("rekemenGameLoginID")} name="gameID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
 
             <Col xs={4}>
               <Form.Item label={t("rekemenName")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
 
             <Col xs={4}>
               <Form.Item label={t("rekemenHpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
 
@@ -121,18 +121,18 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
             </Col>
             <Col xs={4}>
               <Form.Item label={t("gameLoginID")} name="toGameID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
             <Col xs={4}>
               <Form.Item label={t("name")} name="toName" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
 
             <Col xs={4}>
               <Form.Item label={t("hpNo")} name="toHpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input type="number" />
+                <Input type="number" autoComplete="off" />
               </Form.Item>
             </Col>
             <Col xs={4}>
