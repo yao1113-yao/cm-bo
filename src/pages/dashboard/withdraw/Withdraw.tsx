@@ -212,7 +212,7 @@ const Withdraw = ({ type }: DepositProps) => {
               </Col>
 
               <Col xs={3}>
-                <Form.Item label={t("remark")} name="remark" rules={[{ required: true, message: t("pleaseEnter") }]}>
+                <Form.Item label={t("remark")} name="remark">
                   <Input />
                 </Form.Item>
               </Col>
