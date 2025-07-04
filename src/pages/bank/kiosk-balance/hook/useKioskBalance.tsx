@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button, Form, message, TableProps, Tooltip } from "antd";
 import { useLocation } from "react-router-dom";
-import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatIndex, formatString } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { ICompanyGPType, IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList } from "../../../../function/ApiFunction";
