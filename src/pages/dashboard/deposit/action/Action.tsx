@@ -9,8 +9,6 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
 
   const [newIDEnable, setNewIDEnable] = useState<boolean>(false);
   const [freeCreditEnable, setFreeCreditEnable] = useState<boolean>(false);
-  const [onChangeName, setOnChangeName] = useState<string>("");
-  const [onChangeHpNo, setOnChangeHpNo] = useState<string>("");
 
   function handleCheckNewID() {
     setNewIDEnable(!newIDEnable);
@@ -18,11 +16,6 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
 
   function handleCheckFreeCredit() {
     setFreeCreditEnable(!freeCreditEnable);
-  }
-
-  function handleOnChangeName(e: any) {
-    form.setFieldValues("name1", e.target.value);
-    setOnChangeName(e.target.value);
   }
 
   return (
