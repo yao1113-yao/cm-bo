@@ -157,17 +157,6 @@ const Transfer = ({ type }: DepositProps) => {
             {!freeCredit && (
               <Row gutter={10}>
                 <Col xs={3}>
-                  <Form.Item label={t("device")} name="device" rules={[{ required: true }]}>
-                    <Select>
-                      {allDeviceList?.map((items: any) => (
-                        <Select.Option value={items.item} key={items.item}>
-                          {items?.item}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col xs={3}>
                   <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
                 </Col>
 
@@ -186,6 +175,18 @@ const Transfer = ({ type }: DepositProps) => {
                 <Col xs={3}>
                   <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
                     <Input type="number" autoComplete="off" />
+                  </Form.Item>
+                </Col>
+
+                <Col xs={3}>
+                  <Form.Item label={t("device")} name="device" rules={[{ required: true }]}>
+                    <Select>
+                      {allDeviceList?.map((items: any) => (
+                        <Select.Option value={items.item} key={items.item}>
+                          {items?.item}
+                        </Select.Option>
+                      ))}
+                    </Select>
                   </Form.Item>
                 </Col>
 

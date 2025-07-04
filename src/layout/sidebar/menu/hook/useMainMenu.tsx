@@ -33,7 +33,13 @@ export const useMainMenu = () => {
     {
       label: t("dashboard"),
       key: "/dashboard/deposit",
-      hidden: false,
+      hidden: userInfo && userInfo.userType > 2,
+      icon: <DashboardOutlined />,
+    },
+    {
+      label: t("dailyReport"),
+      key: "/report/daily",
+      hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
       icon: <DashboardOutlined />,
     },
     {

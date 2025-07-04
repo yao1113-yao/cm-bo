@@ -1,7 +1,7 @@
 import CommonButton from "../../../components/CommonButton";
 import Device from "../../../components/Device";
 import { useBankRecord } from "./hook/useBankRecord";
-import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Table } from "antd";
+import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Table } from "antd";
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
@@ -15,6 +15,16 @@ const BankRecord = () => {
           <Col xs={6}>
             <Form.Item label={t("searchDate")} name="searchDate">
               <RangePicker style={{ width: "100%" }} showTime />
+            </Form.Item>
+          </Col>
+
+          <Col xs={6}>
+            <Form.Item label={t("type")} name="type">
+              <Select>
+                <Select.Option value="all">ALL</Select.Option>
+                <Select.Option value="MAIN">DEPOSIT</Select.Option>
+                <Select.Option value="WITHDRAW">WITHDRAW</Select.Option>
+              </Select>
             </Form.Item>
           </Col>
 

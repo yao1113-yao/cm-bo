@@ -89,22 +89,22 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
             </Col>
             <Col xs={6}>
               <Form.Item label={t("customerBank")} name="customerBank" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
             <Col xs={6}>
               <Form.Item label={t("customerBankAccNo")} name="customerBankAccNo" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
             <Col xs={6}>
               <Form.Item label={t("customerBankAccName")} name="customerBankAccName" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
             <Col xs={6}>
               <Form.Item label={t("Remark")} name="remark" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                <Input />
+                <Input autoComplete="off" />
               </Form.Item>
             </Col>
           </Row>

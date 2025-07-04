@@ -166,3 +166,8 @@ export interface ILogType {
   createBy: string;
   createDate: Date;
 }
+
+export interface IDailyReportType{
+  srno:number;
+  
+}

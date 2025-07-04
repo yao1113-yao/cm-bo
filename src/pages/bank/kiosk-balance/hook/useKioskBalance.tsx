@@ -52,16 +52,16 @@ export const useKioskBalance = () => {
       title: t("balanceGP"),
       dataIndex: "balanceGP",
       ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
       title: t("balanceSystem"),
       dataIndex: "balance",
       ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {

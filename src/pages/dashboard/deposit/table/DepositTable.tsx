@@ -2,7 +2,7 @@ import { Button, Card, Divider, message, Space, Spin, Table, TableProps, Tag, To
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import { CheckOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
@@ -59,7 +59,7 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isSeen === 1 && text !== "REJECT" ? <Tag color="#87d068">DONE</Tag> : record?.isSeen === 1 && text === "REJECT" ? <Tag color="#f50">REJECT NOTED</Tag> : record?.isManual === 1 && text === "SUCCESS" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text === "DONE" ? "SUCCESS" : text}</Tag>;
+        return record?.isSeen === 1 && text === "SUCCESS" ? <Tag color="#87d068">DONE</Tag> : record?.isSeen === 1 && text === "REJECT" ? <Tag color="#f50">REJECT NOTED</Tag> : record?.isSeen;
       },
     },
     {
@@ -290,6 +290,9 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
     }
   };
 
+  useEffect(() => {
+    console.log("first");
+  }, []);
   return (
     <>
       <Spin spinning={isLoading}>

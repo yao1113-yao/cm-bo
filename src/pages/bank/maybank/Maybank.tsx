@@ -57,7 +57,7 @@ const Maybank = () => {
         </Row>
       </Form>
 
-      <Table dataSource={bankRecordList} columns={bankRecordColumns} />
+      <Table dataSource={bankRecordList} columns={bankRecordColumns} pagination={false} />
       {/* </> */}
     </Spin>
   );

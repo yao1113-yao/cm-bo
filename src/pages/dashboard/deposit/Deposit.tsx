@@ -129,7 +129,7 @@ const Deposit = ({ type }: DepositProps) => {
                 <>
                   {fields.map(({ key, name, ...restField }) => (
                     <>
-                      <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} {...restField} />
+                      <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} form={form} {...restField} />
                     </>
                   ))}
                   <Form.Item>
@@ -140,19 +140,6 @@ const Deposit = ({ type }: DepositProps) => {
                 </>
               )}
             </Form.List>
-            <Row gutter={20}>
-              <Col xs={3}>
-                <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-
-              <Col xs={3}>
-                <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input type="number" />
-                </Form.Item>
-              </Col>
-            </Row>
 
             <Divider style={{ margin: "0px" }}>{t("bankDetails")}</Divider>
 

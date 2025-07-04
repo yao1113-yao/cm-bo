@@ -5,7 +5,7 @@ import { formatDateTime, formatNumber, formatString } from "../../../../function
 import { useContext, useRef, useState } from "react";
 import { Api } from "../../../../context/ApiContext";
 
-import { BankOutlined, SendOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
+import { BankOutlined, SendOutlined, CloseOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 import { FaHandPaper } from "react-icons/fa";
 import OpenBankRecord from "./modal/OpenBankRecord";
@@ -40,7 +40,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "BOT FAIL" && (
+            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "BOT FAIL" && record?.mStatus !== "SUCCESS" ? (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -52,6 +52,12 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                   </Button>
                 </Tooltip>
               </>
+            ) : (
+              <Tooltip title={t("Noted")}>
+                <Button onClick={() => handleNotedTransaction(record)}>
+                  <CheckOutlined />
+                </Button>
+              </Tooltip>
             )}
           </Space>
         );
@@ -277,6 +283,41 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       },
     },
   ];
+
+  async function handleNotedTransaction(values: any) {
+    Swal.fire({
+      title: "Confirm to noted the transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Noted",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          status: 1,
+        };
+        await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("deposit");
+            handleGetTransactionRecord("deposit");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
 
   const samePrev = useRef<boolean>(false);
   const prevClass = useRef<string>("row-highlight-1");

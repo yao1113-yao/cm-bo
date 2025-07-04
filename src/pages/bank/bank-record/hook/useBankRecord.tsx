@@ -27,6 +27,7 @@ export const useBankRecord = () => {
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     bank: "all",
+    type: "all",
     remark: "",
   };
   useEffect(() => {
@@ -303,6 +304,7 @@ export const useBankRecord = () => {
       companyID: "BEST8",
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
+      type: values?.type,
       bankCode: values?.bank,
       remark: values?.remark,
     };
@@ -320,10 +322,10 @@ export const useBankRecord = () => {
     console.log(values);
     if (values === "day") {
       form.setFieldValue("searchDate", searchDateRange(values));
-      handleGetBankRecordMarketingList({ searchDate: searchDateRange(values), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });
+      handleGetBankRecordMarketingList({ searchDate: searchDateRange(values), type: form.getFieldValue("type"), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });
     } else {
       form.setFieldValue("searchDate", [dayjs().startOf("day").add(-1, "day"), dayjs().endOf("day").add(-1, "day")]);
-      handleGetBankRecordMarketingList({ searchDate: [dayjs().startOf("day").add(-1, "day"), dayjs().endOf("day").add(-1, "day")], bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });
+      handleGetBankRecordMarketingList({ searchDate: [dayjs().startOf("day").add(-1, "day"), dayjs().endOf("day").add(-1, "day")], type: form.getFieldValue("type"), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });
     }
   }
 

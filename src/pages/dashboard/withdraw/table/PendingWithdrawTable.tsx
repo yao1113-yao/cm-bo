@@ -4,7 +4,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 import { Api } from "../../../../context/ApiContext";
-import { SendOutlined, CloseOutlined, UploadOutlined, EditOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, UploadOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 import OpenBankRecord from "./modal/OpenBankRecord";
 import Swal from "sweetalert2";
@@ -35,7 +35,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "HOLD" ? (
+            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "HOLD" && record?.mStatus !== "SUCCESS" ? (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -48,7 +48,11 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                 </Tooltip>
               </>
             ) : (
-              ""
+              <Tooltip title={t("Noted")}>
+                <Button onClick={() => handleNotedTransaction(record)}>
+                  <CheckOutlined />
+                </Button>
+              </Tooltip>
             )}
           </Space>
         );
@@ -224,6 +228,41 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       },
     },
   ];
+
+  async function handleNotedTransaction(values: any) {
+    Swal.fire({
+      title: "Confirm to noted the transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Noted",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          status: 1,
+        };
+        await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("withdraw");
+            handleGetTransactionRecord("withdraw");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
   function OpenModalEditTransaction(values: any) {
     setSelectedPendingDeposit(values);
     setOpenEditTransaction(true);

@@ -6,7 +6,7 @@ import { getAllItemCodeList } from "../../../../function/ApiFunction";
 import { Api } from "../../../../context/ApiContext";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useTranslation } from "react-i18next";
-import { RightOutlined, LeftOutlined } from "@ant-design/icons";
+import { RightOutlined, LeftOutlined, CloseOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 
 export const useMaybank = () => {
@@ -109,6 +109,10 @@ export const useMaybank = () => {
                   </Button>
                 </Tooltip>
               )}
+
+              <Tooltip title={t("deleteRecord")}>
+                <Button icon={<CloseOutlined />} onClick={() => handleDeleteBankRecord(record)} disabled={record?.status === 1}></Button>
+              </Tooltip>
             </Space>
           </>
         );
@@ -201,6 +205,44 @@ export const useMaybank = () => {
           content: error.response.data.message,
         });
       });
+    setIsLoading(false);
+  }
+
+  function handleDeleteBankRecord(record: any) {
+    Swal.fire({
+      title: "Please confirm that data will be delete in system",
+      showCancelButton: true,
+      confirmButtonText: "Submit",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          bankRecordSrno: record?.srno,
+        };
+        await bankApi("/delete-bank-record", object)
+          .then(() => {
+            form.resetFields();
+            setIsLoading(false);
+            handleGetBankRecordList({ bank: bankSelected });
+            form2.setFieldValue("bank", bankSelected);
+            messageApi.open({
+              type: "success",
+              content: "Success",
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            messageApi.open({
+              type: "error",
+              content: error.response.data.message,
+            });
+          });
+        setIsLoading(false);
+      }
+    });
+
     setIsLoading(false);
   }
 

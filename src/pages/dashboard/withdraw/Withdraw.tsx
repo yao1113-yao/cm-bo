@@ -176,19 +176,19 @@ const Withdraw = ({ type }: DepositProps) => {
             <Row gutter={10}>
               <Col xs={3}>
                 <Form.Item label={t("customerBank")} name="customerBank" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                  <Input />
+                  <Input autoComplete="off" />
                 </Form.Item>
               </Col>
 
               <Col xs={3}>
                 <Form.Item label={t("customerBankAccNo")} name="customerBankAccNo" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                  <Input />
+                  <Input autoComplete="off" />
                 </Form.Item>
               </Col>
 
               <Col xs={3}>
                 <Form.Item label={t("customerBankAccName")} name="customerBankAccName" rules={[{ required: true, message: t("pleaseEnter") }]}>
-                  <Input />
+                  <Input autoComplete="off" />
                 </Form.Item>
               </Col>
 
@@ -213,7 +213,7 @@ const Withdraw = ({ type }: DepositProps) => {
 
               <Col xs={3}>
                 <Form.Item label={t("remark")} name="remark">
-                  <Input />
+                  <Input autoComplete="off" />
                 </Form.Item>
               </Col>
             </Row>

@@ -4,11 +4,13 @@ import { MinusCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
-const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, ...rest }: any) => {
+const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form, ...rest }: any) => {
   const { t } = useTranslation();
 
   const [newIDEnable, setNewIDEnable] = useState<boolean>(false);
   const [freeCreditEnable, setFreeCreditEnable] = useState<boolean>(false);
+  const [onChangeName, setOnChangeName] = useState<string>("");
+  const [onChangeHpNo, setOnChangeHpNo] = useState<string>("");
 
   function handleCheckNewID() {
     setNewIDEnable(!newIDEnable);
@@ -16,6 +18,11 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, ...re
 
   function handleCheckFreeCredit() {
     setFreeCreditEnable(!freeCreditEnable);
+  }
+
+  function handleOnChangeName(e: any) {
+    form.setFieldValues("name1", e.target.value);
+    setOnChangeName(e.target.value);
   }
 
   return (
@@ -61,6 +68,23 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, ...re
             </Select>
           </Form.Item>
         </Col>
+        {name > 0 ? (
+          ""
+        ) : (
+          <>
+            <Col xs={4}>
+              <Form.Item label={t("name")} name={[name, "name"]} rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col xs={4}>
+              <Form.Item label={t("hpNo")} name={[name, "hpNo"]} rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input type="number" />
+              </Form.Item>
+            </Col>
+          </>
+        )}
+
         <Col xs={4}>
           <Form.Item
             label={
