@@ -167,7 +167,10 @@ export interface ILogType {
   createDate: Date;
 }
 
-export interface IDailyReportType{
-  srno:number;
-  
+export interface ITeamCaseType {
+  srno: number;
+  companyID: string;
+  totalCase: number;
+  totalDepositCase: number;
+  totalWithdrawCase: number;
 }

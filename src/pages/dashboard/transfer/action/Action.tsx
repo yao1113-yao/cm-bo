@@ -1,10 +1,16 @@
-import { Col, Form, Input, Row, Select } from "antd";
+import { Checkbox, Col, Form, Input, Row, Select, Space } from "antd";
 
 import { MinusCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 const Action = ({ onChange, allGameList, key, name, remove, ...rest }: any) => {
   const { t } = useTranslation();
+
+  const [newIDEnable, setNewIDEnable] = useState<boolean>(false);
+  function handleCheckNewID() {
+    setNewIDEnable(!newIDEnable);
+  }
 
   return (
     <>
@@ -22,8 +28,19 @@ const Action = ({ onChange, allGameList, key, name, remove, ...rest }: any) => {
         </Col>
 
         <Col xs={3}>
-          <Form.Item label={t("toGameLoginID")} name={[name, "gameLoginID"]} rules={[{ required: true, message: t("pleaseSelect") }]}>
-            <Input autoComplete="off" />
+          <Form.Item
+            label={
+              <Space>
+                {t("toGameLoginID")}
+                <Checkbox onChange={handleCheckNewID}>
+                  <div>&nbsp;New ID</div>
+                </Checkbox>
+              </Space>
+            }
+            name={[name, "toGameLoginID"]}
+            rules={[{ required: !newIDEnable, message: t("pleaseSelect") }]}
+          >
+            <Input disabled={newIDEnable} autoComplete="off" />
           </Form.Item>
         </Col>
 

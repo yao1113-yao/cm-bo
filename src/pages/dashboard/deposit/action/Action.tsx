@@ -50,17 +50,6 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
           </Form.Item>
         </Col>
 
-        <Col xs={4}>
-          <Form.Item label={t("device")} name={[name, "device"]} rules={[{ required: true }]}>
-            <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("device")} optionFilterProp="label">
-              {allDeviceList?.map((items: any) => (
-                <Select.Option value={items.item} key={items.item}>
-                  {items?.item}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
         {name > 0 ? (
           ""
         ) : (
@@ -78,6 +67,17 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
           </>
         )}
 
+        <Col xs={4}>
+          <Form.Item label={t("device")} name={[name, "device"]} rules={[{ required: true }]}>
+            <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("device")} optionFilterProp="label">
+              {allDeviceList?.map((items: any) => (
+                <Select.Option value={items.item} key={items.item}>
+                  {items?.item}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
         <Col xs={4}>
           <Form.Item
             label={

@@ -17,6 +17,7 @@ import KioskErrorReport from "./pages/bank/error-report/kiosk/KioskErrorReport";
 import BankErrorReport from "./pages/bank/error-report/bank/BankErrorReport";
 import MatchBankLater from "./pages/bank/match-bank-later/MatchBankLater";
 import DailyReport from "./pages/report/daily/DailyReport";
+import TeamCase from "./pages/report/case-sales/TeamCase";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -51,6 +52,7 @@ function App() {
         { path: "/kiosk-adjustment", element: <Protected roles={[1, 2]} component={<KioskErrorReport />} /> },
         { path: "/bank-adjustment", element: <Protected roles={[1, 2]} component={<BankErrorReport />} /> },
         { path: "/report/daily", element: <Protected roles={[1, 4, 5]} component={<DailyReport />} /> },
+        { path: "/team/case", element: <Protected roles={[1, 4, 5]} component={<TeamCase />} /> },
       ],
     },
   ]);

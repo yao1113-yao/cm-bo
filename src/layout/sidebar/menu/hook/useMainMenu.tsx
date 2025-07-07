@@ -37,8 +37,8 @@ export const useMainMenu = () => {
       icon: <DashboardOutlined />,
     },
     {
-      label: t("dailyReport"),
-      key: "/report/daily",
+      label: t("Team Case and Sales"),
+      key: "/team/case",
       hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
       icon: <DashboardOutlined />,
     },
