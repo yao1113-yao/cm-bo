@@ -37,7 +37,7 @@ const Action = ({ onChange, allGameList, key, name, remove, ...rest }: any) => {
                 </Checkbox>
               </Space>
             }
-            name={[name, "toGameLoginID"]}
+            name={[name, "gameLoginID"]}
             rules={[{ required: !newIDEnable, message: t("pleaseSelect") }]}
           >
             <Input disabled={newIDEnable} autoComplete="off" />

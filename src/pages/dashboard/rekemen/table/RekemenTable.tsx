@@ -124,11 +124,11 @@ const RekemenTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       },
     },
     {
-      title: t("bonus"),
-      dataIndex: "bonus",
+      title: t("bonus") + "%",
+      dataIndex: "bonusPer",
       align: "center",
       render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text * 100)}</div>;
       },
     },
     {

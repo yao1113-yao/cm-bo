@@ -70,7 +70,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         return (
           <>
             <Space>
-              {!record?.bankRecordSrno && record?.mStatus !== "BOT PROCESSING" ? (
+              {!record?.bankRecordSrno && record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "BOT FAIL" ? (
                 <>
                   <Tooltip title={t("assignBank")}>
                     <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
@@ -238,15 +238,15 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       dataIndex: "bonusPer",
       align: "center",
       render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text * 100)}</div>;
       },
     },
     {
-      title: t("bonus"),
-      dataIndex: "bonus",
+      title: t("bonus") + "%",
+      dataIndex: "bonusPer",
       align: "center",
       render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text * 100)}</div>;
       },
     },
     {

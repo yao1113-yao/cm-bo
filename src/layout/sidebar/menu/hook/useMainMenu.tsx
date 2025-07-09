@@ -43,6 +43,12 @@ export const useMainMenu = () => {
       icon: <DashboardOutlined />,
     },
     {
+      label: t("Team Kiosk Balance"),
+      key: "/team/kiosk-balance",
+      hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
+      icon: <DashboardOutlined />,
+    },
+    {
       label: t("account"),
       key: "account",
       type: "group",

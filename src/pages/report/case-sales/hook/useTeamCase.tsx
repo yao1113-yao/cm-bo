@@ -2,7 +2,7 @@ import { Form, message, TableProps } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ITeamCaseType } from "../../../../type/main.interface";
-import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatIndex, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { reportApi } from "../../../../service/CallApi";
 import dayjs from "dayjs";
 
@@ -17,7 +17,7 @@ export const useTeamCase = () => {
   const [apiData, setApiData] = useState<ITeamCaseType[] | undefined>();
 
   const initialValues = {
-    searchDate: [dayjs(), dayjs()],
+    searchDate: searchDateRange("day"),
     companyID: "all",
   };
   useEffect(() => {
@@ -65,8 +65,8 @@ export const useTeamCase = () => {
       title: t("totalCase"),
       dataIndex: "totalCase",
       ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
 
@@ -74,16 +74,32 @@ export const useTeamCase = () => {
       title: t("totalDepositCase"),
       dataIndex: "totalDepositCase",
       ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
       title: t("totalWithdrawCase"),
       dataIndex: "totalWithdrawCase",
       ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("totalDeposit(RM)"),
+      dataIndex: "totalDeposit",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("totalWithdraw(RM)"),
+      dataIndex: "totalWithdraw",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
   ];
