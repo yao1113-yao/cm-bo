@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { reportApi } from "../../../service/CallApi";
 import { ITeamKioskBalance } from "../../../type/main.interface";
 import { Card, Descriptions, message } from "antd";

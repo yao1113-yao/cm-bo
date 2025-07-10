@@ -1,9 +1,8 @@
-import { Card, Col, DatePicker, Divider, Form, Input, Row, Select, Table } from "antd";
+import { Card, Col, Divider, Form, Input, Row, Select, Table } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import { useTeamKioskBalance } from "./hook/useTeamKioskBalance";
 import { useState } from "react";
 import ExpandData from "./ExpandData";
-const { RangePicker } = DatePicker;
 
 const TeamKioskBalance = () => {
   const { t, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance } = useTeamKioskBalance();
