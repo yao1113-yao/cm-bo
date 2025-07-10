@@ -6,7 +6,7 @@ import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, form, contextHolder, isLoading, allBankList, apiData, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName } = useBankRecord();
+  const { t, userInfo, form, contextHolder, isLoading, allBankList, apiData, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName } = useBankRecord();
   return (
     <Card>
       {contextHolder}
@@ -17,6 +17,13 @@ const BankRecord = () => {
               <RangePicker style={{ width: "100%" }} showTime />
             </Form.Item>
           </Col>
+          {userInfo && userInfo?.userType !== 2 && (
+            <Col xs={6}>
+              <Form.Item label={t("companyID")} name="companyID">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+          )}
 
           <Col xs={6}>
             <Form.Item label={t("type")} name="type">

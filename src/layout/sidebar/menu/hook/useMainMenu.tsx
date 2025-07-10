@@ -63,7 +63,7 @@ export const useMainMenu = () => {
       label: t("bank"),
       key: "bank",
       type: "group",
-      hidden: userInfo && userInfo.userType > 2,
+      hidden: userInfo && userInfo.userType === 3,
       children: [
         {
           label: t("Bank Transaction"),
@@ -93,7 +93,7 @@ export const useMainMenu = () => {
           label: t("Deposit Withdraw Record"),
           key: "/bank-marketing",
           icon: <FileSearchOutlined />,
-          hidden: userInfo && userInfo.userType > 2,
+          hidden: userInfo && userInfo.userType === 3,
         },
         {
           label: t("Rekemen Record"),

@@ -59,7 +59,7 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isSeen === 1 && text === "SUCCESS" ? <Tag color="#87d068">DONE</Tag> : record?.isSeen === 1 && text === "REJECT" ? <Tag color="#f50">REJECT NOTED</Tag> : record?.isSeen;
+        return record?.isSeen === 1 && text === "SUCCESS" ? <Tag color="#87d068">DONE</Tag> : record?.isSeen === 1 && text === "REJECT" ? <Tag color="#f50">REJECT NOTED</Tag> : record?.isSeen === 0 && text === "REJECT" ? <Tag color="#f50">REJECT </Tag> : "";
       },
     },
     {

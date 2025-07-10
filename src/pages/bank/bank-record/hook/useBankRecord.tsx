@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
@@ -9,8 +9,10 @@ import { IDeviceType, ITransactionType } from "../../../../type/main.interface";
 import { getAllItemCodeList } from "../../../../function/ApiFunction";
 import { CloseOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
+import { Api } from "../../../../context/ApiContext";
 
 export const useBankRecord = () => {
+  const { userInfo } = useContext(Api);
   const { t } = useTranslation();
   const [form] = Form.useForm();
 
@@ -26,6 +28,7 @@ export const useBankRecord = () => {
 
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    companyID: "all",
     bank: "all",
     type: "all",
     remark: "",
@@ -73,6 +76,15 @@ export const useBankRecord = () => {
       align: "center",
       render: (text: number) => {
         return text === 1 ? <Tag color="#87d068">Assign</Tag> : <Tag color="#f50">Haven't</Tag>;
+      },
+    },
+    {
+      title: t("companyID"),
+      dataIndex: "companyID",
+      align: "center",
+      hidden: userInfo && userInfo?.userType === 2,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
@@ -301,7 +313,7 @@ export const useBankRecord = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: userInfo?.userType === 2 ? "BEST8" : values?.companyID,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       type: values?.type,
@@ -329,5 +341,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, form, contextHolder, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
+  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
 };

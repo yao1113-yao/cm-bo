@@ -242,11 +242,11 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       },
     },
     {
-      title: t("bonus") + "%",
-      dataIndex: "bonusPer",
+      title: t("bonus"),
+      dataIndex: "bonus",
       align: "center",
       render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text * 100)}</div>;
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
     {

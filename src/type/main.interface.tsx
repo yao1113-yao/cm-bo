@@ -174,3 +174,12 @@ export interface ITeamCaseType {
   totalDepositCase: number;
   totalWithdrawCase: number;
 }
+
+export interface ITeamKioskBalance {
+  srno: number;
+  companyID: string;
+  gpCount: number;
+  gameName: string;
+  balance: number;
+  balanceGP: number;
+}
