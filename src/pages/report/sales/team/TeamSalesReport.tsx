@@ -1,4 +1,4 @@
-import { Card, Col, DatePicker, Divider, Form, Input, Row, Space, Statistic, StatisticProps, Table } from "antd";
+import { Card, Col, DatePicker, Divider, Form, Input, Row, Statistic, StatisticProps, Table } from "antd";
 import { useTeamSalesReport } from "./hook/useTeamSalesReport";
 import CommonButton from "../../../../components/CommonButton";
 import { DollarOutlined } from "@ant-design/icons";
