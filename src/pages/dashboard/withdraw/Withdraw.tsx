@@ -153,7 +153,7 @@ const Withdraw = ({ type }: DepositProps) => {
                 <Device list={allDeviceList} required={true} selectAll={false} label="device" />
               </Col>
 
-              <Col xs={3}>
+              <Col xs={4}>
                 <Form.Item
                   label={
                     <Space>
