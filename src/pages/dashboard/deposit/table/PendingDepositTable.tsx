@@ -59,11 +59,18 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                 </Button>
               </Tooltip>
             ) : record?.mStatus === "REJECT" ? (
-              <Tooltip title={t("editDetails")}>
-                <Button onClick={() => OpenModalEditTransaction(record)}>
-                  <EditOutlined />
-                </Button>
-              </Tooltip>
+              <>
+                <Tooltip title={t("Noted")}>
+                  <Button onClick={() => handleNotedTransaction(record)}>
+                    <CheckOutlined />
+                  </Button>
+                </Tooltip>
+                <Tooltip title={t("editDetails")}>
+                  <Button onClick={() => OpenModalEditTransaction(record)}>
+                    <EditOutlined />
+                  </Button>
+                </Tooltip>
+              </>
             ) : (
               ""
             )}
