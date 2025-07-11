@@ -6,7 +6,7 @@ import { useTransferRecord } from "./hook/useTransferRecord";
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 const TransferRecord = () => {
-  const { t, form, isLoading, allGameList, apiData, columns, initialValues, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter } = useTransferRecord();
+  const { userInfo, t, form, isLoading, allGameList, apiData, columns, initialValues, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter } = useTransferRecord();
   return (
     <Card>
       <Form layout="vertical" onFinish={handleGetTransferRecordMarketing} initialValues={initialValues} form={form}>
@@ -16,6 +16,13 @@ const TransferRecord = () => {
               <RangePicker style={{ width: "100%" }} showTime />
             </Form.Item>
           </Col>
+          {userInfo && userInfo?.userType !== 2 && (
+            <Col xs={6}>
+              <Form.Item label={t("companyID")} name="companyID">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+          )}
 
           <Col xs={6}>
             <GameProvider list={allGameList} required={true} selectAll label="gameName" />

@@ -159,7 +159,7 @@ const Withdraw = ({ type }: DepositProps) => {
                     <Space>
                       {t("credit")}
                       <Checkbox onChange={handleCheckFreeCredit}>
-                        <div>&nbsp;Cuci All</div>
+                        <div>&nbsp;Free ID Cuci All</div>
                       </Checkbox>
                     </Space>
                   }

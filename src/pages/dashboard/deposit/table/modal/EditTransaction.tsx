@@ -15,10 +15,20 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
-  console.log(selectedPendingDeposit);
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
   }, []);
+  console.log(selectedPendingDeposit);
+
+  const initialValues = {
+    mGame: selectedPendingDeposit?.mGame,
+    gameID: selectedPendingDeposit?.gameID,
+    inCredit: selectedPendingDeposit?.inCredit,
+    freeCredit: selectedPendingDeposit?.freeCredit,
+    bonus: selectedPendingDeposit?.bonusPer * 100,
+    total: selectedPendingDeposit?.total,
+    cuci: selectedPendingDeposit?.cuci,
+  };
 
   async function handleEditTransactionDetails(values: any) {
     setIsLoading(true);
@@ -29,13 +39,13 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
       mktDetailsSrno: selectedPendingDeposit?.srno,
       ...values,
     };
-    await mainApi("/edit-transaction-details", object)
+    await mainApi("/edit-deposit-transaction-details", object)
       .then(() => {
         messageApi.open({
           type: "success",
-          content: "edit-transaction-details",
+          content: "edit-deposit-transaction-details",
         });
-        setOpenEditTransaction(false);
+        handleOnCloseModal();
         handleGetPendingTransactionRecord("deposit");
       })
       .catch(() => {
@@ -63,7 +73,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
   return (
     <div>
       <Modal width="70vw" open={openEditTransaction} onCancel={() => handleOnCloseModal()} footer={null} closable={false} loading={isLoading}>
-        <Form form={form} initialValues={selectedPendingDeposit} layout="vertical" onFinish={handleEditTransactionDetails}>
+        <Form form={form} initialValues={initialValues} layout="vertical" onFinish={handleEditTransactionDetails}>
           <Row gutter={20}>
             <Col xs={6}>
               <Form.Item label={t("game")} name="mGame" rules={[{ required: true }]}>

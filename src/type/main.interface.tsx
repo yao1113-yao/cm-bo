@@ -183,3 +183,15 @@ export interface ITeamKioskBalance {
   balance: number;
   balanceGP: number;
 }
+export interface ITeamStaffSalesType {
+  srno: number;
+  companyID: string;
+  UserID: string;
+  Deposit: number;
+  Withdraw: number;
+}
+
+export interface ITotalValueType {
+  totalDeposit: number;
+  totalWithdraw: number;
+}

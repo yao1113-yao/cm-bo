@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
@@ -7,8 +7,11 @@ import { formatDateTime, formatNumber, formatString, searchDateRange } from "../
 import { bankApi } from "../../../../service/CallApi";
 import { IDeviceType, IGameProviderType, ITransactionType } from "../../../../type/main.interface";
 import { getAllGameProviderList, getAllItemCodeList } from "../../../../function/ApiFunction";
+import { Api } from "../../../../context/ApiContext";
 
 export const useTransferRecord = () => {
+  const { userInfo } = useContext(Api);
+
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const userID = localStorage.getItem("userID");
@@ -22,6 +25,7 @@ export const useTransferRecord = () => {
 
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    companyID: "all",
     gameName: "all",
     gameLoginID: "",
     toGameName: "all",
@@ -42,6 +46,15 @@ export const useTransferRecord = () => {
       ellipsis: true,
       render: (text: Date) => {
         return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+    {
+      title: t("companyID"),
+      dataIndex: "companyID",
+      align: "center",
+      hidden: userInfo && userInfo?.userType === 2,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
@@ -134,7 +147,7 @@ export const useTransferRecord = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: userInfo?.userType === 2 ? "BEST8" : values?.companyID,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       gameName: values?.gameName,
@@ -163,5 +176,5 @@ export const useTransferRecord = () => {
     }
   }
 
-  return { t, form, isLoading, apiData, setApiData, allGameList, allBankList, initialValues, columns, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter };
+  return { userInfo, t, form, isLoading, apiData, setApiData, allGameList, allBankList, initialValues, columns, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter };
 };

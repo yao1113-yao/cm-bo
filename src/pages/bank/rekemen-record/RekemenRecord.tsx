@@ -6,7 +6,7 @@ import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const RekemenRecord = () => {
-  const { t, form, isLoading, allGameList, apiData, columns, initialValues, handleGetRekemenRecordMarketing, handleSearchByFilter } = useRekemenRecord();
+  const { userInfo, t, form, isLoading, allGameList, apiData, columns, initialValues, handleGetRekemenRecordMarketing, handleSearchByFilter } = useRekemenRecord();
   return (
     <Card>
       <Form layout="vertical" onFinish={handleGetRekemenRecordMarketing} initialValues={initialValues} form={form}>
@@ -16,6 +16,14 @@ const RekemenRecord = () => {
               <RangePicker style={{ width: "100%" }} showTime />
             </Form.Item>
           </Col>
+
+          {userInfo && userInfo?.userType !== 2 && (
+            <Col xs={6}>
+              <Form.Item label={t("companyID")} name="companyID">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+          )}
 
           <Col xs={6}>
             <GameProvider list={allGameList} required={true} selectAll label="gameName" />

@@ -2,7 +2,7 @@ import { Button, Card, Divider, message, Space, Spin, Table, TableProps, Tag, To
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { SendOutlined, CloseOutlined, EditOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 import { Api } from "../../../../context/ApiContext";
 import { FaHandPaper } from "react-icons/fa";
 import { useContext, useRef, useState } from "react";
@@ -20,6 +20,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
+
   const columns: TableProps<ITransactionType>["columns"] = [
     {
       title: t("action"),
@@ -27,7 +28,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "REJECT" && (
+            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "BOT FAIL" && record?.mStatus !== "SUCCESS" ? (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -39,6 +40,12 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
                   </Button>
                 </Tooltip>
               </>
+            ) : (
+              <Tooltip title={t("Noted")}>
+                <Button onClick={() => handleNotedTransaction(record)}>
+                  <CheckOutlined />
+                </Button>
+              </Tooltip>
             )}
           </Space>
         );
@@ -166,6 +173,41 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
       },
     },
   ];
+
+  async function handleNotedTransaction(values: any) {
+    Swal.fire({
+      title: "Confirm to noted the transaction?",
+      showCancelButton: true,
+      confirmButtonText: "Noted",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          status: 1,
+        };
+        await mainApi("/update-transaction-status", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("transfer");
+            handleGetTransactionRecord("transfer");
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
 
   function OpenModalEditTransaction(values: any) {
     setSelectedPendingDeposit(values);

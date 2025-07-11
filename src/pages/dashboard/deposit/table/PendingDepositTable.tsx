@@ -40,7 +40,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "BOT FAIL" && record?.mStatus !== "SUCCESS" ? (
+            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "BOT FAIL" ? (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -52,12 +52,20 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                   </Button>
                 </Tooltip>
               </>
-            ) : (
+            ) : record?.mStatus !== "REJECT" && record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "BOT FAIL" ? (
               <Tooltip title={t("Noted")}>
                 <Button onClick={() => handleNotedTransaction(record)}>
                   <CheckOutlined />
                 </Button>
               </Tooltip>
+            ) : record?.mStatus === "REJECT" ? (
+              <Tooltip title={t("editDetails")}>
+                <Button onClick={() => OpenModalEditTransaction(record)}>
+                  <EditOutlined />
+                </Button>
+              </Tooltip>
+            ) : (
+              ""
             )}
           </Space>
         );
@@ -70,16 +78,14 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         return (
           <>
             <Space>
-              {!record?.bankRecordSrno && record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "BOT FAIL" ? (
+              {!record?.bankRecordSrno && record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "BOT FAIL" && record?.mStatus !== "REJECT" ? (
                 <>
                   <Tooltip title={t("assignBank")}>
                     <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
                   </Tooltip>
-                  {record?.isLater === 0 && (
-                    <Tooltip title={t("matchBankLater")}>
-                      <Button icon={<MdOutlineWatchLater />} onClick={() => handleMatchBankLater(record)} disabled={record?.isEditing === 1}></Button>
-                    </Tooltip>
-                  )}
+                  <Tooltip title={t("matchBankLater")}>
+                    <Button icon={<MdOutlineWatchLater />} onClick={() => handleMatchBankLater(record)} disabled={record?.isEditing === 1}></Button>
+                  </Tooltip>
 
                   <Tooltip title={t("reject")}>
                     <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>

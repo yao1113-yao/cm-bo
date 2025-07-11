@@ -35,7 +35,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
           type: "success",
           content: "edit-transaction-details",
         });
-        setOpenEditTransaction(false);
+        handleOnCloseModal();
         handleGetPendingTransactionRecord("withdraw");
       })
       .catch(() => {

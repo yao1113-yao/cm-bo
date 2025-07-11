@@ -19,6 +19,7 @@ import MatchBankLater from "./pages/bank/match-bank-later/MatchBankLater";
 import DailyReport from "./pages/report/daily/DailyReport";
 import TeamCase from "./pages/report/case-sales/TeamCase";
 import TeamKioskBalance from "./pages/report/kiosk-balance/TeamKioskBalance";
+import TeamSalesReport from "./pages/report/sales/team/TeamSalesReport";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -48,13 +49,14 @@ function App() {
         { path: "/company-bank", element: <Protected roles={[1, 2]} component={<BankBalance />} /> },
         { path: "/kiosk-balance", element: <Protected roles={[1, 2]} component={<KioskBalance />} /> },
         { path: "/bank-marketing", element: <Protected roles={[1, 2, 4, 5]} component={<BankRecord />} /> },
-        { path: "/rekemen-record", element: <Protected roles={[1, 2]} component={<RekemenRecord />} /> },
-        { path: "/transfer-record", element: <Protected roles={[1, 2]} component={<TransferRecord />} /> },
-        { path: "/kiosk-adjustment", element: <Protected roles={[1, 2]} component={<KioskErrorReport />} /> },
-        { path: "/bank-adjustment", element: <Protected roles={[1, 2]} component={<BankErrorReport />} /> },
+        { path: "/rekemen-record", element: <Protected roles={[1, 2, 4, 5]} component={<RekemenRecord />} /> },
+        { path: "/transfer-record", element: <Protected roles={[1, 2, 4, 5]} component={<TransferRecord />} /> },
+        { path: "/kiosk-adjustment", element: <Protected roles={[1, 2, 4, 5]} component={<KioskErrorReport />} /> },
+        { path: "/bank-adjustment", element: <Protected roles={[1, 2, 4, 5]} component={<BankErrorReport />} /> },
         { path: "/report/daily", element: <Protected roles={[1, 4, 5]} component={<DailyReport />} /> },
         { path: "/team/case", element: <Protected roles={[1, 4, 5]} component={<TeamCase />} /> },
         { path: "/team/kiosk-balance", element: <Protected roles={[1, 4, 5]} component={<TeamKioskBalance />} /> },
+        { path: "/team/sales", element: <Protected roles={[1, 4, 5]} component={<TeamSalesReport />} /> },
       ],
     },
   ]);

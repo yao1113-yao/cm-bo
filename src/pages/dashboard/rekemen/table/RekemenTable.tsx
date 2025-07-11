@@ -48,7 +48,7 @@ const RekemenTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL DONE</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+        return record?.isSeen === 1 && text === "SUCCESS" ? <Tag color="#87d068">DONE</Tag> : record?.isSeen === 1 && text === "REJECT" ? <Tag color="#f50">REJECT NOTED</Tag> : record?.isSeen === 0 && text === "REJECT" ? <Tag color="#f50">REJECT </Tag> : "";
       },
     },
     {
