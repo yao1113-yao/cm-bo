@@ -103,6 +103,36 @@ const Rekemen = ({ type }: DepositProps) => {
       <Spin spinning={isActionLoading}>
         {userInfo?.userType !== 2 && (
           <Form layout="vertical" form={form} onValuesChange={handleOnChangeBonus} onFinish={handleInsertGetTransactionRecord} initialValues={initialValues}>
+            <Divider>{t("newCustomerDetails")}</Divider>
+
+            <Row gutter={10}>
+              <Col xs={3}>
+                <GameProvider list={allGameList} required={true} selectAll={false} label="toGame" />
+              </Col>
+              <Col xs={3}>
+                <Form.Item label={t("gameLoginID")} name="toGameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input autoComplete="off" />
+                </Form.Item>
+              </Col>
+              <Col xs={3}>
+                <Form.Item label={t("name")} name="toName" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input autoComplete="off" />
+                </Form.Item>
+              </Col>
+
+              <Col xs={3}>
+                <Form.Item label={t("hpNo")} name="toHpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input type="number" autoComplete="off" />
+                </Form.Item>
+              </Col>
+              <Col xs={3}>
+                <Form.Item label={t("credit")} name="credit" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <InputNumber style={{ width: "100%" }} />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Divider>Details</Divider>
+
             <Row gutter={10}>
               <Col xs={3}>
                 <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
@@ -135,34 +165,6 @@ const Rekemen = ({ type }: DepositProps) => {
               <Col xs={3}>
                 <Form.Item label={t("totalBonus")} name="totalBonus" rules={[{ required: true, message: t("pleaseSelect") }]}>
                   <Input disabled />
-                </Form.Item>
-              </Col>
-            </Row>
-
-            <Divider>{t("newCustomerDetails")}</Divider>
-            <Row gutter={10}>
-              <Col xs={3}>
-                <GameProvider list={allGameList} required={true} selectAll={false} label="toGame" />
-              </Col>
-              <Col xs={3}>
-                <Form.Item label={t("gameLoginID")} name="toGameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input autoComplete="off" />
-                </Form.Item>
-              </Col>
-              <Col xs={3}>
-                <Form.Item label={t("name")} name="toName" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input autoComplete="off" />
-                </Form.Item>
-              </Col>
-
-              <Col xs={3}>
-                <Form.Item label={t("hpNo")} name="toHpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input type="number" autoComplete="off" />
-                </Form.Item>
-              </Col>
-              <Col xs={3}>
-                <Form.Item label={t("credit")} name="credit" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <InputNumber style={{ width: "100%" }} />
                 </Form.Item>
               </Col>
             </Row>

@@ -98,13 +98,13 @@ export const useMaybank = () => {
             <Space>
               {record?.debit !== 0 ? (
                 <Tooltip title={t("assignBank")}>
-                  <Button icon={<RightOutlined />} onClick={() => handleChangeDebitCredit(record)}>
+                  <Button icon={<RightOutlined />} onClick={() => handleChangeDebitCredit(record)} disabled={record?.status === 1}>
                     Credit
                   </Button>
                 </Tooltip>
               ) : (
                 <Tooltip title={t("assignBank")}>
-                  <Button icon={<LeftOutlined />} onClick={() => handleChangeDebitCredit(record)}>
+                  <Button icon={<LeftOutlined />} onClick={() => handleChangeDebitCredit(record)} disabled={record?.status === 1}>
                     Debit
                   </Button>
                 </Tooltip>

@@ -30,29 +30,29 @@ const All = () => {
   const [pendingTransferRecod, setPendingTransferRecod] = useState<[ITransactionType] | undefined>();
 
   useEffect(() => {
-    // const intervalId = setInterval(() => {
-    //   handleGetTransactionRecord("Main", "Deposit");
-    //   handleGetTransactionRecord("Main", "Deposit");
-    //   handleGetTransactionRecord("Main", "Withdraw");
-    //   handleGetTransactionRecord("Rekemen", "Rekemen");
-    //   handleGetTransactionRecord("Transfer", "Transfer");
-    //   handleGetPendingTransactionRecord("Main", "Deposit");
-    //   handleGetPendingTransactionRecord("Main", "Withdraw");
-    //   handleGetPendingTransactionRecord("Rekemen", "Rekemen");
-    //   handleGetPendingTransactionRecord("Transfer", "Transfer");
-    // }, 10000);
+    const intervalId = setInterval(() => {
+      handleGetTransactionRecord("Main", "Deposit");
+      handleGetTransactionRecord("Main", "Deposit");
+      handleGetTransactionRecord("Main", "Withdraw");
+      handleGetTransactionRecord("Rekemen", "Rekemen");
+      handleGetTransactionRecord("Transfer", "Transfer");
+      handleGetPendingTransactionRecord("Main", "Deposit");
+      handleGetPendingTransactionRecord("Main", "Withdraw");
+      handleGetPendingTransactionRecord("Rekemen", "Rekemen");
+      handleGetPendingTransactionRecord("Transfer", "Transfer");
+    }, 10000);
 
-    // return () => {
-    //   clearInterval(intervalId); // Clear the interval on unmount
-    // };
-    handleGetTransactionRecord("Main", "Deposit");
-    handleGetTransactionRecord("Main", "Withdraw");
-    handleGetTransactionRecord("Rekemen", "Rekemen");
-    handleGetTransactionRecord("Transfer", "Transfer");
-    handleGetPendingTransactionRecord("Main", "Deposit");
-    handleGetPendingTransactionRecord("Main", "Withdraw");
-    handleGetPendingTransactionRecord("Rekemen", "Rekemen");
-    handleGetPendingTransactionRecord("Transfer", "Transfer");
+    return () => {
+      clearInterval(intervalId); // Clear the interval on unmount
+    };
+    // handleGetTransactionRecord("Main", "Deposit");
+    // handleGetTransactionRecord("Main", "Withdraw");
+    // handleGetTransactionRecord("Rekemen", "Rekemen");
+    // handleGetTransactionRecord("Transfer", "Transfer");
+    // handleGetPendingTransactionRecord("Main", "Deposit");
+    // handleGetPendingTransactionRecord("Main", "Withdraw");
+    // handleGetPendingTransactionRecord("Rekemen", "Rekemen");
+    // handleGetPendingTransactionRecord("Transfer", "Transfer");
   }, []);
 
   async function handleGetTransactionRecord(recordType: string, type: string) {

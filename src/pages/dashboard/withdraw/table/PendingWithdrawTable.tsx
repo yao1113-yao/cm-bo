@@ -96,14 +96,14 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
         return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "PROCESSING" ? "#4096ff" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
       },
     },
-    // {
-    //   title: t("staff"),
-    //   dataIndex: "mStaff",
-    //   align: "center",
-    //   render: (text: string) => {
-    //     return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
-    //   },
-    // },
+    {
+      title: t("systemRemark"),
+      dataIndex: "sysRemark1",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
     {
       title: t("game"),
       dataIndex: "mGame",
