@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { mainApi } from "../../../../service/CallApi";
 import EditTransaction from "./modal/EditTransaction";
 import { handleEditingTransaction } from "../../../../function/ApiFunction";
+import OpenManualSuccess from "./modal/OpenManualSuccess";
 const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo } = useContext(Api);
@@ -18,6 +19,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
   const userToken = localStorage.getItem("userToken");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [openManualSuccess, setOpenManualSuccess] = useState<boolean>(false);
   const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
 
@@ -28,7 +30,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "BOT FAIL" && record?.mStatus !== "SUCCESS" ? (
+            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "BOT FAIL" ? (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -40,12 +42,27 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
                   </Button>
                 </Tooltip>
               </>
-            ) : (
+            ) : record?.mStatus !== "REJECT" && record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "BOT FAIL" ? (
               <Tooltip title={t("Noted")}>
                 <Button onClick={() => handleNotedTransaction(record)}>
                   <CheckOutlined />
                 </Button>
               </Tooltip>
+            ) : record?.mStatus === "REJECT" ? (
+              <>
+                <Tooltip title={t("Noted")}>
+                  <Button onClick={() => handleNotedTransaction(record)}>
+                    <CheckOutlined />
+                  </Button>
+                </Tooltip>
+                <Tooltip title={t("editDetails")}>
+                  <Button onClick={() => OpenModalEditTransaction(record)}>
+                    <EditOutlined />
+                  </Button>
+                </Tooltip>
+              </>
+            ) : (
+              ""
             )}
           </Space>
         );
@@ -57,21 +74,38 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
       render: (record) => {
         return (
           <>
-            {(record?.isFreeCredit === 1 && record?.mStatus === "WAITING") || (record?.inCredit === 0 && record?.mStatus === "WAITING") ? (
-              <Space>
-                <Tooltip title={t("approve")}>
-                  <Button icon={<SendOutlined />} onClick={() => handleInsertTransferTask(record)} disabled={record?.isEditing === 1}></Button>
-                </Tooltip>
-                <Tooltip title={t("manualSuccess")}>
-                  <Button icon={<FaHandPaper />}></Button>
-                </Tooltip>
-                <Tooltip title={t("reject")}>
-                  <Button icon={<CloseOutlined />}></Button>
-                </Tooltip>
-              </Space>
-            ) : (
-              ""
-            )}
+            <Space>
+              {(record?.isFreeCredit === 1 && record?.mStatus === "WAITING") || (record?.inCredit === 0 && record?.mStatus === "WAITING") ? (
+                <>
+                  <Tooltip title={t("approve")}>
+                    <Button icon={<SendOutlined />} onClick={() => handleInsertTransferTask(record)} disabled={record?.isEditing === 1}></Button>
+                  </Tooltip>
+                  <Tooltip title={t("manualSuccess")}>
+                    <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
+                  </Tooltip>
+                  <Tooltip title={t("reject")}>
+                    <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                  </Tooltip>
+                </>
+              ) : record?.mStatus === "BOT FAIL" ? (
+                <>
+                  <Tooltip title={t("manualSuccess")}>
+                    <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
+                  </Tooltip>
+                  <Tooltip title={t("reject")}>
+                    <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                  </Tooltip>
+                </>
+              ) : record?.mStatus === "HOLD" ? (
+                <>
+                  <Tooltip title={t("manualSuccess")}>
+                    <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
+                  </Tooltip>
+                </>
+              ) : (
+                ""
+              )}
+            </Space>
           </>
         );
       },
@@ -208,6 +242,10 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
       setIsLoading(false);
     });
   }
+  function handleOpenManualSuccessModal(values: any) {
+    setOpenManualSuccess(true);
+    setSelectedPendingDeposit(values);
+  }
 
   function OpenModalEditTransaction(values: any) {
     setSelectedPendingDeposit(values);
@@ -252,6 +290,9 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
     Swal.fire({
       title: "Do you want to rejcet this transaction?",
       showCancelButton: true,
+      text: "Remark:",
+      input: "text",
+      inputValue: values?.remark,
       confirmButtonText: "Reject",
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -261,6 +302,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
           status: 0,
+          remark: result.value,
         };
         await mainApi("/update-transaction-status", object)
           .then(() => {
@@ -296,6 +338,35 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
     }
   };
 
+  function handleCloseManualSuccessModal() {
+    setOpenManualSuccess(false);
+    setSelectedPendingDeposit(undefined);
+  }
+  async function handleInsertManualSuccess() {
+    setIsLoading(true);
+    const object = {
+      UserID: userID,
+      UserToken: userToken,
+      mktDetailsSrno: selectedPendingDeposit?.srno,
+    };
+    await mainApi("/insert-transfer-manual-success", object)
+      .then(() => {
+        handleCloseManualSuccessModal();
+        handleGetPendingTransactionRecord("transfer");
+        handleGetTransactionRecord("transfer");
+        messageApi.open({
+          type: "success",
+          content: "done",
+        });
+      })
+      .catch(() => {
+        messageApi.open({
+          type: "error",
+          content: "",
+        });
+      });
+    setIsLoading(false);
+  }
   return (
     <>
       <Spin spinning={isLoading}>
@@ -307,6 +378,8 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
         </Card>
 
         {openEditTransaction && <EditTransaction messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openEditTransaction={openEditTransaction} setOpenEditTransaction={setOpenEditTransaction} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />}
+        {/* manual success */}
+        {openManualSuccess && <OpenManualSuccess isLoading={isLoading} setIsLoading={setIsLoading} openManualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />}
       </Spin>
     </>
   );

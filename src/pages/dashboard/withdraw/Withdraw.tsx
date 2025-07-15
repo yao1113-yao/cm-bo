@@ -23,6 +23,7 @@ const Withdraw = ({ type }: DepositProps) => {
   const { userInfo } = useContext(Api);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [cuciAllEnable, setCuciAllEnable] = useState<boolean>(false);
   const [withdrawRecod, setWithdrawRecord] = useState<[ITransactionType] | undefined>();
@@ -107,12 +108,23 @@ const Withdraw = ({ type }: DepositProps) => {
       cashOut: values?.cashOut,
       remark: values?.remark,
     };
-    await mainApi("/insert-withdraw-transaction-record", object).then(() => {
-      message.success("success");
-      form.resetFields();
-      setCuciAllEnable(false);
-      handleGetPendingTransactionRecord("Withdraw");
-    });
+    await mainApi("/insert-withdraw-transaction-record", object)
+      .then(() => {
+        messageApi.open({
+          type: "success",
+          content: "success",
+        });
+        form.resetFields();
+        setCuciAllEnable(false);
+        handleGetPendingTransactionRecord("Withdraw");
+      })
+      .catch((error) => {
+        console.log(error?.response?.data?.message);
+        messageApi.open({
+          type: "error",
+          content: error?.response?.data?.message,
+        });
+      });
     setIsActionLoading(false);
   }
 
@@ -123,6 +135,7 @@ const Withdraw = ({ type }: DepositProps) => {
 
   return (
     <>
+      {contextHolder}
       <Spin spinning={isActionLoading}>
         {userInfo?.userType !== 2 && (
           <Form layout="vertical" form={form} onValuesChange={handleOnChangeBonus} onFinish={handleInsertGetTransactionRecord}>

@@ -37,45 +37,55 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
     {
       title: t("action"),
       hidden: userInfo?.userType !== 3,
-      render: (record: any) => {
-        return (
-          <Space>
-            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "BOT FAIL" ? (
-              <>
-                <Tooltip title={t("reject")}>
-                  <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
-                </Tooltip>
+      render: (_text, record: any, index: number) => {
+        if (index > 0 && record.mktSrno === pendingDepositRecod[index - 1]?.mktSrno && record?.mStatus === "SUCCESS")
+          return (
+            <Tooltip title={t("Noted")}>
+              <Button onClick={() => handleNotedTransaction(record)}>
+                <CheckOutlined />
+              </Button>
+            </Tooltip>
+          );
+        else {
+          return (
+            <Space>
+              {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "REJECT" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "BOT FAIL" ? (
+                <>
+                  <Tooltip title={t("reject")}>
+                    <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                  </Tooltip>
 
-                <Tooltip title={t("editDetails")}>
-                  <Button onClick={() => OpenModalEditTransaction(record)}>
-                    <EditOutlined />
-                  </Button>
-                </Tooltip>
-              </>
-            ) : record?.mStatus !== "REJECT" && record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "BOT FAIL" ? (
-              <Tooltip title={t("Noted")}>
-                <Button onClick={() => handleNotedTransaction(record)}>
-                  <CheckOutlined />
-                </Button>
-              </Tooltip>
-            ) : record?.mStatus === "REJECT" ? (
-              <>
+                  <Tooltip title={t("editDetails")}>
+                    <Button onClick={() => OpenModalEditTransaction(record)}>
+                      <EditOutlined />
+                    </Button>
+                  </Tooltip>
+                </>
+              ) : record?.mStatus !== "REJECT" && record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "BOT FAIL" ? (
                 <Tooltip title={t("Noted")}>
                   <Button onClick={() => handleNotedTransaction(record)}>
                     <CheckOutlined />
                   </Button>
                 </Tooltip>
-                <Tooltip title={t("editDetails")}>
-                  <Button onClick={() => OpenModalEditTransaction(record)}>
-                    <EditOutlined />
-                  </Button>
-                </Tooltip>
-              </>
-            ) : (
-              ""
-            )}
-          </Space>
-        );
+              ) : record?.mStatus === "REJECT" ? (
+                <>
+                  <Tooltip title={t("Noted")}>
+                    <Button onClick={() => handleNotedTransaction(record)}>
+                      <CheckOutlined />
+                    </Button>
+                  </Tooltip>
+                  <Tooltip title={t("editDetails")}>
+                    <Button onClick={() => OpenModalEditTransaction(record)}>
+                      <EditOutlined />
+                    </Button>
+                  </Tooltip>
+                </>
+              ) : (
+                ""
+              )}
+            </Space>
+          );
+        }
       },
     },
     {
@@ -457,7 +467,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
     };
     await mainApi("/insert-manual-success", object)
       .then(() => {
-        setOpenManualSuccess(false);
+        handleCloseManualSuccessModal();
         setSelectedPendingDeposit(undefined);
         setIsLater(0);
         handleGetPendingTransactionRecord("deposit");
@@ -480,6 +490,9 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
     Swal.fire({
       title: "Do you want to rejcet this transaction?",
       showCancelButton: true,
+      text: "Remark:",
+      input: "text",
+      inputValue: values?.remark,
       confirmButtonText: "Reject",
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -489,6 +502,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
           status: 0,
+          remark: result.value,
         };
         await mainApi("/update-transaction-status", object)
           .then(() => {

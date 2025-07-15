@@ -27,7 +27,7 @@ const Action = ({ onChange, allGameList, key, name, remove, ...rest }: any) => {
           </Form.Item>
         </Col>
 
-        <Col xs={3}>
+        <Col xs={4}>
           <Form.Item
             label={
               <Space>

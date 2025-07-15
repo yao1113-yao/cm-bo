@@ -35,7 +35,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "PROCESSING" && record?.mStatus !== "HOLD" && record?.mStatus !== "SUCCESS" ? (
+            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "HOLD" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "REJECT" ? (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -47,12 +47,27 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                   </Button>
                 </Tooltip>
               </>
-            ) : (
+            ) : record?.mStatus === "SUCCESS" ? (
               <Tooltip title={t("Noted")}>
                 <Button onClick={() => handleNotedTransaction(record)}>
                   <CheckOutlined />
                 </Button>
               </Tooltip>
+            ) : record?.mStatus === "REJECT" ? (
+              <>
+                <Tooltip title={t("Noted")}>
+                  <Button onClick={() => handleNotedTransaction(record)}>
+                    <CheckOutlined />
+                  </Button>
+                </Tooltip>
+                <Tooltip title={t("editDetails")}>
+                  <Button onClick={() => OpenModalEditTransaction(record)}>
+                    <EditOutlined />
+                  </Button>
+                </Tooltip>
+              </>
+            ) : (
+              ""
             )}
           </Space>
         );
@@ -68,10 +83,10 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
               {record?.mStatus === "WAITING" && (
                 <>
                   <Tooltip title={t("approve")}>
-                    <Button icon={<SendOutlined />} onClick={() => handleInsertWithdrawTask(record)} disabled={record?.isEditing === 1}></Button>
+                    <Button icon={<SendOutlined />} onClick={() => handleInsertWithdrawTask(record)} disabled={record?.isEditing === 1 || record?.bankAccountStatus === 3}></Button>
                   </Tooltip>
                   <Tooltip title={t("manualSuccess")}>
-                    <Button icon={<FaHandPaper />} onClick={() => handleGetBankRecord(record, "manualSucccess")} disabled={record?.isEditing === 1}></Button>
+                    <Button icon={<FaHandPaper />} onClick={() => handleGetBankRecord(record, "manualSucccess")} disabled={record?.isEditing === 1 || record?.bankAccountStatus === 3}></Button>
                   </Tooltip>
                   <Tooltip title={t("reject")}>
                     <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -82,6 +97,16 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                 <Tooltip title={t("upload")}>
                   <Button icon={<UploadOutlined />} onClick={() => handleGetBankRecord(record, "upload")}></Button>
                 </Tooltip>
+              )}
+              {record?.mStatus === "BOT FAIL" && (
+                <>
+                  <Tooltip title={t("manualSuccess")}>
+                    <Button icon={<FaHandPaper />} onClick={() => handleGetBankRecord(record, "manualSucccess")} disabled={record?.isEditing === 1 || record?.bankAccountStatus === 3}></Button>
+                  </Tooltip>
+                  <Tooltip title={t("reject")}>
+                    <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                  </Tooltip>
+                </>
               )}
             </Space>
           </>
@@ -162,6 +187,15 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
 
       render: (text: number) => {
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("bankChecking"),
+      dataIndex: "bankAccountStatus",
+      align: "center",
+
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{text === 0 ? <div style={{ color: "green" }}>SAFE</div> : text === 2 ? <div style={{ color: "yellow" }}>Suka Scam</div> : <div style={{ color: "red" }}>BlackList</div>}</div>;
       },
     },
     {
@@ -331,6 +365,9 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
     Swal.fire({
       title: "Do you want to rejcet this transaction?",
       showCancelButton: true,
+      text: "Remark:",
+      input: "text",
+      inputValue: values?.remark,
       confirmButtonText: "Reject",
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -340,6 +377,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
           status: 0,
+          remark: result.value,
         };
         await mainApi("/update-transaction-status", object)
           .then(() => {

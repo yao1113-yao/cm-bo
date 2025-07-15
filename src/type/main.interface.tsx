@@ -83,6 +83,7 @@ export interface ITransactionType {
   toGameID: string;
   toName: string;
   toHpNo: string;
+  bankACcountStatus: number;
 }
 
 export interface IGameProviderType {

@@ -320,6 +320,9 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
     Swal.fire({
       title: "Do you want to rejcet this transaction?",
       showCancelButton: true,
+      text: "Remark:",
+      input: "text",
+      inputValue: values?.remark,
       confirmButtonText: "Reject",
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -329,6 +332,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
           status: 0,
+          remark: result.value,
         };
         await mainApi("/update-transaction-status", object)
           .then(() => {
