@@ -37,7 +37,7 @@ const OpenManualSuccess = ({ isLoading, setIsLoading, openManualSuccess, handleC
           </Form.Item>
 
           <Form.Item label={t("gameID")} name="gameID" required>
-            <Input disabled />
+            <Input />
           </Form.Item>
 
           <Form.Item label={t("name")} name="name" required>

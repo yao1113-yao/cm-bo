@@ -342,12 +342,13 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
     setOpenManualSuccess(false);
     setSelectedPendingDeposit(undefined);
   }
-  async function handleInsertManualSuccess() {
+  async function handleInsertManualSuccess(values: any) {
     setIsLoading(true);
     const object = {
       UserID: userID,
       UserToken: userToken,
       mktDetailsSrno: selectedPendingDeposit?.srno,
+      gameID: values?.gameID,
     };
     await mainApi("/insert-transfer-manual-success", object)
       .then(() => {
