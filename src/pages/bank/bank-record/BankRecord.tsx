@@ -1,12 +1,11 @@
 import CommonButton from "../../../components/CommonButton";
-import Device from "../../../components/Device";
 import { useBankRecord } from "./hook/useBankRecord";
 import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Table } from "antd";
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, form, contextHolder, isLoading, allBankList, apiData, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName } = useBankRecord();
+  const { t, userInfo, form, contextHolder, isLoading, apiData, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName } = useBankRecord();
   return (
     <Card>
       {contextHolder}
@@ -35,12 +34,17 @@ const BankRecord = () => {
             </Form.Item>
           </Col>
 
-          <Col xs={6}>
+          {/* <Col xs={6}>
             <Device list={allBankList} label="bank" selectAll required />
-          </Col>
+          </Col> */}
 
-          <Col xs={6}>
+          {/* <Col xs={6}>
             <Form.Item label={t("remark")} name="remark">
+              <Input />
+            </Form.Item>
+          </Col> */}
+          <Col xs={6}>
+            <Form.Item label={t("keyword")} name="keyword">
               <Input />
             </Form.Item>
           </Col>

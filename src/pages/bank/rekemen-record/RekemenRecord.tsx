@@ -1,12 +1,11 @@
 import CommonButton from "../../../components/CommonButton";
 import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Table } from "antd";
 import { useRekemenRecord } from "./hook/useRekemenRecord";
-import GameProvider from "../../../components/GameProvider";
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const RekemenRecord = () => {
-  const { userInfo, t, form, isLoading, allGameList, apiData, columns, initialValues, handleGetRekemenRecordMarketing, handleSearchByFilter } = useRekemenRecord();
+  const { userInfo, t, form, isLoading, apiData, columns, initialValues, handleGetRekemenRecordMarketing, handleSearchByFilter } = useRekemenRecord();
   return (
     <Card>
       <Form layout="vertical" onFinish={handleGetRekemenRecordMarketing} initialValues={initialValues} form={form}>
@@ -26,22 +25,8 @@ const RekemenRecord = () => {
           )}
 
           <Col xs={6}>
-            <GameProvider list={allGameList} required={true} selectAll label="gameName" />
-          </Col>
-
-          <Col xs={6}>
-            <Form.Item label={t("gameLoginID")} name="gameLoginID">
-              <Input autoComplete="off" />
-            </Form.Item>
-          </Col>
-
-          <Col xs={6}>
-            <GameProvider list={allGameList} required={true} selectAll label="toGameName" />
-          </Col>
-
-          <Col xs={6}>
-            <Form.Item label={t("toGameLoginID")} name="toGameLoginID">
-              <Input autoComplete="off" />
+            <Form.Item label={t("keyword")} name="keyword">
+              <Input />
             </Form.Item>
           </Col>
         </Row>

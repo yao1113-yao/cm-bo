@@ -24,7 +24,6 @@ export const useBankRecord = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setApiData] = useState<ITransactionType[]>([]);
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
-  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
 
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
@@ -32,9 +31,9 @@ export const useBankRecord = () => {
     bank: "all",
     type: "all",
     remark: "",
+    keyword: "",
   };
   useEffect(() => {
-    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
     handleGetBankRecordMarketingList(initialValues);
   }, []);
 
@@ -43,6 +42,7 @@ export const useBankRecord = () => {
       title: t("action"),
       align: "center",
       ellipsis: true,
+      hidden: userInfo && userInfo?.userType !== 2,
       render: (record) => {
         return (
           record?.status === 1 && (
@@ -317,8 +317,9 @@ export const useBankRecord = () => {
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       type: values?.type,
-      bankCode: values?.bank,
-      remark: values?.remark,
+      keyword: values?.keyword,
+      // bankCode: values?.bank,
+      // remark: values?.remark,
     };
     await bankApi("/bank-marketing-list", object)
       .then((result) => {
@@ -341,5 +342,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, allBankList, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
+  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
 };

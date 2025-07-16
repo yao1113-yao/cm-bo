@@ -20,6 +20,7 @@ import DailyReport from "./pages/report/daily/DailyReport";
 import TeamCase from "./pages/report/case-sales/TeamCase";
 import TeamKioskBalance from "./pages/report/kiosk-balance/TeamKioskBalance";
 import TeamSalesReport from "./pages/report/sales/team/TeamSalesReport";
+import StaffSalesReport from "./pages/report/sales/staff/StaffSalesReport";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -57,6 +58,7 @@ function App() {
         { path: "/team/case", element: <Protected roles={[1, 4, 5]} component={<TeamCase />} /> },
         { path: "/team/kiosk-balance", element: <Protected roles={[1, 4, 5]} component={<TeamKioskBalance />} /> },
         { path: "/team/sales", element: <Protected roles={[1, 4, 5]} component={<TeamSalesReport />} /> },
+        { path: "/staff/sales", element: <Protected roles={[1, 4, 5]} component={<StaffSalesReport />} /> },
       ],
     },
   ]);

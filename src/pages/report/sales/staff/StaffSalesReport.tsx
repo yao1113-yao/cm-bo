@@ -1,30 +1,30 @@
 import { Card, Col, DatePicker, Divider, Form, Input, Row, Statistic, StatisticProps, Table } from "antd";
-import { useTeamSalesReport } from "./hook/useTeamSalesReport";
 import CommonButton from "../../../../components/CommonButton";
 import { DollarOutlined } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 import CountUp from "react-countup";
 import { useState } from "react";
+import { useStaffSalesReport } from "./hook/useStaffSalesReport";
 import ExpandData from "./ExpandData";
 
 const formatter: StatisticProps["formatter"] = (value) => <CountUp end={value as number} separator="," />;
-const TeamSalesReport = () => {
-  const { t, form, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamCase } = useTeamSalesReport();
+const StaffSalesReport = () => {
+  const { t, form, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails } = useStaffSalesReport();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
     const keys = [];
 
     if (expended) {
-      console.log(record.companyID);
-      keys.push(record.companyID);
+      console.log(record.userID);
+      keys.push(record.userID);
     }
 
     setExpandedRowKeys(keys);
   }
   return (
     <Card>
-      <Form layout="vertical" initialValues={initialValues} form={form} onFinish={handleGetTeamCase}>
+      <Form layout="vertical" initialValues={initialValues} form={form} onFinish={handleGetTeamSalesDetails}>
         <Row gutter={20}>
           <Col xs={6}>
             <Form.Item label={t("searchDate")} name="searchDate">
@@ -32,7 +32,7 @@ const TeamSalesReport = () => {
             </Form.Item>
           </Col>
           <Col xs={6}>
-            <Form.Item label={t("companyID")} name="companyID">
+            <Form.Item label={t("staffCode")} name="staffCode">
               <Input disabled />
             </Form.Item>
           </Col>
@@ -48,7 +48,7 @@ const TeamSalesReport = () => {
         </Button> */}
       </Form>
 
-      <Divider>Team Case</Divider>
+      <Divider>Staff Sales Report</Divider>
       <Row style={{ paddingBottom: "20px" }}>
         <Col xs={3}>
           <Statistic title="Total Deposit" value={apiData2?.totalDeposit} formatter={formatter} prefix={<DollarOutlined />} valueStyle={{ color: "green" }} />
@@ -64,14 +64,14 @@ const TeamSalesReport = () => {
         <Table
           columns={columns}
           dataSource={apiData}
-          rowKey="companyID"
+          rowKey="userID"
           scroll={{ x: true }}
           rowHoverable={false}
           expandable={{
             expandedRowKeys: expandedRowKeys,
             onExpand: handleTableRowExpand,
             expandedRowRender: (record) => {
-              if (record.companyID === expandedRowKeys[0]) {
+              if (record.userID === expandedRowKeys[0]) {
                 return (
                   <div>
                     <ExpandData record={record} userInput={userInput} />
@@ -86,4 +86,4 @@ const TeamSalesReport = () => {
   );
 };
 
-export default TeamSalesReport;
+export default StaffSalesReport;

@@ -195,4 +195,14 @@ export interface ITeamStaffSalesType {
 export interface ITotalValueType {
   totalDeposit: number;
   totalWithdraw: number;
+  totalProfit: number;
+}
+export interface ITeamSalesDetailsType {
+  srno: number;
+  companyID: string;
+  userID: string;
+  cashierDeposit: number;
+  cashierWithdraw: number;
+  marketingDeposit: number;
+  marketingWithdraw: number;
 }

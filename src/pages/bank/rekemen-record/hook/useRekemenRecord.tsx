@@ -5,8 +5,7 @@ import dayjs from "dayjs";
 import { Form, message, TableProps, Tag } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
-import { IDeviceType, IGameProviderType, ITransactionType } from "../../../../type/main.interface";
-import { getAllGameProviderList, getAllItemCodeList } from "../../../../function/ApiFunction";
+import { ITransactionType } from "../../../../type/main.interface";
 import { Api } from "../../../../context/ApiContext";
 
 export const useRekemenRecord = () => {
@@ -20,8 +19,6 @@ export const useRekemenRecord = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setApiData] = useState<ITransactionType[] | undefined>();
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
-  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
-  const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
@@ -33,9 +30,6 @@ export const useRekemenRecord = () => {
     remark: "",
   };
   useEffect(() => {
-    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
-    getAllGameProviderList(setIsLoading, setAllGameList);
-
     handleGetRekemenRecordMarketing(initialValues);
   }, []);
 
@@ -172,10 +166,7 @@ export const useRekemenRecord = () => {
       companyID: userInfo?.userType === 2 ? "BEST8" : values?.companyID,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
-      gameName: values?.gameName,
-      gameLoginID: values?.gameLoginID,
-      toGameName: values?.toGameName,
-      toGameLoginID: values?.toGameLoginID,
+      keyword: values?.keyword,
     };
     await bankApi("/rekemen-record", object)
       .then((result) => {
@@ -198,5 +189,5 @@ export const useRekemenRecord = () => {
     }
   }
 
-  return { userInfo, t, form, isLoading, apiData, setApiData, allGameList, allBankList, initialValues, columns, handleGetRekemenRecordMarketing, handleSearchByFilter };
+  return { userInfo, t, form, isLoading, apiData, setApiData, initialValues, columns, handleGetRekemenRecordMarketing, handleSearchByFilter };
 };

@@ -23,24 +23,9 @@ const TransferRecord = () => {
               </Form.Item>
             </Col>
           )}
-
           <Col xs={6}>
-            <GameProvider list={allGameList} required={true} selectAll label="gameName" />
-          </Col>
-
-          <Col xs={6}>
-            <Form.Item label={t("gameLoginID")} name="gameLoginID">
-              <Input autoComplete="off" />
-            </Form.Item>
-          </Col>
-
-          <Col xs={6}>
-            <GameProvider list={allGameList} required={true} selectAll label="toGameName" />
-          </Col>
-
-          <Col xs={6}>
-            <Form.Item label={t("toGameLoginID")} name="toGameLoginID">
-              <Input autoComplete="off" />
+            <Form.Item label={t("keyword")} name="keyword">
+              <Input />
             </Form.Item>
           </Col>
         </Row>

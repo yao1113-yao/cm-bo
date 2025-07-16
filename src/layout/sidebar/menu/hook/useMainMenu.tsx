@@ -41,7 +41,7 @@ export const useMainMenu = () => {
       label: t("Team Report"),
       key: "",
       type: "group",
-      hidden: userInfo && userInfo.userType === 3,
+      hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
       children: [
         {
           label: t("Team Case and Sales"),
@@ -59,13 +59,13 @@ export const useMainMenu = () => {
           label: t("Team Sales Report"),
           key: "/team/sales",
           icon: <FileSearchOutlined />,
-          hidden: userInfo && userInfo.userType === 3,
+          hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
         },
         {
           label: t("Staff Sales Report"),
-          key: "/team/staff-report",
+          key: "/staff/sales",
           icon: <FileSearchOutlined />,
-          hidden: userInfo && userInfo.userType === 3,
+          hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
         },
       ],
     },

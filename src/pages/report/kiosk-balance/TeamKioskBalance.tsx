@@ -12,7 +12,6 @@ const TeamKioskBalance = () => {
     const keys = [];
 
     if (expended) {
-      console.log(record.companyID);
       keys.push(record.companyID);
     }
 

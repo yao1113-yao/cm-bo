@@ -150,10 +150,7 @@ export const useTransferRecord = () => {
       companyID: userInfo?.userType === 2 ? "BEST8" : values?.companyID,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
-      gameName: values?.gameName,
-      gameLoginID: values?.gameLoginID,
-      toGameName: values?.toGameName,
-      toGameLoginID: values?.toGameLoginID,
+      keyword: values?.keyword,
     };
     await bankApi("/transfer-record", object)
       .then((result) => {
