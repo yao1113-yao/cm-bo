@@ -1,12 +1,11 @@
 import CommonButton from "../../../components/CommonButton";
 import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Table } from "antd";
-import GameProvider from "../../../components/GameProvider";
 import { useTransferRecord } from "./hook/useTransferRecord";
 
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 const TransferRecord = () => {
-  const { userInfo, t, form, isLoading, allGameList, apiData, columns, initialValues, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter } = useTransferRecord();
+  const { userInfo, t, form, isLoading, apiData, columns, initialValues, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter } = useTransferRecord();
   return (
     <Card>
       <Form layout="vertical" onFinish={handleGetTransferRecordMarketing} initialValues={initialValues} form={form}>

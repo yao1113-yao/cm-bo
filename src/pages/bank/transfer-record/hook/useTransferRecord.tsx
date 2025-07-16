@@ -5,8 +5,7 @@ import dayjs from "dayjs";
 import { Form, message, TableProps, Tag } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
-import { IDeviceType, IGameProviderType, ITransactionType } from "../../../../type/main.interface";
-import { getAllGameProviderList, getAllItemCodeList } from "../../../../function/ApiFunction";
+import { ITransactionType } from "../../../../type/main.interface";
 import { Api } from "../../../../context/ApiContext";
 
 export const useTransferRecord = () => {
@@ -20,8 +19,6 @@ export const useTransferRecord = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setApiData] = useState<ITransactionType[]>([]);
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
-  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
-  const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
@@ -33,9 +30,6 @@ export const useTransferRecord = () => {
     remark: "",
   };
   useEffect(() => {
-    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
-    getAllGameProviderList(setIsLoading, setAllGameList);
-
     handleGetTransferRecordMarketing(initialValues);
   }, []);
 
@@ -173,5 +167,5 @@ export const useTransferRecord = () => {
     }
   }
 
-  return { userInfo, t, form, isLoading, apiData, setApiData, allGameList, allBankList, initialValues, columns, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter };
+  return { userInfo, t, form, isLoading, apiData, setApiData, initialValues, columns, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter };
 };
