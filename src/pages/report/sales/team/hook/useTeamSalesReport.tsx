@@ -2,7 +2,7 @@ import { Form, message, TableProps } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
-import { formatIndex, formatString, searchDateRange } from "../../../../../function/CommonFunction";
+import { formatIndex, formatNumber, formatString, searchDateRange } from "../../../../../function/CommonFunction";
 import { ITeamStaffSalesType, ITotalValueType } from "../../../../../type/main.interface";
 import { reportApi } from "../../../../../service/CallApi";
 
@@ -78,6 +78,13 @@ export const useTeamSalesReport = () => {
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600", color: "red" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("totalProfit(RM)"),
+      ellipsis: true,
+      render: (record) => {
+        return <div style={{ fontWeight: "600", color: record?.deposit - record?.withdraw > 0 ? "green" : record?.deposit - record?.withdraw < 0 ? "red" : "black" }}>{formatNumber(record?.deposit - record?.withdraw)}</div>;
       },
     },
   ];

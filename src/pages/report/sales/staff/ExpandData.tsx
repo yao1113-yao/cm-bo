@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, message, Table, TableProps } from "antd";
 import { reportApi } from "../../../../service/CallApi";
 import { ITeamSalesDetailsType } from "../../../../type/main.interface";
-import { formatIndex, formatString } from "../../../../function/CommonFunction";
+import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 
@@ -47,6 +47,13 @@ const ExpandData = ({ record, userInput }: any) => {
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600", color: "red" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("totalProfit(RM)"),
+      ellipsis: true,
+      render: (record) => {
+        return <div style={{ fontWeight: "600", color: record?.deposit - record?.withdraw > 0 ? "green" : record?.deposit - record?.withdraw < 0 ? "red" : "black" }}>{formatNumber(record?.deposit - record?.withdraw)}</div>;
       },
     },
   ];

@@ -187,9 +187,9 @@ export interface ITeamKioskBalance {
 export interface ITeamStaffSalesType {
   srno: number;
   companyID: string;
-  UserID: string;
-  Deposit: number;
-  Withdraw: number;
+  userID: string;
+  deposit: number;
+  withdraw: number;
 }
 
 export interface ITotalValueType {
