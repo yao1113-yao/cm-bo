@@ -1,13 +1,11 @@
-import { Card, Col, DatePicker, Divider, Form, Input, Row, Statistic, StatisticProps, Table } from "antd";
+import { Card, Col, DatePicker, Divider, Form, Input, Row, Statistic, Table } from "antd";
 import CommonButton from "../../../../components/CommonButton";
 import { DollarOutlined } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
-import CountUp from "react-countup";
 import { useState } from "react";
 import { useStaffSalesReport } from "./hook/useStaffSalesReport";
 import ExpandData from "./ExpandData";
 
-const formatter: StatisticProps["formatter"] = (value) => <CountUp end={value as number} separator="," />;
 const StaffSalesReport = () => {
   const { t, form, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails } = useStaffSalesReport();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
@@ -51,13 +49,13 @@ const StaffSalesReport = () => {
       <Divider>Staff Sales Report</Divider>
       <Row style={{ paddingBottom: "20px" }}>
         <Col xs={3}>
-          <Statistic title="Total Deposit" value={apiData2?.totalDeposit} formatter={formatter} prefix={<DollarOutlined />} valueStyle={{ color: "green" }} />
+          <Statistic title="Total Deposit" value={apiData2?.totalDeposit} prefix={<DollarOutlined />} valueStyle={{ color: "green" }} />
         </Col>
         <Col xs={3}>
-          <Statistic title="Total Withdraw" value={apiData2?.totalWithdraw} formatter={formatter} prefix={<DollarOutlined />} valueStyle={{ color: "red" }} />
+          <Statistic title="Total Withdraw" value={apiData2?.totalWithdraw} prefix={<DollarOutlined />} valueStyle={{ color: "red" }} />
         </Col>
         <Col xs={3}>
-          <Statistic title="Total Profit" value={apiData2?.totalProfit} formatter={formatter} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalProfit ?? 0 < 0 ? "red" : apiData2?.totalProfit ?? 0 > 0 ? "green" : "black" }} />
+          <Statistic title="Total Profit" value={apiData2?.totalProfit} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalProfit ?? 0 < 0 ? "red" : apiData2?.totalProfit ?? 0 > 0 ? "green" : "black" }} />
         </Col>
       </Row>
       <Card loading={isLoading}>

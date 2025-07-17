@@ -65,6 +65,14 @@ export const useTeamSalesReport = () => {
       },
     },
     {
+      title: t("totalCase"),
+      dataIndex: "totalCase",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("totalDeposit(RM)"),
       dataIndex: "deposit",
       ellipsis: true,
