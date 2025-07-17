@@ -68,6 +68,7 @@ export const useTeamSalesReport = () => {
       title: t("totalCase"),
       dataIndex: "totalCase",
       ellipsis: true,
+      sorter: (a, b) => a.totalCase - b.totalCase,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },

@@ -190,6 +190,7 @@ export interface ITeamStaffSalesType {
   userID: string;
   deposit: number;
   withdraw: number;
+  totalCase: number;
 }
 
 export interface ITotalValueType {
