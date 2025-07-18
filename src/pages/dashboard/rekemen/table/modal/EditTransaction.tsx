@@ -15,7 +15,6 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
-  console.log(selectedPendingDeposit);
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
   }, []);
@@ -137,7 +136,13 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
             </Col>
             <Col xs={4}>
               <Form.Item label={t("credit")} name="inCredit" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <InputNumber style={{ width: "100%" }} onChange={onChange} />
+                <InputNumber style={{ width: "100%" }} onChange={onChange} autoComplete="off" />
+              </Form.Item>
+            </Col>
+
+            <Col xs={6}>
+              <Form.Item label={t("remark")} name="remark">
+                <Input style={{ width: "100%" }} autoComplete="off" />
               </Form.Item>
             </Col>
           </Row>

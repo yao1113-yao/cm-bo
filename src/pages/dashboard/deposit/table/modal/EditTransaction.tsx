@@ -28,10 +28,12 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
     bonus: selectedPendingDeposit?.bonusPer * 100,
     total: selectedPendingDeposit?.total,
     cuci: selectedPendingDeposit?.cuci,
+    remark: selectedPendingDeposit?.remark,
   };
 
   async function handleEditTransactionDetails(values: any) {
     setIsLoading(true);
+    console.log(values);
     const object = {
       UserID: userID,
       UserToken: userToken,
@@ -119,6 +121,11 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
             <Col xs={6}>
               <Form.Item label={t("minCuci")} name="cuci">
                 <InputNumber style={{ width: "100%" }} disabled />
+              </Form.Item>
+            </Col>
+            <Col xs={6}>
+              <Form.Item label={t("remark")} name="remark">
+                <Input style={{ width: "100%" }} autoComplete="off" />
               </Form.Item>
             </Col>
           </Row>
