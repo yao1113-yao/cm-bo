@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { Button, Form, message, Space, TableProps, Tag, Tooltip } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi, mainApi } from "../../../../service/CallApi";
-import { ITransactionType } from "../../../../type/main.interface";
+import { ITotalValueType, ITransactionType } from "../../../../type/main.interface";
 import { CloseOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { Api } from "../../../../context/ApiContext";
@@ -22,6 +22,7 @@ export const useBankRecord = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setApiData] = useState<ITransactionType[]>([]);
+  const [apiData2, setApiData2] = useState<ITotalValueType | undefined>();
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
 
   const initialValues = {
@@ -194,8 +195,8 @@ export const useBankRecord = () => {
       },
     },
     {
-      title: t("bonus") + "%",
-      dataIndex: "bonusPer",
+      title: t("bonus"),
+      dataIndex: "bonus",
       align: "center",
       render: (text: number) => {
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
@@ -331,6 +332,7 @@ export const useBankRecord = () => {
     await bankApi("/bank-marketing-list", object)
       .then((result) => {
         setApiData(result.data);
+        setApiData2(result.data2);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -349,5 +351,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
+  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, apiData2, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
 };

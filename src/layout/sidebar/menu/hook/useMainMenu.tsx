@@ -56,6 +56,12 @@ export const useMainMenu = () => {
           icon: <DashboardOutlined />,
         },
         {
+          label: t("Team Bank Balance"),
+          key: "/team/bank-balance",
+          hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
+          icon: <DashboardOutlined />,
+        },
+        {
           label: t("Team Sales Report"),
           key: "/team/sales",
           icon: <FileSearchOutlined />,

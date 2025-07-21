@@ -197,6 +197,7 @@ export interface ITotalValueType {
   totalDeposit: number;
   totalWithdraw: number;
   totalProfit: number;
+  totalBonus: number;
 }
 export interface ITeamSalesDetailsType {
   srno: number;

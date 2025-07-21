@@ -5,7 +5,7 @@ import { ITeamKioskBalance } from "../../../../type/main.interface";
 import { formatIndex, formatString } from "../../../../function/CommonFunction";
 import { reportApi } from "../../../../service/CallApi";
 
-export const useTeamKioskBalance = () => {
+export const useTeamBankBalance = () => {
   const { t } = useTranslation();
 
   const userID = localStorage.getItem("userID");

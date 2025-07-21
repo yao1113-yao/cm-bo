@@ -1,14 +1,15 @@
 import CommonButton from "../../../components/CommonButton";
 import { useBankRecord } from "./hook/useBankRecord";
-import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Table } from "antd";
-import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
+import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Statistic, Table } from "antd";
+import { DownCircleOutlined, LeftCircleOutlined, DollarOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, form, contextHolder, isLoading, apiData, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName } = useBankRecord();
+  const { t, userInfo, form, contextHolder, isLoading, apiData, apiData2, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName } = useBankRecord();
   return (
     <Card>
       {contextHolder}
+
       <Form layout="vertical" onFinish={handleGetBankRecordMarketingList} initialValues={initialValues} form={form}>
         <Row gutter={20}>
           <Col xs={6}>
@@ -61,6 +62,21 @@ const BankRecord = () => {
       </Form>
 
       <Divider>Bank Record</Divider>
+
+      <Row style={{ paddingBottom: "20px" }}>
+        <Col xs={3}>
+          <Statistic title="Total Deposit" value={apiData2?.totalDeposit} prefix={<DollarOutlined />} valueStyle={{ color: "green" }} />
+        </Col>
+        <Col xs={3}>
+          <Statistic title="Total Withdraw" value={apiData2?.totalWithdraw} prefix={<DollarOutlined />} valueStyle={{ color: "red" }} />
+        </Col>
+        <Col xs={3}>
+          <Statistic title="Total Bonus" value={apiData2?.totalBonus} prefix={<DollarOutlined />} valueStyle={{ color: "red" }} />
+        </Col>
+        <Col xs={3}>
+          <Statistic title="Total Profit" value={apiData2?.totalProfit} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalProfit ?? 0 < 0 ? "red" : apiData2?.totalProfit ?? 0 > 0 ? "green" : "black" }} />
+        </Col>
+      </Row>
 
       <Card loading={isLoading}>
         <Table columns={columns} dataSource={apiData} rowKey="srno" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} />

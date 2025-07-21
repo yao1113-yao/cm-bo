@@ -1,11 +1,11 @@
 import { Card, Col, Divider, Form, Input, InputNumber, Row, Table } from "antd";
 import CommonButton from "../../../components/CommonButton";
-import { useTeamKioskBalance } from "./hook/useTeamKioskBalance";
 import { useState } from "react";
+import { useTeamBankBalance } from "./hook/useTeamBankBalance";
 import ExpandData from "./ExpandData";
 
-const TeamKioskBalance = () => {
-  const { t, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance } = useTeamKioskBalance();
+const TeamBankBalance = () => {
+  const { t, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance } = useTeamBankBalance();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -79,4 +79,4 @@ const TeamKioskBalance = () => {
   );
 };
 
-export default TeamKioskBalance;
+export default TeamBankBalance;

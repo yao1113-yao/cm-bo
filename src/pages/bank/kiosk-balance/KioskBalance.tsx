@@ -9,7 +9,7 @@ const KioskBalance = () => {
   return (
     <div>
       <Card title={t("kiosk balance")} loading={isLoading}>
-        <Table columns={columnsCompanyGP} dataSource={apiData2} rowKey="srno" scroll={{ x: true }}></Table>
+        <Table columns={columnsCompanyGP} dataSource={apiData2} rowKey="srno" scroll={{ x: true }} pagination={false}></Table>
       </Card>
 
       {openEditKioskBalance && <EditKioskBalance openEditKioskBalance={openEditKioskBalance} setOpenEditKioskBalance={setOpenEditKioskBalance} selectedRecord={selectedRecord} handleCloseModalEditBankBalance={handleCloseModalEditBankBalance} handleGetCompanyGPList={handleGetCompanyGPList} />}
