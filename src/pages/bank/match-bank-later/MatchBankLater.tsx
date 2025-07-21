@@ -3,10 +3,12 @@ import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Table } from 
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 import { useMatchBankLater } from "./hook/useMatchBankLater";
 import OpenBankRecord from "./modal/OpenBankRecord";
+import EditDepositTransaction from "./modal/EditDepositTransaction";
+import EditWithdrawTransaction from "./modal/EditWithdrawTransaction";
 
 const { RangePicker } = DatePicker;
 const MatchBankLater = () => {
-  const { t, form, messageApi, contextHolder, isLoading, apiData, columns, initialValues, openBankRecord, setOpenBankRecord, selectedPendingDeposit, isCheckAllAmount, setIsCheckAllAmount, handleGetMatchBankLaterList, handleSearchByFilter, rowClassName } = useMatchBankLater();
+  const { t, form, messageApi, contextHolder, isLoading, apiData, userInput, columns, initialValues, openBankRecord, setOpenBankRecord, openEditTransaction, setOpenEditTransaction, selectedPendingDeposit, isCheckAllAmount, setIsCheckAllAmount, handleGetMatchBankLaterList, handleSearchByFilter, rowClassName } = useMatchBankLater();
   return (
     <Card>
       {contextHolder}
@@ -43,6 +45,8 @@ const MatchBankLater = () => {
 
       {/* open bank list assign bank */}
       {openBankRecord && <OpenBankRecord messageApi={messageApi} initialValues={initialValues} isCheckAllAmount={isCheckAllAmount} setIsCheckAllAmount={setIsCheckAllAmount} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetMatchBankLaterList={handleGetMatchBankLaterList} />}
+      {openEditTransaction && selectedPendingDeposit?.recordType === "Main" && <EditDepositTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetMatchBankLaterList={handleGetMatchBankLaterList} userInput={userInput} />}
+      {openEditTransaction && selectedPendingDeposit?.recordType === "Withdraw" && <EditWithdrawTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetMatchBankLaterList={handleGetMatchBankLaterList} userInput={userInput} />}
     </Card>
   );
 };

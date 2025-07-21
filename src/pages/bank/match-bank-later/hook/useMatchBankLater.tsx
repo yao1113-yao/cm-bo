@@ -6,8 +6,9 @@ import { Button, Form, message, Space, TableProps, Tooltip } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { ITransactionType } from "../../../../type/main.interface";
-import { BankOutlined } from "@ant-design/icons";
-// import { getAllItemCodeList } from "../../../../function/ApiFunction";
+import { BankOutlined, EditOutlined } from "@ant-design/icons";
+import { handleEditingTransaction } from "../../../../function/ApiFunction";
+// import { getAllItem,CodeList } from "../../../../function/ApiFunction";
 
 export const useMatchBankLater = () => {
   const { t } = useTranslation();
@@ -23,7 +24,8 @@ export const useMatchBankLater = () => {
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
-
+  const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
+  const [userInput, setUserInput] = useState();
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     remark: "",
@@ -43,6 +45,11 @@ export const useMatchBankLater = () => {
           <Space>
             <Tooltip title={t("assignBank")}>
               <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)}></Button>
+            </Tooltip>
+            <Tooltip title={t("editDetails")}>
+              <Button onClick={() => OpenModalEditTransaction(record)}>
+                <EditOutlined />
+              </Button>
             </Tooltip>
           </Space>
         );
@@ -198,6 +205,12 @@ export const useMatchBankLater = () => {
     },
   ];
 
+  function OpenModalEditTransaction(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenEditTransaction(true);
+    handleEditingTransaction(values, 1);
+  }
+
   function OpenModalBankRecord(values: any) {
     setSelectedPendingDeposit(values);
     setOpenBankRecord(!openBankRecord);
@@ -218,7 +231,7 @@ export const useMatchBankLater = () => {
 
   async function handleGetMatchBankLaterList(values: any) {
     setIsLoading(true);
-
+    setUserInput(values);
     const object = {
       UserID: userID,
       UserToken: userToken,
@@ -248,5 +261,5 @@ export const useMatchBankLater = () => {
     }
   }
 
-  return { t, form, messageApi, contextHolder, isLoading, apiData, setApiData, openBankRecord, setOpenBankRecord, selectedPendingDeposit, isCheckAllAmount, setIsCheckAllAmount, initialValues, columns, handleGetMatchBankLaterList, handleSearchByFilter, rowClassName };
+  return { t, form, messageApi, contextHolder, isLoading, apiData, setApiData, userInput, openBankRecord, setOpenBankRecord, openEditTransaction, setOpenEditTransaction, selectedPendingDeposit, isCheckAllAmount, setIsCheckAllAmount, initialValues, columns, handleGetMatchBankLaterList, handleSearchByFilter, rowClassName };
 };

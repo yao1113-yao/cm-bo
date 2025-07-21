@@ -152,6 +152,14 @@ export const useBankRecord = () => {
       },
     },
     {
+      title: t("remark"),
+      dataIndex: "remark",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("bankIn"),
       dataIndex: "credit",
       align: "center",
@@ -178,8 +186,8 @@ export const useBankRecord = () => {
       },
     },
     {
-      title: t("remark"),
-      dataIndex: "remark",
+      title: t("bankRemark"),
+      dataIndex: "bankRemark",
       align: "center",
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
