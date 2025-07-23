@@ -4,7 +4,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 import { Api } from "../../../../context/ApiContext";
-import { SendOutlined, CloseOutlined, UploadOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, UploadOutlined, EditOutlined, CheckOutlined, RollbackOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 import OpenBankRecord from "./modal/OpenBankRecord";
 import Swal from "sweetalert2";
@@ -14,7 +14,7 @@ import { handleEditingTransaction } from "../../../../function/ApiFunction";
 
 const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
 
   const userID = localStorage.getItem("userID");
@@ -66,6 +66,12 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                   </Button>
                 </Tooltip>
               </>
+            ) : record?.mStatus === "HOLD" ? (
+              <Tooltip title={t("editDetails")}>
+                <Button onClick={() => OpenModalEditTransaction(record)}>
+                  <EditOutlined />
+                </Button>
+              </Tooltip>
             ) : (
               ""
             )}
@@ -94,9 +100,14 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                 </>
               )}
               {record?.mStatus === "HOLD" && (
-                <Tooltip title={t("upload")}>
-                  <Button icon={<UploadOutlined />} onClick={() => handleGetBankRecord(record, "upload")}></Button>
-                </Tooltip>
+                <>
+                  <Tooltip title={t("upload")}>
+                    <Button icon={<UploadOutlined />} onClick={() => handleGetBankRecord(record, "upload")}></Button>
+                  </Tooltip>
+                  <Tooltip title={t("giveBackCredit")}>
+                    <Button icon={<RollbackOutlined />} onClick={() => handleRevertCredit(record)}></Button>
+                  </Tooltip>
+                </>
               )}
               {record?.mStatus === "BOT FAIL" && (
                 <>
@@ -301,6 +312,80 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
     setSelectedPendingDeposit(values);
     setOpenEditTransaction(true);
     handleEditingTransaction(values, 1);
+  }
+
+  // function handleRevertCredit(values: any) {
+  //     Swal.fire({
+  //       title: "Please confirm that later will match the transaction!",
+  //       showCancelButton: true,
+  //       showDenyButton: true,
+  //       html: `<p style="color:red"}>*Reminder : <br>Please match bank record later</p>`,
+  //       confirmButtonText: "Send To Bot",
+  //       denyButtonText: "Manual Success",
+  //     }).then(async (result) => {
+  //       if (result.isConfirmed) {
+  //         setIsLoading(true);
+
+  //         const object = {
+  //           UserID: userID,
+  //           UserToken: userToken,
+  //           mktDetailsSrno: values?.srno,
+  //           IsLater: 1,
+  //         };
+  //         await mainApi("/revert-credit", object)
+  //           .then(() => {
+  //             setOpenBankRecord(false);
+  //             handleGetPendingTransactionRecord("withdraw");
+  //             messageApi.open({
+  //               type: "success",
+  //               content: "sent",
+  //             });
+  //           })
+  //           .catch(() => {
+  //             messageApi.open({
+  //               type: "error",
+  //               content: "",
+  //             });
+  //           });
+  //         setIsLoading(false);
+  //       } else if (result.isDenied) {
+  //         setIsLater(1);
+  //         handleOpenManualSuccessModal(values);
+  //       }
+  //     });
+  //   }
+
+  function handleRevertCredit(values: any) {
+    Swal.fire({
+      title: "Do you want to revert back the credit to customer?",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktDetailsSrno: values?.srno,
+          companyID: subdomain,
+        };
+        await mainApi("/revert-credit", object)
+          .then(() => {
+            handleGetPendingTransactionRecord("withdraw");
+            messageApi.open({
+              type: "success",
+              content: "sent",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+        setIsLoading(false);
+      }
+    });
   }
 
   function handleInsertWithdrawTask(values: any) {

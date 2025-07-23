@@ -208,3 +208,14 @@ export interface ITeamSalesDetailsType {
   marketingDeposit: number;
   marketingWithdraw: number;
 }
+
+export interface IKioskLogType {
+  srno: number;
+  companyID: string;
+  gameName: string;
+  beforeBalance: number;
+  balance: number;
+  afterBalance: number;
+  remark: string;
+  createDate: Date;
+}

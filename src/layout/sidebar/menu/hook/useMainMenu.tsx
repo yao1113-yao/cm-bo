@@ -111,6 +111,12 @@ export const useMainMenu = () => {
           hidden: userInfo && userInfo.userType > 2,
         },
         {
+          label: t("Kiosk Log"),
+          key: "/kiosk-log",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType > 2,
+        },
+        {
           label: t("Match Bank Later Record"),
           key: "/match-bank-later",
           icon: <FileSearchOutlined />,

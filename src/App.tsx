@@ -22,6 +22,7 @@ import TeamKioskBalance from "./pages/report/kiosk-balance/TeamKioskBalance";
 import TeamSalesReport from "./pages/report/sales/team/TeamSalesReport";
 import StaffSalesReport from "./pages/report/sales/staff/StaffSalesReport";
 import TeamBankBalance from "./pages/report/bank-balance/TeamBankBalance";
+import KioskLog from "./pages/bank/kiosk-log/KioskLog";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -50,6 +51,7 @@ function App() {
         { path: "/match-bank-later", element: <Protected roles={[1, 2]} component={<MatchBankLater />} /> },
         { path: "/company-bank", element: <Protected roles={[1, 2]} component={<BankBalance />} /> },
         { path: "/kiosk-balance", element: <Protected roles={[1, 2]} component={<KioskBalance />} /> },
+        { path: "/kiosk-log", element: <Protected roles={[1, 2]} component={<KioskLog />} /> },
         { path: "/bank-marketing", element: <Protected roles={[1, 2, 4, 5]} component={<BankRecord />} /> },
         { path: "/rekemen-record", element: <Protected roles={[1, 2, 4, 5]} component={<RekemenRecord />} /> },
         { path: "/transfer-record", element: <Protected roles={[1, 2, 4, 5]} component={<TransferRecord />} /> },
