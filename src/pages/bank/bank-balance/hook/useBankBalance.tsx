@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button, Form, message, TableProps, Tooltip } from "antd";
@@ -7,9 +7,10 @@ import { formatDateTime, formatIndex, formatNumber, formatString } from "../../.
 import { bankApi } from "../../../../service/CallApi";
 import { ICompanyBankType } from "../../../../type/main.interface";
 import { WalletOutlined } from "@ant-design/icons";
+import { Api } from "../../../../context/ApiContext";
 export const useBankBalance = () => {
   const { t } = useTranslation();
-
+  const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const location = useLocation();
@@ -99,7 +100,7 @@ export const useBankBalance = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       bankCode: values?.bank,
     };
     await bankApi("/company-bank-list", object)

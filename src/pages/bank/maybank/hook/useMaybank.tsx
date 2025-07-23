@@ -14,7 +14,7 @@ export const useMaybank = () => {
   const userToken = localStorage.getItem("userToken");
   const { t } = useTranslation();
 
-  const { companyList } = useContext(Api);
+  const { companyList, subdomain } = useContext(Api);
 
   const [form] = Form.useForm();
   const [form2] = Form.useForm();
@@ -30,7 +30,7 @@ export const useMaybank = () => {
   useEffect(() => {
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
     // handleGetBankRecordList();
-    const temp = companyList?.filter((items: any) => items.companyID === "BEST8");
+    const temp = companyList?.filter((items: any) => items.companyID === subdomain);
     if (temp !== undefined) {
       setSelectedCompany(temp[0]);
     }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button, Form, message, TableProps, Tooltip } from "antd";
@@ -9,9 +9,10 @@ import { ICompanyGPType, IGameProviderType } from "../../../../type/main.interfa
 import { getAllGameProviderList } from "../../../../function/ApiFunction";
 
 import { WalletOutlined } from "@ant-design/icons";
+import { Api } from "../../../../context/ApiContext";
 export const useKioskBalance = () => {
   const { t } = useTranslation();
-
+  const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const location = useLocation();
@@ -85,7 +86,7 @@ export const useKioskBalance = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       gameName: values?.gameName,
     };
     await bankApi("/company-gp-list", object)

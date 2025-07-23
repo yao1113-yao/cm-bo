@@ -10,6 +10,7 @@ interface IApiContextType {
   setUserInfo: Dispatch<SetStateAction<IUserType | undefined>>;
   companyList: [ICompanyType] | undefined;
   setCompanyList: Dispatch<SetStateAction<[ICompanyType] | undefined>>;
+  subdomain: string;
 }
 
 const initApiContext: IApiContextType = {
@@ -19,6 +20,7 @@ const initApiContext: IApiContextType = {
   setUserInfo: () => {},
   companyList: undefined,
   setCompanyList: () => {},
+  subdomain: "",
 };
 
 export const Api = createContext<IApiContextType>(initApiContext);
@@ -34,7 +36,8 @@ const ApiContext = ({ children }: IApiContextProps) => {
 
   const [windowWidth, setWindowWidth] = useState<number>(screen.availWidth);
   const [windowHeight, setWindowHeight] = useState<number>(screen.availHeight);
-
+  const subdomain = window.location.hostname.split(".")[0] === "testcm" ? "BEST1" : window.location.hostname.split(".")[0] === "localhost" ? "BEST1" : window.location.hostname.split(".")[0];
+  console.log(subdomain);
   useEffect(() => {
     handleFirstLoad();
 
@@ -67,7 +70,7 @@ const ApiContext = ({ children }: IApiContextProps) => {
     return <Spin spinning={isLoading}></Spin>;
   }
 
-  const values: IApiContextType = { windowWidth, windowHeight, userInfo, setUserInfo, companyList, setCompanyList };
+  const values: IApiContextType = { windowWidth, windowHeight, userInfo, setUserInfo, companyList, setCompanyList, subdomain };
   return <Api.Provider value={values}>{children}</Api.Provider>;
 };
 

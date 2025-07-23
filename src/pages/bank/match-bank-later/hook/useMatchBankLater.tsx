@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
@@ -8,11 +8,13 @@ import { bankApi } from "../../../../service/CallApi";
 import { ITransactionType } from "../../../../type/main.interface";
 import { BankOutlined, EditOutlined } from "@ant-design/icons";
 import { handleEditingTransaction } from "../../../../function/ApiFunction";
+import { Api } from "../../../../context/ApiContext";
 // import { getAllItem,CodeList } from "../../../../function/ApiFunction";
 
 export const useMatchBankLater = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
+  const { subdomain } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -235,7 +237,7 @@ export const useMatchBankLater = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       remark: values?.remark,

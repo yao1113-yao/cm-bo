@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Form, message, TableProps } from "antd";
@@ -6,11 +6,12 @@ import { IGameProviderType, ILogType, IUserType } from "../../../../../type/main
 import { getAllGameProviderList, getAllStaffList } from "../../../../../function/ApiFunction";
 import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
+import { Api } from "../../../../../context/ApiContext";
 
 export const useKioskErrorReport = () => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-
+  const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const [form] = Form.useForm();
@@ -28,7 +29,7 @@ export const useKioskErrorReport = () => {
   };
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
-    getAllStaffList(setIsLoading, "BEST8", setAllStaffList);
+    getAllStaffList(setIsLoading, subdomain, setAllStaffList);
     handleGetKioskErrorReport(initialValues);
   }, []);
 
@@ -104,7 +105,7 @@ export const useKioskErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       ...values,
     };
     await LogApi("/insert-error-report", object)
@@ -131,7 +132,7 @@ export const useKioskErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       staffSrno: values?.staffSrno,
       gameName: values?.gameName,
       remark: values?.remark,

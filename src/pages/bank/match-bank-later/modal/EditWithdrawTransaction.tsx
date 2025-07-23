@@ -1,13 +1,15 @@
 import { Col, Form, Input, InputNumber, Modal, Row, Select } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList, handleEditingTransaction } from "../../../../function/ApiFunction";
 import { mainApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
+import { Api } from "../../../../context/ApiContext";
 
 const EditWithdrawTransaction = ({ messageApi, openEditTransaction, selectedPendingDeposit, setOpenEditTransaction, handleGetMatchBankLaterList, userInput }: any) => {
   const { t } = useTranslation();
+  const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const [form] = Form.useForm();
@@ -25,7 +27,7 @@ const EditWithdrawTransaction = ({ messageApi, openEditTransaction, selectedPend
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       ...values,
     };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Form, message, TableProps } from "antd";
@@ -6,11 +6,12 @@ import { IDeviceType, ILogType, IUserType } from "../../../../../type/main.inter
 import { getAllItemCodeList, getAllStaffList } from "../../../../../function/ApiFunction";
 import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
+import { Api } from "../../../../../context/ApiContext";
 
 export const useBankErrorReport = () => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-
+  const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const [form] = Form.useForm();
@@ -28,7 +29,7 @@ export const useBankErrorReport = () => {
   };
   useEffect(() => {
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
-    getAllStaffList(setIsLoading, "BEST8", setAllStaffList);
+    getAllStaffList(setIsLoading, subdomain, setAllStaffList);
     handleGetBankErrorReport(initialValues);
   }, []);
 
@@ -112,7 +113,7 @@ export const useBankErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       type: values?.type,
       staffSrno: values?.staffSrno,
       bankCode: values?.bank,
@@ -143,7 +144,7 @@ export const useBankErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       staffSrno: values?.staffSrno,
       bankCode: values?.bank,
       remark: values?.remark,

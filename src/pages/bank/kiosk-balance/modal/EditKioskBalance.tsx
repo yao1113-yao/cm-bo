@@ -2,11 +2,13 @@ import { Form, Input, InputNumber, message, Modal } from "antd";
 import { useTranslation } from "react-i18next";
 import { LogApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
+import { useContext } from "react";
+import { Api } from "../../../../context/ApiContext";
 
 const EditKioskBalance = ({ isLoading, openEditKioskBalance, setOpenEditKioskBalance, selectedRecord, handleCloseModalEditBankBalance, handleGetCompanyGPList }: any) => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-
+  const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
 
@@ -14,7 +16,7 @@ const EditKioskBalance = ({ isLoading, openEditKioskBalance, setOpenEditKioskBal
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       CompanyGPSrno: selectedRecord?.srno,
       balance: values?.amount,
     };

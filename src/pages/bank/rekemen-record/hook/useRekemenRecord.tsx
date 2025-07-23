@@ -9,7 +9,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { Api } from "../../../../context/ApiContext";
 
 export const useRekemenRecord = () => {
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
 
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -163,7 +163,7 @@ export const useRekemenRecord = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: userInfo?.userType === 2 ? "BEST8" : values?.companyID,
+      companyID: userInfo?.userType === 2 ? subdomain : values?.companyID,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       keyword: values?.keyword,

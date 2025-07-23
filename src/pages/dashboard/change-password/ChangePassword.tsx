@@ -19,7 +19,7 @@ const ChangePassword = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [form1] = Form.useForm();
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -50,7 +50,7 @@ const ChangePassword = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       ...values,
     };
     await mainApi("/change-player-password", object)
@@ -77,7 +77,7 @@ const ChangePassword = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
-      companyID: "BEST8",
+      companyID: subdomain,
       ...values,
     };
     await mainApi("/check-player-balance", object)
