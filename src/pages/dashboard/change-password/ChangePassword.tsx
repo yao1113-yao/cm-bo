@@ -122,7 +122,7 @@ const ChangePassword = () => {
       render: (record: any) => {
         return (
           <>
-            {userInfo?.userType === 3 && record?.mStatus === "SUCCESS" ? (
+            {userInfo?.userType === 3 && record?.isSeen === 1 ? (
               <Tooltip title={t("Noted")}>
                 <Button onClick={() => handleNotedTransaction(record)}>
                   <CheckOutlined />
@@ -147,8 +147,8 @@ const ChangePassword = () => {
       title: t("status"),
       dataIndex: "mStatus",
       align: "center",
-      render: (text: string) => {
-        return text === "PROCESSING" ? <Tag color="#4096ff">PROCESSING</Tag> : <Tag color="#87d068">{text}</Tag>;
+      render: (text: string, record) => {
+        return record?.isSeen === 1 ? <Tag color="#87d068">DONE</Tag> : text === "PROCESSING" ? <Tag color="#2db7f5">PROCESSING</Tag> : text === "SUCCESS" ? <Tag color="yellow">SUCCESS</Tag> : <Tag color="#f50">BOT FAIL</Tag>;
       },
     },
     // {

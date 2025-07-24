@@ -429,6 +429,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       UserID: userID,
       UserToken: userToken,
       Type: "Withdraw",
+      CompanyID: subdomain,
       Bank: values?.mBank,
     };
     await mainApi("/bank-record", object)

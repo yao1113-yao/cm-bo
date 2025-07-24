@@ -40,6 +40,10 @@ const OpenManualSuccess = ({ isLoading, setIsLoading, openManualSuccess, handleC
             <Input />
           </Form.Item>
 
+          <Form.Item label={t("password")} name="password" rules={[{ required: true, message: t("pleaseSelect") }]}>
+            <Input autoComplete="off" />
+          </Form.Item>
+
           <Form.Item label={t("name")} name="name" required>
             <Input disabled />
           </Form.Item>

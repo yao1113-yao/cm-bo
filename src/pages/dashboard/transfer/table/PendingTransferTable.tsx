@@ -349,6 +349,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
       UserToken: userToken,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       gameID: values?.gameID,
+      password: values?.password,
     };
     await mainApi("/insert-transfer-manual-success", object)
       .then(() => {

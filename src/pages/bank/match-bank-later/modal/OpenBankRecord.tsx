@@ -1,12 +1,15 @@
 import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BankOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { ITransactionType } from "../../../../type/main.interface";
+import { IDeviceType, ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { mainApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
+import { getAllItemCodeList } from "../../../../function/ApiFunction";
+import Device from "../../../../components/Device";
+import { Api } from "../../../../context/ApiContext";
 
 const { RangePicker } = DatePicker;
 
@@ -15,10 +18,11 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
-
+  const { subdomain } = useContext(Api);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
-
+  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
+  console.log(isLoading);
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     mBank: selectedPendingDeposit?.mBank,
@@ -27,7 +31,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
 
   useEffect(() => {
     handleGetBankRecord(initialValues);
-    console.log("first");
+    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
   }, []);
 
   const bankRecordColumns: TableProps<ITransactionType>["columns"] = [
@@ -136,7 +140,9 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
       UserID: userID,
       UserToken: userToken,
       Type: "Deposit",
+      CompanyID: subdomain,
       Bank: values?.mBank,
+
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       Amount: isCheckAllAmount === true ? -1 : values?.amount,
@@ -162,7 +168,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
 
   return (
     <>
-      <Modal width="70vw" open={openBankRecord} onCancel={() => handleOnCloseModal()} footer={null} closable={false} loading={isLoading}>
+      <Modal width="70vw" open={openBankRecord} onCancel={() => handleOnCloseModal()} footer={null} closable={false}>
         <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankRecord}>
           <Row gutter={10}>
             <Col xs={6}>
@@ -171,10 +177,9 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
               </Form.Item>
             </Col>
             <Col xs={6}>
-              <Form.Item label={t("bank")} name="mBank">
-                <Input disabled />
-              </Form.Item>
+              <Device list={allBankList} required={true} selectAll={false} label="mBank" />
             </Col>
+
             <Col xs={6}>
               <Form.Item
                 label={

@@ -1,6 +1,6 @@
 import { Button, Form, Modal, Select, Space, Table, TableProps, Tooltip, Upload } from "antd";
 import { formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IDeviceType, ITransactionType } from "../../../../../type/main.interface";
 import { BankOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../../service/CallApi";
@@ -9,10 +9,11 @@ import { getAllItemCodeList } from "../../../../../function/ApiFunction";
 import { checkMedia, normFile } from "../../../../../function/antd-upload/Upload";
 
 import { CloudUploadOutlined } from "@ant-design/icons";
+import { Api } from "../../../../../context/ApiContext";
 
 const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, setOpenBankRecord, handleGetPendingTransactionRecord, handleGetTransactionRecord, isLater, isManual }: any) => {
   const { t } = useTranslation();
-
+  const { subdomain } = useContext(Api);
   console.log(isLater);
 
   const userID = localStorage.getItem("userID");
@@ -94,41 +95,33 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
     },
   ];
   async function handleAssignBank(values: any) {
-    const temp = form.getFieldValue("imageUrl");
-    if (temp) {
-      setIsLoading(true);
-      const formData = new FormData();
-      formData.append("userID", userID as string);
-      formData.append("userToken", userToken as string);
-      formData.append("mktDetailsSrno", selectedPendingDeposit?.srno);
-      formData.append("bankRecordSrno", values?.bankRecordSrno);
-      formData.append("receiptImage", temp[0]?.originFileObj);
-      formData.append("isManual", isManual);
-      formData.append("isLater", isLater);
-      await mainApi("/assign-withdraw-bank", formData)
-        .then(() => {
-          setOpenBankRecord(false);
-          setBankRecord([]);
-          handleGetPendingTransactionRecord("withdraw");
-          handleGetTransactionRecord("withdraw");
-          messageApi.open({
-            type: "success",
-            content: "Assign Success",
-          });
-        })
-        .catch(() => {
-          messageApi.open({
-            type: "error",
-            content: "error",
-          });
+    const temp = form.getFieldValue("imageUrl") ?? [];
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append("userID", userID as string);
+    formData.append("userToken", userToken as string);
+    formData.append("mktDetailsSrno", selectedPendingDeposit?.srno);
+    formData.append("bankRecordSrno", values?.bankRecordSrno);
+    formData.append("receiptImage", temp[0]?.originFileObj);
+    formData.append("isManual", isManual);
+    formData.append("isLater", isLater);
+    await mainApi("/assign-withdraw-bank", formData)
+      .then(() => {
+        setOpenBankRecord(false);
+        setBankRecord([]);
+        handleGetPendingTransactionRecord("withdraw");
+        handleGetTransactionRecord("withdraw");
+        messageApi.open({
+          type: "success",
+          content: "Assign Success",
         });
-      setIsLoading(false);
-    } else {
-      messageApi.open({
-        type: "error",
-        content: "please upload image first",
+      })
+      .catch(() => {
+        messageApi.open({
+          type: "error",
+          content: "error",
+        });
       });
-    }
     setIsLoading(false);
   }
 
@@ -137,6 +130,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
     const object = {
       UserID: userID,
       UserToken: userToken,
+      CompanyID: subdomain,
       Type: "Withdraw",
       Bank: e,
     };

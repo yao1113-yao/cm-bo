@@ -126,6 +126,7 @@ export const useMaybank = () => {
       UserID: userID,
       UserToken: userToken,
       bankCode: values?.bank,
+      CompanyID: subdomain,
     };
     await bankApi("/bank-record-list", object)
       .then((result) => {
