@@ -35,6 +35,7 @@ export const useMaybank = () => {
       setSelectedCompany(temp[0]);
     }
   }, []);
+  console.log(selectedCompany);
   const bankRecordColumns: TableProps<ITransactionType>["columns"] = [
     {
       title: "createDate",
