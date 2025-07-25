@@ -129,6 +129,7 @@ const Deposit = ({ type }: DepositProps) => {
                 <>
                   {fields.map(({ key, name, ...restField }) => (
                     <>
+                      ·
                       <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} form={form} {...restField} />
                     </>
                   ))}
