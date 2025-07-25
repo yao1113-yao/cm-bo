@@ -105,6 +105,11 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
           </Form.Item>
         </Col>
 
+        <Col xs={4}>
+          <Form.Item label="bonus" name={[name, "bonusPer"]} rules={[{ required: true, message: t("pleaseSelect") }]}>
+            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, rest.fieldKey, "bonusPer")} />
+          </Form.Item>
+        </Col>
         {/* <Col xs={4}>
           <Form.Item
             label={
