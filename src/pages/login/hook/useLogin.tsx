@@ -17,7 +17,6 @@ export const useLogin = () => {
 
   useEffect(() => {
     if (userInfo) {
-      console.log("first");
       navigate("/dashboard/deposit");
     }
   }, []);

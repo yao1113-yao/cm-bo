@@ -69,7 +69,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
               </Form.Item>
             </Col>
             <Col xs={4}>
-              <Form.Item label={t("gameLoginID")} name="gameID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+              <Form.Item label={t("gameLoginID")} name="gameID">
                 <Input autoComplete="off" />
               </Form.Item>
             </Col>

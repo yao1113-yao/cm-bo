@@ -82,25 +82,39 @@ const Transfer = ({ type }: DepositProps) => {
   }
 
   async function handleInsertGetTransactionRecord(values: any) {
-    setIsActionLoading(true);
-    const object = {
-      UserID: userID,
-      UserToken: userToken,
-      RecordType: "Transfer",
-      Type: type,
-      FreeCredit: Number(freeCredit),
-      ...values,
-    };
-    await mainApi("/insert-transfer-transaction-record", object).then(() => {
-      messageApi.open({
-        type: "success",
-        content: "sent",
-      });
-      handleGetPendingTransactionRecord("Transfer");
-      form.resetFields();
+    const fields = form.getFieldsValue();
+
+    const { users } = fields;
+    let credit = 0;
+    users.map((items: any) => {
+      credit += Number(items.credit);
     });
-    setIsActionLoading(false);
-    console.log(values);
+    if (values?.credit === credit) {
+      setIsActionLoading(true);
+      const object = {
+        UserID: userID,
+        UserToken: userToken,
+        RecordType: "Transfer",
+        Type: type,
+        FreeCredit: Number(freeCredit),
+        ...values,
+      };
+      await mainApi("/insert-transfer-transaction-record", object).then(() => {
+        messageApi.open({
+          type: "success",
+          content: "sent",
+        });
+        handleGetPendingTransactionRecord("Transfer");
+        form.resetFields();
+      });
+      setIsActionLoading(false);
+    } else {
+      messageApi.open({
+        type: "warning",
+        content: "toCredit do not more than credit",
+      });
+    }
+    //   console.log(values);
   }
 
   const onChange = (e: any, key: any, type: any) => {
