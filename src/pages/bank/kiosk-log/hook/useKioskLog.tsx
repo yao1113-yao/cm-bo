@@ -27,6 +27,7 @@ export const useKioskLog = () => {
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     gameName: "all",
+    remark: "all",
   };
   useEffect(() => {
     // getAllItemCodeList("MBank", setIsLoading, setAllBankList);
@@ -96,6 +97,7 @@ export const useKioskLog = () => {
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       gameName: values?.gameName,
+      remark: values?.remark,
     };
     await bankApi("/kiosk-log", object)
       .then((result) => {

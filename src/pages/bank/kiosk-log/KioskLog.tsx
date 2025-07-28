@@ -1,5 +1,5 @@
 import CommonButton from "../../../components/CommonButton";
-import { Button, Card, Col, DatePicker, Divider, Form, Row, Table } from "antd";
+import { Button, Card, Col, DatePicker, Divider, Form, Row, Select, Table } from "antd";
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 import { useKioskLog } from "./hook/useKioskLog";
 import GameProvider from "../../../components/GameProvider";
@@ -20,6 +20,18 @@ const KioskLog = () => {
 
           <Col xs={6}>
             <GameProvider list={allGameList} required={true} selectAll label="gameName" />
+          </Col>
+
+          <Col xs={6}>
+            <Form.Item label={t("remark")} name="remark">
+              <Select>
+                <Select.Option value="all">all</Select.Option>
+                <Select.Option value="Customer Deposit">Customer Deposit</Select.Option>
+                <Select.Option value="Customer Withdraw">Customer Withdraw</Select.Option>
+                <Select.Option value="Transfer Deposit">Transfer Deposit</Select.Option>
+                <Select.Option value="Transfer Withdraw">Transfer Withdraw</Select.Option>
+              </Select>
+            </Form.Item>
           </Col>
         </Row>
         <CommonButton text="Submit" />
