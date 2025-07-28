@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import { MdOutlineWatchLater } from "react-icons/md";
 import EditTransaction from "./modal/EditTransaction";
 import { handleEditingTransaction } from "../../../../function/ApiFunction";
+import dayjs from "dayjs";
 
 const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
@@ -80,6 +81,10 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
                     </Button>
                   </Tooltip>
                 </>
+              ) : record?.mStatus === "BOT PROCESSING" && dayjs().diff(record?.createDate, "hour") > 1 ? (
+                <Tooltip title={t("reject")}>
+                  <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                </Tooltip>
               ) : (
                 ""
               )}

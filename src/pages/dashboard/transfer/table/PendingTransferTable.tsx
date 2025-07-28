@@ -11,6 +11,7 @@ import { mainApi } from "../../../../service/CallApi";
 import EditTransaction from "./modal/EditTransaction";
 import { handleEditingTransaction } from "../../../../function/ApiFunction";
 import OpenManualSuccess from "./modal/OpenManualSuccess";
+import dayjs from "dayjs";
 const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo } = useContext(Api);
@@ -102,6 +103,10 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
                     <Button icon={<FaHandPaper />} onClick={() => handleOpenManualSuccessModal(record)}></Button>
                   </Tooltip>
                 </>
+              ) : record?.mStatus === "BOT PROCESSING" && dayjs().diff(record?.createDate, "hour") > 1 ? (
+                <Tooltip title={t("reject")}>
+                  <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                </Tooltip>
               ) : (
                 ""
               )}

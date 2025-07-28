@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 import { FaHandPaper } from "react-icons/fa";
 import EditTransaction from "./modal/EditTransaction";
 import { handleEditingTransaction } from "../../../../function/ApiFunction";
-
+import dayjs from "dayjs";
 const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo, subdomain } = useContext(Api);
@@ -71,6 +71,10 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                 <Button onClick={() => OpenModalEditTransaction(record)}>
                   <EditOutlined />
                 </Button>
+              </Tooltip>
+            ) : record?.mStatus === "BOT PROCESSING" && dayjs().diff(record?.createDate, "hour") > 1 ? (
+              <Tooltip title={t("reject")}>
+                <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
               </Tooltip>
             ) : (
               ""
