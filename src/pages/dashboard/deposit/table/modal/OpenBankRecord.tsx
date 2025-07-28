@@ -1,18 +1,19 @@
 import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
 import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../../type/main.interface";
 import { BankOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../../service/CallApi";
 import CommonButton from "../../../../../components/CommonButton";
 import dayjs from "dayjs";
+import { Api } from "../../../../../context/ApiContext";
 
 const { RangePicker } = DatePicker;
 
 const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, selectedPendingDeposit, openBankRecord, setOpenBankRecord, handleGetPendingTransactionRecord }: any) => {
   const { t } = useTranslation();
-
+  const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
 
@@ -138,6 +139,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       Amount: isCheckAllAmount === true ? -1 : values?.amount,
+      CompanyID: subdomain,
     };
     await mainApi("/bank-record", object)
       .then((result: any) => {

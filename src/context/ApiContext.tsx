@@ -36,7 +36,7 @@ const ApiContext = ({ children }: IApiContextProps) => {
 
   const [windowWidth, setWindowWidth] = useState<number>(screen.availWidth);
   const [windowHeight, setWindowHeight] = useState<number>(screen.availHeight);
-  const subdomain = window.location.hostname.split(".")[0] === "testcm" ? "BEST1" : window.location.hostname.split(".")[0] === "localhost" ? "BEST8" : window.location.hostname.split(".")[0].toUpperCase();
+  const subdomain = window.location.hostname.split(".")[0] === "testcm" ? "BEST1" : window.location.hostname.split(".")[0] === "localhost" ? "BEST1" : window.location.hostname.split(".")[0].toUpperCase();
   console.log(subdomain);
   useEffect(() => {
     handleFirstLoad();
