@@ -252,8 +252,8 @@ export const useMatchBankLater = () => {
       });
     setIsLoading(false);
   }
+
   function handleSearchByFilter(values: any) {
-    console.log(values);
     if (values === "day") {
       form.setFieldValue("searchDate", searchDateRange(values));
       handleGetMatchBankLaterList({ searchDate: searchDateRange(values), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });

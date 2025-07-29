@@ -19,6 +19,7 @@ const Deposit = ({ type }: DepositProps) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const { userInfo } = useContext(Api);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -87,25 +88,37 @@ const Deposit = ({ type }: DepositProps) => {
       UserToken: userToken,
       RecordType: "Main",
       Type: type,
+
       ...values,
     };
-    await mainApi("/insert-deposit-transaction-record", object).then(() => {
-      message.success("success");
-      handleGetPendingTransactionRecord("deposit");
-      form.resetFields();
-    });
+    await mainApi("/insert-deposit-transaction-record", object)
+      .then(() => {
+        messageApi.open({
+          type: "success",
+          content: "success",
+        });
+        handleGetPendingTransactionRecord("deposit");
+        form.resetFields();
+      })
+      .catch((error) => {
+        messageApi.open({
+          type: "error",
+          content: error?.response?.data?.message,
+        });
+      });
     setIsActionLoading(false);
   }
 
   const onChange = (e: any, key: any, type: any) => {
     const fields = form.getFieldsValue();
+    console.log(e);
 
     const { users } = fields;
     if (type === "credit") {
       users[key].credit = e.target.value;
     }
     if (type === "bonusPer") {
-      users[key].bonusPer = e.target.value;
+      users[key].bonusPer = e;
     }
     if (type === "freeCredit") {
       users[key].freeCredit = e.target.value;
@@ -121,6 +134,7 @@ const Deposit = ({ type }: DepositProps) => {
 
   return (
     <>
+      {contextHolder}
       <Spin spinning={isActionLoading}>
         {userInfo?.userType !== 2 && (
           <Form name="dynamic_form_nest_item" autoComplete="off" layout="vertical" onFinish={handleInsertGetTransactionRecord} initialValues={{ users: [{}] }} form={form}>
@@ -129,7 +143,6 @@ const Deposit = ({ type }: DepositProps) => {
                 <>
                   {fields.map(({ key, name, ...restField }) => (
                     <>
-                      ·
                       <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} form={form} {...restField} />
                     </>
                   ))}

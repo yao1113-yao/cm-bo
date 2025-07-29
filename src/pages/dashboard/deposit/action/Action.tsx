@@ -9,7 +9,7 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
 
   const [newIDEnable, setNewIDEnable] = useState<boolean>(false);
   const [freeCreditEnable, setFreeCreditEnable] = useState<boolean>(false);
-  // const [welcomeBonusEnable, setWelcomeBonusEnable] = useState<boolean>(false);
+  const [welcomeBonusEnable, setWelcomeBonusEnable] = useState<boolean>(false);
 
   function handleCheckNewID() {
     setNewIDEnable(!newIDEnable);
@@ -19,9 +19,9 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
     setFreeCreditEnable(!freeCreditEnable);
   }
 
-  // function handleCheckWelcomeBonus() {
-  //   setWelcomeBonusEnable(!welcomeBonusEnable);
-  // }
+  function handleCheckWelcomeBonus() {
+    setWelcomeBonusEnable(!welcomeBonusEnable);
+  }
   return (
     <>
       <Row gutter={10}>
@@ -105,27 +105,49 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
           </Form.Item>
         </Col>
 
-        <Col xs={4}>
+        {/* <Col xs={4}>
           <Form.Item label={t("bonus(%)")} name={[name, "bonusPer"]} rules={[{ required: true, message: t("pleaseSelect") }]}>
             <Input style={{ width: "100%" }} onChange={(e) => onChange(e, rest.fieldKey, "bonusPer")} />
           </Form.Item>
-        </Col>
-        {/* <Col xs={4}>
+        </Col> */}
+        <Col xs={4}>
           <Form.Item
             label={
               <Space>
                 {t("bonus(%)")}
-                <Checkbox onChange={handleCheckWelcomeBonus}>
-                  <div>&nbsp;Welcome Bonus</div>
-                </Checkbox>
+                {name === 0 && (
+                  <Checkbox onChange={handleCheckWelcomeBonus}>
+                    <div>&nbsp;Welcome Bonus</div>
+                  </Checkbox>
+                )}
               </Space>
             }
             name={[name, "bonusPer"]}
             rules={[{ required: true, message: t("pleaseSelect") }]}
           >
-            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, rest.fieldKey, "bonusPer")} max={welcomeBonusEnable ? 30 : 20} />
+            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, rest.fieldKey, "bonusPer")} max={name === 0 && welcomeBonusEnable ? 30 : 20} />
           </Form.Item>
-        </Col> */}
+        </Col>
+
+        {name === 0 && welcomeBonusEnable && (
+          <>
+            <Col xs={4}>
+              <Form.Item label={t("customerBank")} name={[name, "customerBank"]}>
+                <Input style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col xs={4}>
+              <Form.Item label={t("customerBankAccName")} name={[name, "customerBankAccName"]}>
+                <Input style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col xs={4}>
+              <Form.Item label={t("customerBankAccNo")} name={[name, "customerBankAccNo"]}>
+                <Input style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+          </>
+        )}
       </Row>
 
       <Row gutter={10}>
@@ -146,25 +168,6 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
             <InputNumber style={{ width: "100%" }} disabled />
           </Form.Item>
         </Col>
-        {/* {welcomeBonusEnable && (
-          <>
-            <Col xs={4}>
-              <Form.Item label={t("customerBank")} name={[name, "customerBank"]}>
-                <InputNumber style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-            <Col xs={4}>
-              <Form.Item label={t("customerBankName")} name={[name, "customerBankName"]}>
-                <InputNumber style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-            <Col xs={4}>
-              <Form.Item label={t("customerBankAccNo")} name={[name, "customerBankAccNo"]}>
-                <InputNumber style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-          </>
-        )} */}
 
         {rest.fieldKey !== 0 && <MinusCircleOutlined onClick={() => remove(name)} />}
       </Row>
