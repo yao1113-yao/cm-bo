@@ -2,13 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Form, message, TableProps } from "antd";
-import { IGameProviderType, ILogType, IUserType } from "../../../../../type/main.interface";
-import { getAllGameProviderList, getAllStaffList } from "../../../../../function/ApiFunction";
+import { IDeviceType, IGameProviderType, ILogType, IUserType } from "../../../../../type/main.interface";
+import { getAllGameProviderList, getAllItemCodeList, getAllStaffList } from "../../../../../function/ApiFunction";
 import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
 
-export const useKioskErrorReport = () => {
+export const useErrorReport = () => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const { subdomain } = useContext(Api);
@@ -21,6 +21,8 @@ export const useKioskErrorReport = () => {
   const [apiData, setApiData] = useState<ILogType[] | undefined>();
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
   const [allStaffList, setAllStaffList] = useState<[IUserType] | undefined>();
+  const [type, setType] = useState<string>("");
+  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
 
   const initialValues = {
     staffSrno: 0,
@@ -29,6 +31,8 @@ export const useKioskErrorReport = () => {
   };
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
+    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
+
     getAllStaffList(setIsLoading, subdomain, setAllStaffList);
     handleGetKioskErrorReport(initialValues);
   }, []);
@@ -43,6 +47,14 @@ export const useKioskErrorReport = () => {
       },
     },
     {
+      title: t("Type"),
+      dataIndex: "type",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("staffID"),
       dataIndex: "staffID",
       ellipsis: true,
@@ -53,6 +65,14 @@ export const useKioskErrorReport = () => {
     {
       title: t("gameName"),
       dataIndex: "gameName",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("bankCode"),
+      dataIndex: "bankCode",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
@@ -108,7 +128,7 @@ export const useKioskErrorReport = () => {
       companyID: subdomain,
       ...values,
     };
-    await LogApi("/insert-kiosk-error-report", object)
+    await LogApi(values?.type === "Kiosk Error" ? "/insert-kiosk-error-report" : "/insert-bank-error-report", object)
       .then(() => {
         form.resetFields();
         messageApi.open({
@@ -136,9 +156,10 @@ export const useKioskErrorReport = () => {
       staffSrno: values?.staffSrno,
       gameName: values?.gameName,
       remark: values?.remark,
-      type: "all",
+      type: values?.type,
+      bankCode: "all",
     };
-    await LogApi("/kiosk-error-report", object)
+    await LogApi(values?.type === "Kiosk Error" ? "/kiosk-error-report" : "/bank-error-report", object)
       .then((result) => {
         setApiData(result.data);
         setKioskReportIsLoading(false);
@@ -149,5 +170,10 @@ export const useKioskErrorReport = () => {
     setKioskReportIsLoading(false);
   }
 
-  return { t, contextHolder, isLoading, isKioskReportLoading, form, allGameList, allStaffList, apiData, initialValues, columns, handleInsertKioskError, handleGetKioskErrorReport };
+  function handleOnChangeType(value: any) {
+    console.log(value);
+    setType(value);
+  }
+
+  return { t, contextHolder, isLoading, isKioskReportLoading, form, allGameList, allStaffList, apiData, type, allBankList, initialValues, columns, handleInsertKioskError, handleGetKioskErrorReport, handleOnChangeType };
 };

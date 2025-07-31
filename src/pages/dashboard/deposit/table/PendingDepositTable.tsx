@@ -467,7 +467,10 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       UserToken: userToken,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       gameID: values?.gameID,
+      password: values?.password,
+      name: values?.name,
       hpNo: values?.hpNo,
+
       isLater: isLater,
     };
     await mainApi("/insert-manual-success", object)

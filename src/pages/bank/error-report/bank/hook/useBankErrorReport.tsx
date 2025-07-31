@@ -27,6 +27,7 @@ export const useBankErrorReport = () => {
     bank: "all",
     remark: "",
   };
+
   useEffect(() => {
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
     getAllStaffList(setIsLoading, subdomain, setAllStaffList);
@@ -148,6 +149,7 @@ export const useBankErrorReport = () => {
       staffSrno: values?.staffSrno,
       bankCode: values?.bank,
       remark: values?.remark,
+      type: "all",
     };
     await LogApi("/bank-error-report", object)
       .then((result) => {
