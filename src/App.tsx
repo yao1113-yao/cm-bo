@@ -24,6 +24,7 @@ import StaffSalesReport from "./pages/report/sales/staff/StaffSalesReport";
 import TeamBankBalance from "./pages/report/bank-balance/TeamBankBalance";
 import KioskLog from "./pages/bank/kiosk-log/KioskLog";
 import ErrorReport from "./pages/bank/error-report/error/ErrorReport";
+import Error from "./pages/report/error/Error";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -65,6 +66,7 @@ function App() {
         { path: "/error-report", element: <Protected roles={[1, 2, 4, 5]} component={<ErrorReport />} /> },
         { path: "/team/sales", element: <Protected roles={[1, 4, 5]} component={<TeamSalesReport />} /> },
         { path: "/staff/sales", element: <Protected roles={[1, 4, 5]} component={<StaffSalesReport />} /> },
+        { path: "/staff/error", element: <Protected roles={[1, 4, 5]} component={<Error />} /> },
       ],
     },
   ]);

@@ -4,12 +4,11 @@ import { MinusCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
-const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form, ...rest }: any) => {
+const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form, welcomeBonusEnable, setWelcomeBonusEnable, ...rest }: any) => {
   const { t } = useTranslation();
 
   const [newIDEnable, setNewIDEnable] = useState<boolean>(false);
   const [freeCreditEnable, setFreeCreditEnable] = useState<boolean>(false);
-  const [welcomeBonusEnable, setWelcomeBonusEnable] = useState<boolean>(false);
 
   function handleCheckNewID() {
     setNewIDEnable(!newIDEnable);
@@ -21,7 +20,19 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
 
   function handleCheckWelcomeBonus() {
     setWelcomeBonusEnable(!welcomeBonusEnable);
+
+    const fields = form.getFieldsValue();
+
+    const { users } = fields;
+    if (users) {
+      users[0].customerBank = "";
+      users[0].customerBankAccName = "";
+      users[0].customerBankAccNo = "";
+    }
+
+    console.log(users);
   }
+
   return (
     <>
       <Row gutter={10}>

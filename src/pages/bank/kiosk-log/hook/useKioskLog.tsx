@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import dayjs from "dayjs";
 import { Form, message, TableProps } from "antd";
-import { formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { IGameProviderType, IKioskLogType } from "../../../../type/main.interface";
 
@@ -36,6 +36,14 @@ export const useKioskLog = () => {
   }, []);
 
   const columns: TableProps<IKioskLogType>["columns"] = [
+    {
+      title: t("createDate"),
+      dataIndex: "createDate",
+      align: "center",
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
     {
       title: t("companyID"),
       dataIndex: "companyID",

@@ -73,6 +73,12 @@ export const useMainMenu = () => {
           icon: <FileSearchOutlined />,
           hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
         },
+        {
+          label: t("Error Report"),
+          key: "/staff/error",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType !== 4 && userInfo.userType !== 5,
+        },
       ],
     },
     {

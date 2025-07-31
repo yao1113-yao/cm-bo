@@ -219,3 +219,23 @@ export interface IKioskLogType {
   remark: string;
   createDate: Date;
 }
+
+export interface ITeamErrorReportType {
+  srno: number;
+  companyID: string;
+  userID: string;
+  errorCount: number;
+  errorAmount: number;
+}
+export interface ITeamErrorReportSummaryType {
+  srno: number;
+  companyID: string;
+  userID: string;
+  balance: number;
+  createBy: string;
+  createDate: Date;
+  type: string;
+  bankCode: string;
+  remark: string;
+  gameName: string;
+}
