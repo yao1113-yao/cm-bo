@@ -8,6 +8,7 @@ import { formatDateTime, formatNumber, formatString } from "../../../../function
 import { useTranslation } from "react-i18next";
 import { RightOutlined, LeftOutlined, CloseOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
+import dayjs from "dayjs";
 
 export const useMaybank = () => {
   const userID = localStorage.getItem("userID");
@@ -26,6 +27,11 @@ export const useMaybank = () => {
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
   const [selectedCompany, setSelectedCompany] = useState<ICompanyType | undefined>();
   const [bankRecordList, setBankRecordList] = useState<[ITransactionType] | undefined>();
+
+  const initialValues = {
+    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    bank: "",
+  };
 
   useEffect(() => {
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
@@ -126,6 +132,8 @@ export const useMaybank = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
+      endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       bankCode: values?.bank,
       CompanyID: subdomain,
     };
@@ -162,7 +170,11 @@ export const useMaybank = () => {
           .then(() => {
             form.resetFields();
             setIsLoading(false);
-            handleGetBankRecordList({ bank: bankSelected });
+            handleGetBankRecordList({
+              startDate: dayjs(initialValues?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
+              endDate: dayjs(initialValues?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
+              bank: bankSelected,
+            });
             form2.setFieldValue("bank", bankSelected);
             messageApi.open({
               type: "success",
@@ -198,7 +210,7 @@ export const useMaybank = () => {
           type: "success",
           content: "Success",
         });
-        // handleGetBankRecordList();
+        handleGetBankRecordList({ startDate: dayjs(initialValues?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"), endDate: dayjs(initialValues?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"), bank: bankSelected });
       })
       .catch((error) => {
         console.log(error);
@@ -227,7 +239,7 @@ export const useMaybank = () => {
           .then(() => {
             form.resetFields();
             setIsLoading(false);
-            handleGetBankRecordList({ bank: bankSelected });
+            handleGetBankRecordList({ startDate: dayjs(initialValues?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"), endDate: dayjs(initialValues?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"), bank: bankSelected });
             form2.setFieldValue("bank", bankSelected);
             messageApi.open({
               type: "success",
@@ -248,5 +260,5 @@ export const useMaybank = () => {
     setIsLoading(false);
   }
 
-  return { form, form2, contextHolder, companyList, isLoading, selectedCompany, setSelectedCompany, bankSelected, setBankSelected, handleOnChangeSelectedCompany, allBankList, bankRecordColumns, bankRecordList, handleInsertBankTransaction, handleGetBankRecordList };
+  return { form, form2, contextHolder, companyList, isLoading, initialValues, selectedCompany, setSelectedCompany, bankSelected, setBankSelected, handleOnChangeSelectedCompany, allBankList, bankRecordColumns, bankRecordList, handleInsertBankTransaction, handleGetBankRecordList };
 };

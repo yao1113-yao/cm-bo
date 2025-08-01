@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { Button, Form, message, TableProps, Tooltip } from "antd";
 import { useLocation } from "react-router-dom";
-import { formatIndex, formatString } from "../../../../function/CommonFunction";
+import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { ICompanyGPType, IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList } from "../../../../function/ApiFunction";
@@ -53,16 +53,16 @@ export const useKioskBalance = () => {
       title: t("balanceGP"),
       dataIndex: "balanceGP",
       ellipsis: true,
-      render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
     {
       title: t("balanceSystem"),
       dataIndex: "balance",
       ellipsis: true,
-      render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
     {

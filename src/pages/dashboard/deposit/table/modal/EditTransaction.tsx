@@ -131,7 +131,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
               </Form.Item>
             </Col>
           </Row>
-          <CommonButton text="search" />
+          <CommonButton text="submit" />
         </Form>
       </Modal>
     </div>
