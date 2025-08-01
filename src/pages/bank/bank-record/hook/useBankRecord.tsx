@@ -247,7 +247,7 @@ export const useBankRecord = () => {
         const object = {
           UserID: userID,
           UserToken: userToken,
-          mktDetailsSrno: values?.mktDetailsSrno,
+          mktSrno: values?.mktSrno,
         };
         await mainApi("/show-record", object)
           .then(() => {

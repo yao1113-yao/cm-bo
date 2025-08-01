@@ -79,7 +79,7 @@ const BankRecord = () => {
       </Row>
 
       <Card loading={isLoading}>
-        <Table columns={columns} dataSource={apiData} rowKey="srno" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} />
+        <Table columns={columns} dataSource={apiData} rowKey="" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} />
       </Card>
     </Card>
   );
