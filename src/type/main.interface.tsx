@@ -217,6 +217,7 @@ export interface IKioskLogType {
   balance: number;
   afterBalance: number;
   remark: string;
+  mktDetailsSrno: number;
   createDate: Date;
 }
 

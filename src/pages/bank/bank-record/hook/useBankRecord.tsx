@@ -6,7 +6,7 @@ import { Button, Form, message, Space, TableProps, Tag, Tooltip } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi, mainApi } from "../../../../service/CallApi";
 import { ITotalValueType, ITransactionType } from "../../../../type/main.interface";
-import { CloseOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { CloseOutlined, ClockCircleOutlined, BankOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { Api } from "../../../../context/ApiContext";
 
@@ -25,6 +25,10 @@ export const useBankRecord = () => {
   const [apiData2, setApiData2] = useState<ITotalValueType | undefined>();
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
+  const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
+
+  const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
+  const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
   const handleTableChange = (pagination: any) => {
     setPagination(pagination);
   };
@@ -39,6 +43,11 @@ export const useBankRecord = () => {
   useEffect(() => {
     handleGetBankRecordMarketingList(initialValues);
   }, []);
+
+  function OpenModalBankRecord(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenBankRecord(!openBankRecord);
+  }
 
   const columns: TableProps<ITransactionType>["columns"] = [
     {
@@ -58,6 +67,10 @@ export const useBankRecord = () => {
                 <Button onClick={() => handleShowRecord(record)}>
                   <ClockCircleOutlined />
                 </Button>
+              </Tooltip>
+
+              <Tooltip title={t("assignBank")}>
+                <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
               </Tooltip>
             </Space>
           )
@@ -354,5 +367,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, apiData2, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange };
+  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, apiData2, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
 };

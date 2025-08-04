@@ -290,9 +290,6 @@ const DepositTable = ({ depositRecord, handleGetPendingTransactionRecord, handle
     }
   };
 
-  useEffect(() => {
-    console.log("first");
-  }, []);
   return (
     <>
       <Spin spinning={isLoading}>

@@ -60,7 +60,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
           <Row gutter={20}>
             <Col xs={6}>
               <Form.Item label={t("game")} name="mGame" rules={[{ required: true }]}>
-                <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("game")} optionFilterProp="label">
+                <Select disabled={selectedPendingDeposit?.mStatus === "HOLD"} defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("game")} optionFilterProp="label">
                   {allGameList?.map((items: any) => (
                     <Select.Option value={items.gameName} key={items.gameName}>
                       {items?.gameName}
@@ -71,7 +71,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
             </Col>
             <Col xs={6}>
               <Form.Item label={t("gameLoginID")} name="gameID">
-                <Input autoComplete="off" />
+                <Input autoComplete="off" disabled={selectedPendingDeposit?.mStatus === "HOLD"} />
               </Form.Item>
             </Col>
             {/* <Col xs={6}>
@@ -81,12 +81,12 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
             </Col> */}
             <Col xs={6}>
               <Form.Item label={t("credit")} name="outCredit" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input />
+                <Input disabled={selectedPendingDeposit?.mStatus === "HOLD"} />
               </Form.Item>
             </Col>
             <Col xs={6}>
               <Form.Item label={t("cashOut")} name="bankOut" rules={[{ min: 0, type: "number", message: t("cannotLessThan0") }]}>
-                <InputNumber style={{ width: "100%" }} />
+                <InputNumber style={{ width: "100%" }} disabled={selectedPendingDeposit?.mStatus === "HOLD"} />
               </Form.Item>
             </Col>
             <Col xs={6}>
