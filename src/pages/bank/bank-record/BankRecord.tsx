@@ -5,7 +5,8 @@ import { DownCircleOutlined, LeftCircleOutlined, DollarOutlined } from "@ant-des
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, form, contextHolder, isLoading, apiData, apiData2, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName } = useBankRecord();
+  const { t, userInfo, form, contextHolder, isLoading, apiData, apiData2, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange } = useBankRecord();
+
   return (
     <Card>
       {contextHolder}
@@ -79,7 +80,7 @@ const BankRecord = () => {
       </Row>
 
       <Card loading={isLoading}>
-        <Table columns={columns} dataSource={apiData} rowKey="" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} />
+        <Table columns={columns} dataSource={apiData} rowKey="" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} pagination={pagination} onChange={handleTableChange} />
       </Card>
     </Card>
   );

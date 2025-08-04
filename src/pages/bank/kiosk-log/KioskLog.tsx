@@ -30,6 +30,7 @@ const KioskLog = () => {
                 <Select.Option value="Customer Withdraw">Customer Withdraw</Select.Option>
                 <Select.Option value="Transfer Deposit">Transfer Deposit</Select.Option>
                 <Select.Option value="Transfer Withdraw">Transfer Withdraw</Select.Option>
+                <Select.Option value="Take Out Bank">Take Out Bank</Select.Option>
               </Select>
             </Form.Item>
           </Col>

@@ -24,7 +24,10 @@ export const useBankRecord = () => {
   const [apiData, setApiData] = useState<ITransactionType[]>([]);
   const [apiData2, setApiData2] = useState<ITotalValueType | undefined>();
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
-
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
+  const handleTableChange = (pagination: any) => {
+    setPagination(pagination);
+  };
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     companyID: "all",
@@ -165,7 +168,7 @@ export const useBankRecord = () => {
       dataIndex: "credit",
       align: "center",
       render: (text: number, record, index: number) => {
-        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[index - 1]?.mktSrno) return <div>-</div>;
+        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno) return <div>-</div>;
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
@@ -174,7 +177,7 @@ export const useBankRecord = () => {
       dataIndex: "debit",
       align: "center",
       render: (text: number, record, index: number) => {
-        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[index - 1]?.mktSrno) return <div>-</div>;
+        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno) return <div>-</div>;
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
@@ -306,7 +309,7 @@ export const useBankRecord = () => {
   const prevClass = useRef<string>("row-highlight-1");
 
   const rowClassName = (record: any, index: number) => {
-    samePrev.current = index > 0 ? record.mktSrno === apiData[index - 1]?.mktSrno : true;
+    samePrev.current = index > 0 ? record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno && record.mktSrno !== 0 : true;
     if (index === 0) prevClass.current = "row-highlight-1";
     if (samePrev.current) return prevClass.current;
     else {
@@ -351,5 +354,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, apiData2, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName };
+  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, apiData2, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange };
 };
