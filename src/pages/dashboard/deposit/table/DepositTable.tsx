@@ -2,7 +2,7 @@ import { Button, Card, Divider, message, Space, Spin, Table, TableProps, Tag, To
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 import { CheckOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
