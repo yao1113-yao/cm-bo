@@ -1,13 +1,14 @@
-import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
+import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, Space, Table, TableProps, Tooltip } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { BankOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { Api } from "../../../../context/ApiContext";
-import { ITransactionType } from "../../../../type/main.interface";
+import { IDeviceType, ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { mainApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
+import { getAllItemCodeList } from "../../../../function/ApiFunction";
 
 const { RangePicker } = DatePicker;
 
@@ -19,6 +20,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
+  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
 
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
@@ -28,6 +30,8 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
 
   useEffect(() => {
     handleGetBankRecord(initialValues);
+    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
+
     console.log("first");
   }, []);
 
@@ -170,8 +174,14 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
               </Form.Item>
             </Col>
             <Col xs={6}>
-              <Form.Item label={t("bank")} name="mBank">
-                <Input disabled />
+              <Form.Item label="bank" name="mBank">
+                <Select onChange={handleGetBankRecord} defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("bank")} optionFilterProp="label">
+                  {allBankList?.map((items: any) => (
+                    <Select.Option value={items.item} key={items.item}>
+                      {items?.item}
+                    </Select.Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Col>
             <Col xs={6}>
