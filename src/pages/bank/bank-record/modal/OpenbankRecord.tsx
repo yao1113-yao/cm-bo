@@ -175,7 +175,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
             </Col>
             <Col xs={6}>
               <Form.Item label="bank" name="mBank">
-                <Select onChange={handleGetBankRecord} defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("bank")} optionFilterProp="label">
+                <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("bank")} optionFilterProp="label">
                   {allBankList?.map((items: any) => (
                     <Select.Option value={items.item} key={items.item}>
                       {items?.item}
