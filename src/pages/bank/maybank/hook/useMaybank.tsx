@@ -128,6 +128,7 @@ export const useMaybank = () => {
   ];
 
   async function handleGetBankRecordList(values: any) {
+    console.log(dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"));
     setIsLoading(true);
     const object = {
       UserID: userID,
@@ -150,6 +151,7 @@ export const useMaybank = () => {
       });
     setIsLoading(false);
   }
+  console.log(dayjs(initialValues?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"));
 
   function handleInsertBankTransaction() {
     Swal.fire({
@@ -168,13 +170,14 @@ export const useMaybank = () => {
         };
         await bankApi("/insert-bank-transaction", object)
           .then(() => {
-            form.resetFields();
-            setIsLoading(false);
+            form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
+
             handleGetBankRecordList({
-              startDate: dayjs(initialValues?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
-              endDate: dayjs(initialValues?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
+              searchDate: [dayjs().subtract(6, "hour"), dayjs()],
               bank: bankSelected,
             });
+            setIsLoading(false);
+
             form2.setFieldValue("bank", bankSelected);
             messageApi.open({
               type: "success",
@@ -210,7 +213,8 @@ export const useMaybank = () => {
           type: "success",
           content: "Success",
         });
-        handleGetBankRecordList({ startDate: dayjs(initialValues?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"), endDate: dayjs(initialValues?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"), bank: bankSelected });
+        form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
+        handleGetBankRecordList({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], bank: bankSelected });
       })
       .catch((error) => {
         console.log(error);
@@ -237,9 +241,9 @@ export const useMaybank = () => {
         };
         await bankApi("/delete-bank-record", object)
           .then(() => {
-            form.resetFields();
+            form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
             setIsLoading(false);
-            handleGetBankRecordList({ startDate: dayjs(initialValues?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"), endDate: dayjs(initialValues?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"), bank: bankSelected });
+            handleGetBankRecordList({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], bank: bankSelected });
             form2.setFieldValue("bank", bankSelected);
             messageApi.open({
               type: "success",

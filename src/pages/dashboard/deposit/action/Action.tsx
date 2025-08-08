@@ -106,13 +106,13 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
             name={[name, "credit"]}
             rules={[{ required: true, message: t("pleaseSelect") }]}
           >
-            <Input style={{ width: "100%" }} onChange={(e) => onChange(e, rest.fieldKey, "credit")} />
+            <Input style={{ width: "100%" }} onChange={(e) => onChange(e, name, "credit")} />
           </Form.Item>
         </Col>
 
         <Col xs={4}>
           <Form.Item label={t("freeCredit")} name={[name, "freeCredit"]}>
-            <Input style={{ width: "100%" }} disabled={!freeCreditEnable} onChange={(e) => onChange(e, rest.fieldKey, "freeCredit")} />
+            <Input style={{ width: "100%" }} disabled={!freeCreditEnable} onChange={(e) => onChange(e, name, "freeCredit")} />
           </Form.Item>
         </Col>
 
@@ -136,7 +136,7 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
             name={[name, "bonusPer"]}
             rules={[{ required: true, message: t("pleaseSelect") }]}
           >
-            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, rest.fieldKey, "bonusPer")} max={name === 0 && welcomeBonusEnable ? 30 : 20} />
+            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, name, "bonusPer")} max={name === 0 && welcomeBonusEnable ? 30 : 20} />
           </Form.Item>
         </Col>
 
