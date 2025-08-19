@@ -404,6 +404,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
           UserID: userID,
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
+          companyID: subdomain,
         };
         await mainApi("/insert-withdraw-task", object)
           .then(() => {

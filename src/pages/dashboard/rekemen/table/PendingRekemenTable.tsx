@@ -13,7 +13,7 @@ import { handleEditingTransaction } from "../../../../function/ApiFunction";
 
 const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
 
   const userID = localStorage.getItem("userID");
@@ -263,6 +263,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
           UserID: userID,
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
+          companyID: subdomain,
         };
         await mainApi("/insert-rekemen-task", object)
           .then(() => {

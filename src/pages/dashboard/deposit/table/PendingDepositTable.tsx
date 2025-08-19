@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 
 const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -384,6 +384,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
           IsLater: type === "sendToBot" ? 0 : 1,
+          companyID: subdomain,
         };
         await mainApi("/insert-deposit-task", object)
           .then(() => {
