@@ -426,6 +426,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
           IsLater: 1,
+          companyID: subdomain,
         };
         await mainApi("/insert-deposit-task", object)
           .then(() => {
