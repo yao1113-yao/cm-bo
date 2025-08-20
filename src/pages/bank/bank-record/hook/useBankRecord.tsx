@@ -6,7 +6,7 @@ import { Button, Form, message, Space, TableProps, Tag, Tooltip } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi, mainApi } from "../../../../service/CallApi";
 import { ITotalValueType, ITransactionType } from "../../../../type/main.interface";
-import { CloseOutlined, ClockCircleOutlined, BankOutlined } from "@ant-design/icons";
+import { CloseOutlined, ClockCircleOutlined, BankOutlined, FileAddOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { Api } from "../../../../context/ApiContext";
 
@@ -56,24 +56,28 @@ export const useBankRecord = () => {
       ellipsis: true,
       hidden: userInfo && userInfo?.userType !== 2,
       render: (record) => {
-        return (
-          record?.status === 1 && (
-            <Space>
-              <Tooltip title={t("takeOutBank")}>
-                <Button icon={<CloseOutlined />} onClick={() => handleTakeOutBankTransaction(record)}></Button>
-              </Tooltip>
+        return record?.status === 1 ? (
+          <Space>
+            <Tooltip title={t("takeOutBank")}>
+              <Button icon={<CloseOutlined />} onClick={() => handleTakeOutBankTransaction(record)}></Button>
+            </Tooltip>
 
-              <Tooltip title={t("ShowRecordToMkt")}>
-                <Button onClick={() => handleShowRecord(record)}>
-                  <ClockCircleOutlined />
-                </Button>
-              </Tooltip>
+            <Tooltip title={t("ShowRecordToMkt")}>
+              <Button onClick={() => handleShowRecord(record)}>
+                <ClockCircleOutlined />
+              </Button>
+            </Tooltip>
 
-              <Tooltip title={t("assignBank")}>
-                <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
-              </Tooltip>
-            </Space>
-          )
+            <Tooltip title={t("assignBank")}>
+              <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
+            </Tooltip>
+          </Space>
+        ) : record?.status === 0 ? (
+          <Tooltip title={t("assignPayment")}>
+            <Button icon={<FileAddOutlined />} onClick={() => handleAssignPaymentTransaction(record)} disabled={record?.isEditing === 1}></Button>
+          </Tooltip>
+        ) : (
+          ""
         );
       },
     },
@@ -91,7 +95,7 @@ export const useBankRecord = () => {
       dataIndex: "status",
       align: "center",
       render: (text: number) => {
-        return text === 1 ? <Tag color="#87d068">Assign</Tag> : <Tag color="#f50">Haven't</Tag>;
+        return text === 1 ? <Tag color="#87d068">Assign</Tag> : text === 2 ? <Tag color="#108ee9">Payment</Tag> : <Tag color="#f50">Haven't</Tag>;
       },
     },
     {
@@ -299,6 +303,39 @@ export const useBankRecord = () => {
           mktSrno: values?.mktSrno,
         };
         await bankApi("/take-out-bank", object)
+          .then(() => {
+            handleGetBankRecordMarketingList(initialValues);
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
+  async function handleAssignPaymentTransaction(values: any) {
+    Swal.fire({
+      title: "Do you want to assign bank?",
+      showCancelButton: true,
+      confirmButtonText: "Assign Payment",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          bankRecordSrno: values?.srno,
+        };
+        await bankApi("/assign-payment", object)
           .then(() => {
             handleGetBankRecordMarketingList(initialValues);
             messageApi.open({
