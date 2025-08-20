@@ -28,7 +28,7 @@ const All = () => {
   const [pendingWithdrawRecod, setPendingWithdrawRecod] = useState<[ITransactionType] | undefined>();
   const [pendingRekemenRecod, setPendingWRekemenRecod] = useState<[ITransactionType] | undefined>();
   const [pendingTransferRecod, setPendingTransferRecod] = useState<[ITransactionType] | undefined>();
-
+  console.log(isLoading);
   useEffect(() => {
     handleGetTransactionRecord("Main", "Deposit");
     handleGetTransactionRecord("Main", "Withdraw");
