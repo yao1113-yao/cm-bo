@@ -14,7 +14,7 @@ import OpenManualSuccess from "./modal/OpenManualSuccess";
 import dayjs from "dayjs";
 const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -278,6 +278,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
           UserID: userID,
           UserToken: userToken,
           mktDetailsSrno: values?.srno,
+          companyID: subdomain,
         };
         await mainApi("/insert-withdraw-task", object)
           .then(() => {
