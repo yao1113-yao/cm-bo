@@ -82,8 +82,17 @@ export const useBankRecord = () => {
       },
     },
     {
-      title: t("createDate"),
+      title: t("mktCreateDate"),
       dataIndex: "createDate",
+      align: "center",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+    {
+      title: t("bankCreateDate"),
+      dataIndex: "bankDate",
       align: "center",
       ellipsis: true,
       render: (text: string) => {

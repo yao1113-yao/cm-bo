@@ -15,7 +15,7 @@ const BankRecord = () => {
       <Form layout="vertical" onFinish={handleGetBankRecordMarketingList} initialValues={initialValues} form={form}>
         <Row gutter={20}>
           <Col xs={6}>
-            <Form.Item label={t("searchDate")} name="searchDate">
+            <Form.Item label={t("searchMktCreateDate")} name="searchDate">
               <RangePicker style={{ width: "100%" }} showTime />
             </Form.Item>
           </Col>
