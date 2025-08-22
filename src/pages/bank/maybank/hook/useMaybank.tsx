@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { bankApi } from "../../../../service/CallApi";
 import { Button, Form, message, Space, TableProps, Tooltip } from "antd";
-import { ICompanyType, IDeviceType, ITransactionType } from "../../../../type/main.interface";
-import { getAllItemCodeList } from "../../../../function/ApiFunction";
+import { ICompanyBankType, ICompanyType, ITransactionType } from "../../../../type/main.interface";
+import { getAllBankList } from "../../../../function/ApiFunction";
 import { Api } from "../../../../context/ApiContext";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useTranslation } from "react-i18next";
@@ -24,7 +24,7 @@ export const useMaybank = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [bankSelected, setBankSelected] = useState<string>("");
-  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
+  const [allBankList, setAllBankList] = useState<[ICompanyBankType] | undefined>();
   const [selectedCompany, setSelectedCompany] = useState<ICompanyType | undefined>();
   const [bankRecordList, setBankRecordList] = useState<[ITransactionType] | undefined>();
 
@@ -34,7 +34,7 @@ export const useMaybank = () => {
   };
 
   useEffect(() => {
-    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
+    getAllBankList(subdomain, "", setIsLoading, setAllBankList);
     // handleGetBankRecordList();
     const temp = companyList?.filter((items: any) => items.companyID === subdomain);
     if (temp !== undefined) {
@@ -174,11 +174,11 @@ export const useMaybank = () => {
 
             handleGetBankRecordList({
               searchDate: [dayjs().subtract(6, "hour"), dayjs()],
-              bank: bankSelected,
+              bank: bankSelected === "AFFIN MAX" ? "AFFIN" : bankSelected === "CIMB NEW BIZ" ? "CIMB" : bankSelected === "CIMB OLD BIZ" ? "CIMB" : bankSelected === "RHB TOKEN" ? "RHB" : bankSelected === "PBB TOKEN" ? "PBB" : bankSelected,
             });
             setIsLoading(false);
 
-            form2.setFieldValue("bank", bankSelected);
+            form2.setFieldValue("bank", bankSelected === "AFFIN MAX" ? "AFFIN" : bankSelected === "CIMB NEW BIZ" ? "CIMB" : bankSelected === "CIMB OLD BIZ" ? "CIMB" : bankSelected === "RHB TOKEN" ? "RHB" : bankSelected === "PBB TOKEN" ? "PBB" : bankSelected);
             messageApi.open({
               type: "success",
               content: "Success",

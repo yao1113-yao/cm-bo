@@ -1,7 +1,6 @@
-import { Button, Col, DatePicker, Divider, Form, Row, Spin, Table } from "antd";
+import { Button, Col, DatePicker, Divider, Form, Row, Select, Spin, Table } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import { useMaybank } from "./hook/useMaybank";
-import Device from "../../../components/Device";
 import "./maybank.scss";
 const { RangePicker } = DatePicker;
 
@@ -34,11 +33,86 @@ const Maybank = () => {
       <Form layout="vertical" onFinish={handleInsertBankTransaction} form={form}>
         <Row gutter={[20, 10]}>
           {allBankList?.map((items) => {
-            return (
+            return items?.bankCode === "CIMB" ? (
+              <>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected(items.bankCode)}>
+                      {items?.bankCode}
+                    </Button>
+                  </Form.Item>
+                </Col>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected("CIMB NEW BIZ")}>
+                      CIMB NEW BIZ
+                    </Button>
+                  </Form.Item>
+                </Col>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected("CIMB OLD BIZ")}>
+                      CIMB OLD BIZ
+                    </Button>
+                  </Form.Item>
+                </Col>
+              </>
+            ) : items?.bankCode === "PBB" ? (
+              <>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected(items.bankCode)}>
+                      {items?.bankCode}
+                    </Button>
+                  </Form.Item>
+                </Col>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected("PBB TOKEN")}>
+                      PBB TOKEN
+                    </Button>
+                  </Form.Item>
+                </Col>
+              </>
+            ) : items?.bankCode === "RHB" ? (
+              <>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected(items.bankCode)}>
+                      {items?.bankCode}
+                    </Button>
+                  </Form.Item>
+                </Col>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected("RHB TOKEN")}>
+                      RHB TOKEN
+                    </Button>
+                  </Form.Item>
+                </Col>
+              </>
+            ) : items?.bankCode === "AFFIN" ? (
+              <>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected(items.bankCode)}>
+                      {items?.bankCode}
+                    </Button>
+                  </Form.Item>
+                </Col>
+                <Col xs={3} key={items.srno}>
+                  <Form.Item>
+                    <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected("AFFIN MAX")}>
+                      AFFIN MAX
+                    </Button>
+                  </Form.Item>
+                </Col>
+              </>
+            ) : (
               <Col xs={3} key={items.srno}>
                 <Form.Item>
-                  <Button htmlType="submit" className={`bank-button-${items.item}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected(items.item)}>
-                    {items.item}
+                  <Button htmlType="submit" className={`bank-button-${items.bankCode}`} style={{ width: "100%", fontWeight: "600" }} onClick={() => setBankSelected(items.bankCode)}>
+                    {items?.bankCode}
                   </Button>
                 </Form.Item>
               </Col>
@@ -57,7 +131,14 @@ const Maybank = () => {
             </Form.Item>
           </Col>
           <Col xs={6}>
-            <Device list={allBankList} label="bank" selectAll={false} required />
+            {/* <Device list={allBankList} label="bank" selectAll={false} required /> */}
+            <Form.Item label="bank" name="bank">
+              <Select>
+                {allBankList?.map((items) => {
+                  return <Select.Option value={items.bankCode}>{items.bankCode}</Select.Option>;
+                })}
+              </Select>
+            </Form.Item>
           </Col>
           <Col>
             <CommonButton text="Search" />

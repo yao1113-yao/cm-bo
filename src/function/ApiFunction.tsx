@@ -1,5 +1,5 @@
 import { message } from "antd";
-import { deviceApi, gameProviderApi, mainApi, staffApi } from "../service/CallApi";
+import { bankApi, deviceApi, gameProviderApi, mainApi, staffApi } from "../service/CallApi";
 
 export async function getAllGameProviderList(setIsGameLoading: any, setAllGameList: any) {
   setIsGameLoading(true);
@@ -66,6 +66,30 @@ export async function getAllStaffList(setIsLoading: any, companyID: string, setA
     .catch((error) => {
       message.error(error?.response?.data?.message);
       setIsLoading(false);
+    });
+}
+
+export async function getAllBankList(companyID: string, bankCode: string, setIsDeviceLoading: any, setAllDeviceList: any) {
+  setIsDeviceLoading(true);
+
+  const userID = localStorage.getItem("userID");
+  const userToken = localStorage.getItem("userToken");
+
+  const object = {
+    userID: userID,
+    userToken: userToken,
+    companyID: companyID,
+    bankCode: bankCode,
+  };
+
+  await bankApi("/company-bank-list", object)
+    .then((result) => {
+      setAllDeviceList(result.data);
+      setIsDeviceLoading(false);
+    })
+    .catch((error) => {
+      message.error(error?.response?.data?.message);
+      setIsDeviceLoading(false);
     });
 }
 
