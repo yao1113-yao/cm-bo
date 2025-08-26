@@ -18,7 +18,7 @@ interface DepositProps extends React.HTMLAttributes<HTMLElement> {
 const Transfer = ({ type }: DepositProps) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
 
   const userID = localStorage.getItem("userID");
@@ -61,6 +61,7 @@ const Transfer = ({ type }: DepositProps) => {
       UserToken: userToken,
       RecordType: "Transfer",
       Type: type,
+      companyID: subdomain,
     };
     await mainApi("/transaction-record", object).then((result) => {
       setDepositRecord(result.data);
@@ -74,6 +75,7 @@ const Transfer = ({ type }: DepositProps) => {
       UserToken: userToken,
       type: type,
       RecordType: "Transfer",
+      companyID: subdomain,
     };
     await mainApi("/pending-transaction-record", object).then((result) => {
       setPendingTransferRecod(result.data);
@@ -96,6 +98,7 @@ const Transfer = ({ type }: DepositProps) => {
         UserToken: userToken,
         RecordType: "Transfer",
         Type: type,
+        companyID: subdomain,
         FreeCredit: Number(freeCredit),
         ...values,
       };

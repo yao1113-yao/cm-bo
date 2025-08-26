@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Button, Dropdown, MenuProps, message, Space, TableProps, Tooltip } from "antd";
@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { formatDateTime, formatIndex, formatNumber, formatStatus, formatString } from "../../../../function/CommonFunction";
 import { playerApi } from "../../../../service/CallApi";
 import { IPaginationType, IPlayerType } from "../../../../type/main.interface";
+import { Api } from "../../../../context/ApiContext";
 
 interface IGetPlayerListReq {
   playerID: string;
@@ -18,6 +19,7 @@ interface IGetPlayerListReq {
 
 export const usePlayerList = () => {
   const { t } = useTranslation();
+  const { subdomain } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -195,6 +197,7 @@ export const usePlayerList = () => {
     setIsLoading(true);
     const input = {
       ...values,
+
       page: page,
       pageSize: pageSize,
     };
@@ -202,6 +205,7 @@ export const usePlayerList = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      companyID: subdomain,
       loginID: values?.loginID,
       Status: values?.status,
       page: page,

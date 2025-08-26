@@ -30,7 +30,6 @@ export const useLogin = () => {
         setCompanyList(result.data2);
         localStorage.setItem("userID", result.data.userID);
         localStorage.setItem("userToken", result.data.token);
-        console.log(result.data);
         navigate("/dashboard/deposit", { replace: true });
         setIsLoading(false);
       })

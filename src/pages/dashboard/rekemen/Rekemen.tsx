@@ -17,7 +17,7 @@ interface DepositProps extends React.HTMLAttributes<HTMLElement> {
 const Rekemen = ({ type }: DepositProps) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
 
@@ -60,6 +60,7 @@ const Rekemen = ({ type }: DepositProps) => {
       UserToken: userToken,
       RecordType: "Rekemen",
       Type: type,
+      companyID: subdomain,
     };
     await mainApi("/transaction-record", object).then((result) => {
       setDepositRecord(result.data);
@@ -74,6 +75,7 @@ const Rekemen = ({ type }: DepositProps) => {
       UserToken: userToken,
       type: type,
       RecordType: "Rekemen",
+      companyID: subdomain,
     };
     await mainApi("/pending-transaction-record", object).then((result) => {
       setPendingWithdrawRecod(result.data);
@@ -88,6 +90,7 @@ const Rekemen = ({ type }: DepositProps) => {
       UserToken: userToken,
       RecordType: "Rekemen",
       Type: type,
+      companyID: subdomain,
       ...values,
     };
     await mainApi("/insert-rekemen-transaction-record", object).then(() => {

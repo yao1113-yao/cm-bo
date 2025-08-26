@@ -20,7 +20,7 @@ const Withdraw = ({ type }: DepositProps) => {
   const [form] = Form.useForm();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -68,6 +68,7 @@ const Withdraw = ({ type }: DepositProps) => {
       UserToken: userToken,
       RecordType: "Main",
       Type: type,
+      companyID: subdomain,
     };
     await mainApi("/transaction-record", object).then((result) => {
       setWithdrawRecord(result.data);
@@ -82,6 +83,7 @@ const Withdraw = ({ type }: DepositProps) => {
       UserToken: userToken,
       type: type,
       RecordType: "Main",
+      companyID: subdomain,
     };
     await mainApi("/pending-transaction-record", object).then((result) => {
       setPendingWithdrawRecord(result.data);
@@ -96,6 +98,7 @@ const Withdraw = ({ type }: DepositProps) => {
       UserToken: userToken,
       RecordType: "Withdraw",
       Type: type,
+      companyID: subdomain,
       game: values?.game,
       gameLoginID: values?.gameLoginID,
       name: values?.name,

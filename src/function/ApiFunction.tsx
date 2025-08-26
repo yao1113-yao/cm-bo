@@ -1,15 +1,18 @@
 import { message } from "antd";
 import { bankApi, deviceApi, gameProviderApi, mainApi, staffApi } from "../service/CallApi";
-
 export async function getAllGameProviderList(setIsGameLoading: any, setAllGameList: any) {
   setIsGameLoading(true);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const subdomain = window.location.hostname.split(".")[0] === "testcm" ? "BEST1" : window.location.hostname.split(".")[0] === "localhost" ? "BEST1" : window.location.hostname.split(".")[0].toUpperCase();
+
+  console.log("");
 
   const object = {
     userID: userID,
     userToken: userToken,
+    companyID: subdomain,
   };
 
   await gameProviderApi("/all-gameprovider-list", object)

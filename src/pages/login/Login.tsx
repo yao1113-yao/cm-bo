@@ -31,7 +31,7 @@ const Login = () => {
                     <Select.Option value={2}>{t("Cashier")}</Select.Option>
                     <Select.Option value={3}>{t("Marketing")}</Select.Option>
                     <Select.Option value={4}>{t("AM")}</Select.Option>
-                    <Select.Option value={4}>{t("GM")}</Select.Option>
+                    <Select.Option value={5}>{t("GM")}</Select.Option>
                   </Select>
                 </Form.Item>
 

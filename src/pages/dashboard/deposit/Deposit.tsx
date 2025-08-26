@@ -60,6 +60,7 @@ const Deposit = ({ type }: DepositProps) => {
       UserToken: userToken,
       type: type,
       RecordType: "Main",
+      companyID: subdomain,
     };
     await mainApi("/transaction-record", object).then((result) => {
       setDepositRecord(result.data);
@@ -74,6 +75,7 @@ const Deposit = ({ type }: DepositProps) => {
       UserToken: userToken,
       type: type,
       RecordType: "Main",
+      companyID: subdomain,
     };
     await mainApi("/pending-transaction-record", object).then((result) => {
       setPendingDepositRecord(result.data);
@@ -86,9 +88,9 @@ const Deposit = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      companyID: subdomain,
       RecordType: "Main",
       Type: type,
-
       ...values,
     };
     await mainApi("/insert-deposit-transaction-record", object)
