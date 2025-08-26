@@ -266,6 +266,8 @@ const ChangePassword = () => {
       UserID: userID,
       UserToken: userToken,
       type: type,
+      companyID: subdomain,
+
       RecordType: "ChangePassword",
     };
     await mainApi("/pending-transaction-record", object).then((result) => {
