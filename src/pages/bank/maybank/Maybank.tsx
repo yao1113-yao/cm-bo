@@ -10,23 +10,6 @@ const Maybank = () => {
   return (
     <Spin spinning={isLoading}>
       {contextHolder}
-      {/* <Row> */}
-      {/* <Col xs={6}>
-          <Form>
-            <Form.Item label="Company">
-              <Select onChange={handleOnChangeSelectedCompany} style={{ width: "100%" }}>
-                {companyList?.map((items) => {
-                  return (
-                    <Select.Option value={items.companyID} key={items.companyID}>
-                      {items.companyID}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Form>
-        </Col>
-      </Row> */}
 
       {selectedCompany?.googleSheetUrl ? <iframe src={selectedCompany?.googleSheetUrl} width="100%" height={600} /> : "Please contact admin to open google sheet"}
 

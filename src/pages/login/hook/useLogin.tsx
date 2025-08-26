@@ -11,7 +11,7 @@ export const useLogin = () => {
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const { userInfo, setUserInfo, setCompanyList } = useContext(Api);
+  const { userInfo, setUserInfo, setCompanyList, subdomain } = useContext(Api);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -23,7 +23,7 @@ export const useLogin = () => {
 
   async function handleLogin(values: any) {
     setIsLoading(true);
-    const object = { UserID: values?.userID, Password: values?.password };
+    const object = { UserID: values?.userID, Password: values?.password, CompanyID: subdomain, UserType: values?.userType };
     await userApi("/user-login", object)
       .then((result) => {
         setUserInfo(result.data);
@@ -45,5 +45,5 @@ export const useLogin = () => {
     setIsLoading(false);
   }
 
-  return { t, i18n, navigate, contextHolder, isLoading, setIsLoading, handleLogin };
+  return { t, i18n, navigate, subdomain, contextHolder, isLoading, setIsLoading, handleLogin };
 };

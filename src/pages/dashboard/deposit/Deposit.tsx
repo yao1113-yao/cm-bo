@@ -1,10 +1,9 @@
-import { Button, Col, Divider, Form, Input, InputNumber, message, Row, Spin } from "antd";
+import { Button, Col, Divider, Form, Input, InputNumber, message, Row, Select, Spin } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import CommonButton from "../../../components/CommonButton";
-import Device from "../../../components/Device";
-import { getAllGameProviderList, getAllItemCodeList } from "../../../function/ApiFunction";
-import { IDeviceType, IGameProviderType, ITransactionType } from "../../../type/main.interface";
+import { getAllBankList, getAllGameProviderList, getAllItemCodeList } from "../../../function/ApiFunction";
+import { ICompanyBankType, IDeviceType, IGameProviderType, ITransactionType } from "../../../type/main.interface";
 import Action from "./action/Action";
 import DepositTable from "./table/DepositTable";
 import { mainApi } from "../../../service/CallApi";
@@ -18,7 +17,7 @@ interface DepositProps extends React.HTMLAttributes<HTMLElement> {
 const Deposit = ({ type }: DepositProps) => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const { userInfo } = useContext(Api);
+  const { userInfo, subdomain } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
 
   const userID = localStorage.getItem("userID");
@@ -29,7 +28,7 @@ const Deposit = ({ type }: DepositProps) => {
 
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
   const [allDeviceList, setAllDeviceList] = useState<[IDeviceType] | undefined>();
-  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
+  const [allBankList, setAllBankList] = useState<[ICompanyBankType] | undefined>();
 
   const [depositRecod, setDepositRecord] = useState<[ITransactionType] | undefined>();
   const [pendingDepositRecod, setPendingDepositRecord] = useState<[ITransactionType] | undefined>();
@@ -38,7 +37,7 @@ const Deposit = ({ type }: DepositProps) => {
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
     getAllItemCodeList("MDevice", setIsLoading, setAllDeviceList);
-    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
+    getAllBankList(subdomain, "", setIsLoading, setAllBankList);
   }, []);
 
   useEffect(() => {
@@ -160,7 +159,13 @@ const Deposit = ({ type }: DepositProps) => {
 
             <Row gutter={10}>
               <Col xs={3}>
-                <Device list={allBankList} required={true} selectAll={false} label="bank" />
+                <Form.Item label="bank" name="bank">
+                  <Select>
+                    {allBankList?.map((items) => {
+                      return <Select.Option value={items.bankCode}>{items.bankCode}</Select.Option>;
+                    })}
+                  </Select>
+                </Form.Item>
               </Col>
 
               <Col xs={3}>

@@ -79,17 +79,36 @@ export const useMaybank = () => {
       },
     },
     {
-      title: t("debit"),
-      dataIndex: "debit",
+      title: t("beforeBalance"),
+      dataIndex: "beforeBalance",
       hidden: false,
       align: "center",
       render: (text: number) => {
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
+
+    {
+      title: t("debit"),
+      dataIndex: "debit",
+      hidden: false,
+      align: "center",
+      render: (text: number, record) => {
+        return <div style={{ fontWeight: "600", color: text > 0 ? (record?.mBank === "PMY" ? "green" : "red") : "" }}>{formatNumber(text)}</div>;
+      },
+    },
     {
       title: t("credit"),
       dataIndex: "credit",
+      hidden: false,
+      align: "center",
+      render: (text: number, record) => {
+        return <div style={{ fontWeight: "600", color: text > 0 ? (record?.mBank === "PMY" ? "red" : "green") : "" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("afterBalance"),
+      dataIndex: "afterBalance",
       hidden: false,
       align: "center",
       render: (text: number) => {

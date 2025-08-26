@@ -61,6 +61,8 @@ export interface ITransactionType {
   bonus: number;
   cuci: number;
   status: number;
+  beforeBalance: number;
+  afterBalance: number;
   createBy: string;
   sysRemark1: string;
   createDate: Date;

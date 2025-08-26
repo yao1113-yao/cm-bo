@@ -1,11 +1,11 @@
 import { useLogin } from "./hook/useLogin";
 
 import "./login.scss";
-import { Button, Card, Col, Form, Input, Row, Spin } from "antd";
+import { Button, Card, Col, Form, Input, Row, Select, Spin } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 
 const Login = () => {
-  const { t, contextHolder, isLoading, handleLogin } = useLogin();
+  const { t, subdomain, contextHolder, isLoading, handleLogin } = useLogin();
 
   return (
     <Row justify="center" align="middle" className="login-container">
@@ -17,12 +17,22 @@ const Login = () => {
               <div className="logo-img">{/* <img src={Logo} alt="Logo" loading="lazy" /> */}</div>
 
               <Form layout="vertical" onFinish={handleLogin}>
+                <div style={{ color: "white", fontWeight: "600", fontSize: "20px", paddingBottom: "10px" }}>CompanyID : {subdomain}</div>
                 <Form.Item label={t("userID")} name="userID" rules={[{ required: true }]}>
                   <Input autoComplete="off" size="large" maxLength={200} prefix={<UserOutlined />} />
                 </Form.Item>
 
                 <Form.Item label={t("password")} name="password" rules={[{ required: true }]}>
                   <Input.Password size="large" autoComplete="off" maxLength={200} prefix={<LockOutlined />} />
+                </Form.Item>
+
+                <Form.Item label={t("userType")} name="userType" rules={[{ required: true, message: t("pleaseSelectUserType") }]}>
+                  <Select placeholder={t("pleaseSelect")}>
+                    <Select.Option value={2}>{t("Cashier")}</Select.Option>
+                    <Select.Option value={3}>{t("Marketing")}</Select.Option>
+                    <Select.Option value={4}>{t("AM")}</Select.Option>
+                    <Select.Option value={4}>{t("GM")}</Select.Option>
+                  </Select>
                 </Form.Item>
 
                 <Form.Item>
