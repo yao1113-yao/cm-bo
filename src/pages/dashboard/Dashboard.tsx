@@ -9,17 +9,20 @@ import All from "./all/All";
 import ChangePassword from "./change-password/ChangePassword";
 
 const Dashboard = () => {
-  const { t, type, handleOnChangeType } = useDashboard();
+  const { t, type, userInfo, handleOnChangeType } = useDashboard();
 
   return (
     <div className="dashboard-container">
       <Card className="user-input">
         <Row gutter={20}>
-          <Col xs={4}>
-            <Button style={{ width: "100%", backgroundColor: type === "all" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("all")}>
-              {t("all")}
-            </Button>
-          </Col>
+          {userInfo?.userType !== 3 && (
+            <Col xs={4}>
+              <Button style={{ width: "100%", backgroundColor: type === "all" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("all")}>
+                {t("all")}
+              </Button>
+            </Col>
+          )}
+
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "deposit" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("deposit")}>
               {t("deposit")}
