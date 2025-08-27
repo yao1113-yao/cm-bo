@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Row } from "antd";
+import { Badge, Button, Card, Col, Divider, Row } from "antd";
 import { useDashboard } from "./hook/useDashboard";
 import "./dashboard.scss";
 import Deposit from "./deposit/Deposit";
@@ -9,7 +9,9 @@ import All from "./all/All";
 import ChangePassword from "./change-password/ChangePassword";
 
 const Dashboard = () => {
-  const { t, type, userInfo, handleOnChangeType } = useDashboard();
+  const { t, type, userInfo, handleOnChangeType, count } = useDashboard();
+
+  console.log(count);
 
   return (
     <div className="dashboard-container">
@@ -25,25 +27,25 @@ const Dashboard = () => {
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "deposit" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("deposit")}>
-              {t("deposit")}
+              {t("deposit")} <Badge count={count?.countDeposit} showZero></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "withdraw" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("withdraw")}>
-              {t("withdraw")}
+              {t("withdraw")} <Badge count={count?.countWithdraw} showZero></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "rekemen" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("rekemen")}>
-              {t("rekemen")}
+              {t("rekemen")} <Badge count={count?.countRekemen} showZero></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "transfer" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("transfer")}>
-              {t("transfer")}
+              {t("transfer")} <Badge count={count?.countTransfer} showZero></Badge>
             </Button>
           </Col>
 

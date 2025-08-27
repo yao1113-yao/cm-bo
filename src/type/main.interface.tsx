@@ -242,3 +242,10 @@ export interface ITeamErrorReportSummaryType {
   remark: string;
   gameName: string;
 }
+
+export interface IPendingMarketingCountType {
+  countDeposit: number;
+  countWithdraw: number;
+  countTransfer: number;
+  countRekemen: number;
+}

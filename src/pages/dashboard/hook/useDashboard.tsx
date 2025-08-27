@@ -1,17 +1,45 @@
 import { Form } from "antd";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Api } from "../../../context/ApiContext";
+import { mainApi } from "../../../service/CallApi";
+import { IPendingMarketingCountType } from "../../../type/main.interface";
 
 export const useDashboard = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { PageType } = useParams();
-
-  const { userInfo } = useContext(Api);
+  const userID = localStorage.getItem("userID");
+  const userToken = localStorage.getItem("userToken");
+  const { userInfo, subdomain } = useContext(Api);
   const [type, setType] = useState(PageType);
+
+  const [count, setCount] = useState<IPendingMarketingCountType | undefined>();
+
+  useEffect(() => {
+    handleGetPendingTransactionRecordCount();
+    const intervalId = setInterval(() => {
+      handleGetPendingTransactionRecordCount();
+    }, 10000);
+    return () => {
+      clearInterval(intervalId); // Clear the interval on unmount
+    };
+  }, []);
+
+  async function handleGetPendingTransactionRecordCount() {
+    // setIsLoading(true);
+    const object = {
+      UserID: userID,
+      UserToken: userToken,
+      companyID: subdomain,
+    };
+    await mainApi("/pending-transaction-record-count", object).then((result) => {
+      setCount(result.data);
+    });
+    // setIsLoading(false);
+  }
 
   function handleOnChangeType(values: any) {
     setType(values);
@@ -49,5 +77,5 @@ export const useDashboard = () => {
   //   setIsLoading(false);
   // }
 
-  return { t, navigate, form, type, userInfo, handleOnChangeType, handleOnChangeBonus };
+  return { t, navigate, form, type, userInfo, count, handleOnChangeType, handleOnChangeBonus };
 };
