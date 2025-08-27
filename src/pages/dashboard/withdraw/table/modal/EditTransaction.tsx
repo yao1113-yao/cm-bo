@@ -74,6 +74,19 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
                 <Input autoComplete="off" disabled={selectedPendingDeposit?.mStatus === "HOLD"} />
               </Form.Item>
             </Col>
+
+            <Col xs={6}>
+              <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input autoComplete="off" />
+              </Form.Item>
+            </Col>
+
+            <Col xs={6}>
+              <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input type="number" />
+              </Form.Item>
+            </Col>
+
             {/* <Col xs={6}>
               <Form.Item label={t("password")} name="password">
                 <Input />
