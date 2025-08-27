@@ -1,7 +1,8 @@
 import { Form } from "antd";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { Api } from "../../../context/ApiContext";
 
 export const useDashboard = () => {
   const { t } = useTranslation();
@@ -9,6 +10,7 @@ export const useDashboard = () => {
   const [form] = Form.useForm();
   const { PageType } = useParams();
 
+  const { userInfo } = useContext(Api);
   const [type, setType] = useState(PageType);
 
   function handleOnChangeType(values: any) {
@@ -47,5 +49,5 @@ export const useDashboard = () => {
   //   setIsLoading(false);
   // }
 
-  return { t, navigate, form, type, handleOnChangeType, handleOnChangeBonus };
+  return { t, navigate, form, type, userInfo, handleOnChangeType, handleOnChangeBonus };
 };
