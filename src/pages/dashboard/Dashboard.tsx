@@ -11,8 +11,6 @@ import ChangePassword from "./change-password/ChangePassword";
 const Dashboard = () => {
   const { t, type, userInfo, handleOnChangeType, count } = useDashboard();
 
-  console.log(count);
-
   return (
     <div className="dashboard-container">
       <Card className="user-input">

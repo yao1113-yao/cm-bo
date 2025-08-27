@@ -7,7 +7,7 @@ import { IGameProviderType } from "../../../../../type/main.interface";
 import { mainApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
 
-const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDeposit, setOpenEditTransaction, handleGetPendingTransactionRecord }: any) => {
+const EditTransaction = ({ messageApi, openEditTransaction, allBankList, selectedPendingDeposit, setOpenEditTransaction, handleGetPendingTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
@@ -25,11 +25,14 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
   const initialValues = {
     mGame: selectedPendingDeposit?.mGame,
     gameID: selectedPendingDeposit?.gameID,
+    name: selectedPendingDeposit?.name,
+    hpNo: selectedPendingDeposit?.hpNo,
     inCredit: selectedPendingDeposit?.inCredit,
     freeCredit: selectedPendingDeposit?.freeCredit,
     bonus: selectedPendingDeposit?.bonusPer * 100,
     total: selectedPendingDeposit?.total,
     cuci: selectedPendingDeposit?.cuci,
+    bank: selectedPendingDeposit?.mBank,
     remark: selectedPendingDeposit?.remark,
   };
 
@@ -43,6 +46,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
       mktDetailsSrno: selectedPendingDeposit?.srno,
       ...values,
     };
+    console.log(object);
     await mainApi("/edit-deposit-transaction-details", object)
       .then(() => {
         messageApi.open({
@@ -95,36 +99,58 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
                 <Input autoComplete="off" />
               </Form.Item>
             </Col>
-            {/* <Col xs={6}>
-              <Form.Item label={t("password")} name="password">
-                <Input />
+
+            <Col xs={6}>
+              <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input autoComplete="off" />
               </Form.Item>
-            </Col> */}
+            </Col>
+
+            <Col xs={6}>
+              <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input type="number" />
+              </Form.Item>
+            </Col>
+
             <Col xs={6}>
               <Form.Item label={t("credit")} name="inCredit" rules={[{ required: true, message: t("pleaseSelect") }]}>
                 <Input onChange={onChange} />
               </Form.Item>
             </Col>
+
             <Col xs={6}>
               <Form.Item label={t("freeCredit")} name="freeCredit">
                 <Input onChange={onChange} />
               </Form.Item>
             </Col>
+
             <Col xs={6}>
               <Form.Item label={t("bonus(%)")} name="bonus" rules={[{ required: true, message: t("pleaseSelect") }]}>
                 <Input onChange={onChange} />
               </Form.Item>
             </Col>
+
             <Col xs={6}>
               <Form.Item label={t("total")} name="total">
                 <InputNumber style={{ width: "100%" }} disabled />
               </Form.Item>
             </Col>
+
             <Col xs={6}>
               <Form.Item label={t("minCuci")} name="cuci">
                 <InputNumber style={{ width: "100%" }} disabled />
               </Form.Item>
             </Col>
+            <Col xs={6}>
+              <Form.Item label="bank" name="bank">
+                <Select>
+                  {allBankList?.map((items: any) => {
+                    return <Select.Option value={items.bankCode}>{items.bankCode}</Select.Option>;
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+
             <Col xs={6}>
               <Form.Item label={t("remark")} name="remark">
                 <Input style={{ width: "100%" }} autoComplete="off" />

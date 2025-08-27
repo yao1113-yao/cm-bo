@@ -145,7 +145,7 @@ const Deposit = ({ type }: DepositProps) => {
                 <>
                   {fields.map(({ key, name, ...restField }) => (
                     <>
-                      <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} form={form} {...restField} welcomeBonusEnable={welcomeBonusEnable} setWelcomeBonusEnable={setWelcomeBonusEnable} />
+                      <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} form={form} allBankList={allBankList} {...restField} welcomeBonusEnable={welcomeBonusEnable} setWelcomeBonusEnable={setWelcomeBonusEnable} />
                     </>
                   ))}
                   <Form.Item>
@@ -195,7 +195,7 @@ const Deposit = ({ type }: DepositProps) => {
           </Form>
         )}
 
-        <PendingDepositTable isPendingLoading={isLoading} pendingDepositRecod={pendingDepositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
+        <PendingDepositTable isPendingLoading={isLoading} pendingDepositRecod={pendingDepositRecod} allBankList={allBankList} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
         <DepositTable isPendingLoading={isLoading} depositRecord={depositRecod} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleGetTransactionRecord={handleGetTransactionRecord} />
       </Spin>
     </>

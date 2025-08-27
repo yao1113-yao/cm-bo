@@ -16,7 +16,7 @@ import EditTransaction from "./modal/EditTransaction";
 import { handleEditingTransaction } from "../../../../function/ApiFunction";
 import dayjs from "dayjs";
 
-const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
+const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionRecord, allBankList, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
   const { userInfo, subdomain } = useContext(Api);
 
@@ -551,7 +551,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         {openBankRecord && <OpenBankRecord messageApi={messageApi} isCheckAllAmount={isCheckAllAmount} setIsCheckAllAmount={setIsCheckAllAmount} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />}
 
         {/* edit transaction */}
-        {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />}
+        {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} allBankList={allBankList} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} />}
 
         {/* manual success */}
         {openManualSuccess && <OpenManualSuccess isLoading={isLoading} openManualSuccess={openManualSuccess} handleCloseManualSuccessModal={handleCloseManualSuccessModal} selectedPendingDeposit={selectedPendingDeposit} handleGetPendingTransactionRecord={handleGetPendingTransactionRecord} handleInsertManualSuccess={handleInsertManualSuccess} />}
