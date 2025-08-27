@@ -17,7 +17,7 @@ const Action = ({ onChange, allGameList, key, name, remove, ...rest }: any) => {
       <Row gutter={10}>
         <Col xs={3}>
           <Form.Item label={t("game")} name={[name, "game"]} rules={[{ required: true }]}>
-            <Select>
+            <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("game")} optionFilterProp="label">
               {allGameList?.map((items: any) => (
                 <Select.Option value={items.gameName} key={items.gameName}>
                   {items?.gameName}
