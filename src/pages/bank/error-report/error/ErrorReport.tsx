@@ -93,7 +93,7 @@ const ErrorReport = () => {
 
         <Divider />
 
-        <Table columns={columns} dataSource={apiData}></Table>
+        <Table columns={columns} dataSource={apiData} rowClassName={(_record, index) => (index % 2 === 0 ? "row-highlight-1" : "row-highlight-2")} rowHoverable={false}></Table>
       </Card>
     </div>
   );

@@ -49,7 +49,7 @@ const KioskLog = () => {
       <Divider>Transaction Kiosk</Divider>
 
       <Card loading={isLoading}>
-        <Table columns={columns} dataSource={apiData} rowKey="srno" scroll={{ x: true }} />
+        <Table columns={columns} dataSource={apiData} rowKey="srno" scroll={{ x: true }} rowClassName={(_record, index) => (index % 2 === 0 ? "row-highlight-1" : "row-highlight-2")} rowHoverable={false} />
       </Card>
     </Card>
   );
