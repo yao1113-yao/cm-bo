@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList } from "../../../../function/ApiFunction";
 import { playerApi } from "../../../../service/CallApi";
 import { message } from "antd";
+import { Api } from "../../../../context/ApiContext";
 
 export const usePlayerRegister = () => {
   const { t } = useTranslation();
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  const { subdomain } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -25,6 +28,7 @@ export const usePlayerRegister = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      companyID: subdomain,
       ...values,
     };
     await playerApi("/register-player", object)
