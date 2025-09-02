@@ -17,6 +17,21 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
+  const initialValues = {
+    toGame: selectedPendingDeposit?.toGame,
+    toGameID: selectedPendingDeposit?.toGameID,
+    toName: selectedPendingDeposit?.toName,
+    toHpNo: selectedPendingDeposit?.toHpNo,
+    inCredit: selectedPendingDeposit?.inCredit,
+    remark: selectedPendingDeposit?.remark,
+    mGame: selectedPendingDeposit?.mGame,
+    gameID: selectedPendingDeposit?.gameID,
+    name: selectedPendingDeposit?.name,
+    hpNo: selectedPendingDeposit?.hpNo,
+    bonusPer: Number(selectedPendingDeposit?.bonusPer * 100),
+    bonus: selectedPendingDeposit?.bonus,
+  };
+
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
   }, []);
@@ -54,58 +69,15 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
 
   function onChange() {
     const credit = form.getFieldValue("inCredit");
-    const bonus = form.getFieldValue("bonus");
+    const bonus = form.getFieldValue("bonusPer");
     const totalBonus = Number(credit) * (Number(bonus) / 100);
-    form.setFieldValue("totalBonus", Number(totalBonus));
+    form.setFieldValue("bonus", Number(totalBonus));
   }
 
   return (
     <div>
       <Modal width="70vw" open={openEditTransaction} onCancel={() => handleOnCloseModal()} footer={null} closable={false} loading={isLoading}>
-        <Form form={form} initialValues={selectedPendingDeposit} layout="vertical" onFinish={handleEditTransactionDetails}>
-          <Row gutter={20}>
-            <Col xs={4}>
-              <Form.Item label={t("game")} name="mGame" rules={[{ required: true }]}>
-                <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("game")} optionFilterProp="label">
-                  {allGameList?.map((items: any) => (
-                    <Select.Option value={items.gameName} key={items.gameName}>
-                      {items?.gameName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xs={4}>
-              <Form.Item label={t("rekemenGameLoginID")} name="gameID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input autoComplete="off" />
-              </Form.Item>
-            </Col>
-
-            <Col xs={4}>
-              <Form.Item label={t("rekemenName")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input autoComplete="off" />
-              </Form.Item>
-            </Col>
-
-            <Col xs={4}>
-              <Form.Item label={t("rekemenHpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input autoComplete="off" />
-              </Form.Item>
-            </Col>
-
-            <Col xs={4}>
-              <Form.Item label={t("bonus") + "(%)"} name="bonus" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input disabled />
-              </Form.Item>
-            </Col>
-
-            <Col xs={4}>
-              <Form.Item label={t("totalBonus")} name="totalBonus" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                <Input disabled />
-              </Form.Item>
-            </Col>
-          </Row>
-
+        <Form form={form} initialValues={initialValues} layout="vertical" onFinish={handleEditTransactionDetails}>
           <Divider>{t("newCustomerDetails")}</Divider>
 
           <Row gutter={10}>
@@ -142,12 +114,57 @@ const EditTransaction = ({ messageApi, openEditTransaction, selectedPendingDepos
               </Form.Item>
             </Col>
 
-            <Col xs={6}>
+            <Col xs={4}>
               <Form.Item label={t("remark")} name="remark">
                 <Input style={{ width: "100%" }} autoComplete="off" />
               </Form.Item>
             </Col>
           </Row>
+
+          <Divider>Details</Divider>
+          <Row gutter={20}>
+            <Col xs={4}>
+              <Form.Item label={t("game")} name="mGame" rules={[{ required: true }]}>
+                <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("game")} optionFilterProp="label">
+                  {allGameList?.map((items: any) => (
+                    <Select.Option value={items.gameName} key={items.gameName}>
+                      {items?.gameName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col xs={4}>
+              <Form.Item label={t("rekemenGameLoginID")} name="gameID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input autoComplete="off" />
+              </Form.Item>
+            </Col>
+
+            <Col xs={4}>
+              <Form.Item label={t("rekemenName")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input autoComplete="off" />
+              </Form.Item>
+            </Col>
+
+            <Col xs={4}>
+              <Form.Item label={t("rekemenHpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input autoComplete="off" />
+              </Form.Item>
+            </Col>
+
+            <Col xs={4}>
+              <Form.Item label={t("bonus") + "(%)"} name="bonusPer" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input disabled />
+              </Form.Item>
+            </Col>
+
+            <Col xs={4}>
+              <Form.Item label={t("bonus")} name="bonus" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input disabled />
+              </Form.Item>
+            </Col>
+          </Row>
+
           <CommonButton text="submit" />
         </Form>
       </Modal>
