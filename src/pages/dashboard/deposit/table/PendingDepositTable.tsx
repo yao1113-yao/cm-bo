@@ -335,10 +335,10 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
               content: "done",
             });
           })
-          .catch(() => {
+          .catch((error) => {
             messageApi.open({
               type: "error",
-              content: "",
+              content: error?.response?.data?.message,
             });
           });
       }

@@ -26,12 +26,14 @@ export const useBankRecord = () => {
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
+  const [timer, setTimer] = useState<number>(4);
 
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
   const handleTableChange = (pagination: any) => {
     setPagination(pagination);
   };
+  let count = 4;
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     companyID: "all",
@@ -297,12 +299,36 @@ export const useBankRecord = () => {
       setIsLoading(false);
     });
   }
-
+  console.log(timer);
   async function handleTakeOutBankTransaction(values: any) {
     Swal.fire({
-      title: "Do you want to take out the bank?",
+      title: `Waiting Count Down`,
+      showConfirmButton: false,
       showCancelButton: true,
-      confirmButtonText: "Take out",
+      didOpen: () => {
+        const intervalId = setInterval(() => {
+          Swal.update({
+            text: `${count}`, //This will use the current value of alertText
+          });
+          count--;
+          setTimer(count);
+
+          if (count <= 0) {
+            // Example: Stop after 5 seconds
+            clearInterval(intervalId); // Stop the interval
+            Swal.update({
+              title: `Do you want to take out the bank?`, // This will use the current value of alertText
+              text: "0",
+            });
+            Swal.update({
+              showConfirmButton: true,
+              showCancelButton: true,
+              confirmButtonText: "Take out",
+              cancelButtonText: "Cancel",
+            });
+          }
+        }, 1000);
+      },
     }).then(async (result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
@@ -413,5 +439,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, apiData2, initialValues, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
+  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, apiData2, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
 };

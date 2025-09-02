@@ -162,7 +162,7 @@ const Deposit = ({ type }: DepositProps) => {
             <Row gutter={10}>
               <Col xs={3}>
                 <Form.Item label="bank" name="bank">
-                  <Select>
+                  <Select filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("bank")} optionFilterProp="label">
                     {allBankList?.map((items) => {
                       return <Select.Option value={items.bankCode}>{items.bankCode}</Select.Option>;
                     })}

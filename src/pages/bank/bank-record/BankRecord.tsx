@@ -6,7 +6,7 @@ import OpenBankRecord from "./modal/OpenbankRecord";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, form, contextHolder, isLoading, apiData, apiData2, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
+  const { t, userInfo, form, contextHolder, isLoading, apiData, apiData2, columns, initialValues, timer, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
 
   return (
     <Card>
