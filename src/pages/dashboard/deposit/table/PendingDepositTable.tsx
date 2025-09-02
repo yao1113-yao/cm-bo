@@ -468,6 +468,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
       UserID: userID,
       UserToken: userToken,
       mktDetailsSrno: selectedPendingDeposit?.srno,
+      companyID: subdomain,
       gameID: values?.gameID,
       password: values?.password,
       name: values?.name,
