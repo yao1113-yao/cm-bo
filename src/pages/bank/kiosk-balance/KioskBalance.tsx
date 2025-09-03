@@ -5,7 +5,7 @@ import { useState } from "react";
 import ExpandData from "./ExpandData";
 
 const KioskBalance = () => {
-  const { t, isLoading, apiData2, openEditKioskBalance, selectedRecord, handleCloseModalEditBankBalance, setOpenEditKioskBalance, columnsCompanyGP, handleGetCompanyGPList } = useKioskBalance();
+  const { t, contextHolder, isLoading, apiData2, openEditKioskBalance, selectedRecord, handleCloseModalEditBankBalance, setOpenEditKioskBalance, columnsCompanyGP, handleGetCompanyGPList } = useKioskBalance();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -19,6 +19,7 @@ const KioskBalance = () => {
   }
   return (
     <div>
+      {contextHolder}
       <Card title={t("kiosk balance")} loading={isLoading}>
         <Table
           columns={columnsCompanyGP}

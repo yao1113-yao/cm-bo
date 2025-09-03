@@ -1,15 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Button, Form, message, TableProps, Tooltip } from "antd";
+import { Button, Form, message, Space, TableProps, Tooltip } from "antd";
 import { useLocation } from "react-router-dom";
 import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { ICompanyGPType, IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList } from "../../../../function/ApiFunction";
 
-import { WalletOutlined } from "@ant-design/icons";
+import { WalletOutlined, SyncOutlined } from "@ant-design/icons";
 import { Api } from "../../../../context/ApiContext";
+import Swal from "sweetalert2";
 export const useKioskBalance = () => {
   const { t } = useTranslation();
   const { subdomain } = useContext(Api);
@@ -17,6 +18,7 @@ export const useKioskBalance = () => {
   const userToken = localStorage.getItem("userToken");
   const location = useLocation();
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openEditKioskBalance, setOpenEditKioskBalance] = useState<boolean>(false);
@@ -70,11 +72,14 @@ export const useKioskBalance = () => {
       ellipsis: true,
       render: (record) => {
         return (
-          <>
-            <Tooltip>
+          <Space>
+            <Tooltip title="editBalance">
               <Button icon={<WalletOutlined />} onClick={() => handleOpenModalEditBankBalance(record)}></Button>
             </Tooltip>
-          </>
+            <Tooltip title="syncBalanceGP">
+              <Button icon={<SyncOutlined />} onClick={() => handleCheckBalanceGP(record)}></Button>
+            </Tooltip>
+          </Space>
         );
       },
     },
@@ -100,6 +105,39 @@ export const useKioskBalance = () => {
     setIsLoading(false);
   }
 
+  async function handleCheckBalanceGP(values: any) {
+    Swal.fire({
+      title: "Do you want to check balance gp?",
+      showCancelButton: true,
+      confirmButtonText: "yes",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          companyGPSrno: values?.srno,
+        };
+        await bankApi("/check-balance-gp", object)
+          .then((result: any) => {
+            handleGetCompanyGPList(initialValues);
+            messageApi.open({
+              type: "success",
+              content: result.message + ". Action need fews minutes to process",
+            });
+          })
+          .catch((error) => {
+            messageApi.open({
+              type: "error",
+              content: error?.response?.data?.message,
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
+  }
+
   function handleOpenModalEditBankBalance(values: ICompanyGPType) {
     setSelectedRecord(values);
     setOpenEditKioskBalance(true);
@@ -112,5 +150,5 @@ export const useKioskBalance = () => {
     setOpenEditKioskBalance(false);
   }
 
-  return { t, isLoading, form, allGameList, selectedRecord, handleCloseModalEditBankBalance, openEditKioskBalance, setOpenEditKioskBalance, apiData2, initialValues, columnsCompanyGP, handleGetCompanyGPList };
+  return { t, contextHolder, isLoading, form, allGameList, selectedRecord, handleCloseModalEditBankBalance, openEditKioskBalance, setOpenEditKioskBalance, apiData2, initialValues, columnsCompanyGP, handleGetCompanyGPList };
 };
