@@ -1,4 +1,4 @@
-import { Button, Form, Modal, Select, Space, Table, TableProps, Tooltip, Upload } from "antd";
+import { Button, Col, Form, Input, Modal, Row, Select, Space, Table, TableProps, Tooltip, Upload } from "antd";
 import { formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { useContext, useEffect, useState } from "react";
 import { IDeviceType, ITransactionType } from "../../../../../type/main.interface";
@@ -24,7 +24,9 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
   const [isDeviceLoading, setIsDeviceLoading] = useState<boolean>(false);
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
-  console.log(isDeviceLoading);
+
+  const initialValues = { bank: selectedPendingDeposit?.MBank, amount: selectedPendingDeposit?.bankOut };
+  console.log(isLoading, isDeviceLoading);
   useEffect(() => {
     getAllItemCodeList("MBank", setIsDeviceLoading, setAllBankList);
   }, []);
@@ -133,6 +135,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
       CompanyID: subdomain,
       Type: "Withdraw",
       Bank: e,
+      amount: selectedPendingDeposit?.bankOut,
     };
     await mainApi("/bank-record", object)
       .then((result: any) => {
@@ -155,32 +158,38 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
 
   return (
     <>
-      <Modal width="70vw" open={openBankRecord} onCancel={() => OnCancel()} footer={null} closable={false} loading={isLoading} destroyOnClose>
-        <Form>
-          <Form.Item label="bank" name="bank">
-            <Select onChange={handleGetBankRecord} defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("bank")} optionFilterProp="label">
-              {allBankList?.map((items: any) => (
-                <Select.Option value={items.item} key={items.item}>
-                  {items?.item}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+      <Modal width="70vw" open={openBankRecord} onCancel={() => OnCancel()} footer={null} closable={false} destroyOnClose>
+        <Form initialValues={initialValues}>
+          <Row gutter={20}>
+            <Col xs={6}>
+              <Form.Item label="bank" name="bank">
+                <Select onChange={handleGetBankRecord} defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("bank")} optionFilterProp="label">
+                  {allBankList?.map((items: any) => (
+                    <Select.Option value={items.item} key={items.item}>
+                      {items?.item}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+
+            <Col xs={6}>
+              <Form.Item label="amount" name="amount">
+                <Input disabled />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
 
-        {bankRecord?.length !== 0 && (
-          <>
-            <Table columns={bankRecordColumns} dataSource={bankRecord}></Table>
+        <Table columns={bankRecordColumns} dataSource={bankRecord}></Table>
 
-            <Form form={form}>
-              <Form.Item label={t("receipt")} name="imageUrl" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: t("pleaseUploadReceipt") }]}>
-                <Upload maxCount={1} listType="picture" beforeUpload={checkMedia}>
-                  <Button icon={<CloudUploadOutlined />}>{t("clickToUpload")}</Button>
-                </Upload>
-              </Form.Item>
-            </Form>
-          </>
-        )}
+        <Form form={form}>
+          <Form.Item label={t("receipt")} name="imageUrl" valuePropName="fileList" getValueFromEvent={normFile} rules={[{ required: true, message: t("pleaseUploadReceipt") }]}>
+            <Upload maxCount={1} listType="picture" beforeUpload={checkMedia}>
+              <Button icon={<CloudUploadOutlined />}>{t("clickToUpload")}</Button>
+            </Upload>
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );

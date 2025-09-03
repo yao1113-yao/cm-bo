@@ -23,7 +23,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     mBank: selectedPendingDeposit?.mBank,
-    amount: selectedPendingDeposit?.inCredit,
+    amount: selectedPendingDeposit?.bankOut,
   };
 
   useEffect(() => {
