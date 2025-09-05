@@ -27,8 +27,8 @@ const KioskBalance = () => {
           rowKey="gameName"
           scroll={{ x: true }}
           pagination={false}
-          // rowClassName={(_record, index) => (index % 2 === 0 ? "row-highlight-1" : "row-highlight-2")}
-          // rowHoverable={false}
+          rowClassName={(_record, index) => (index % 2 === 0 ? "row-highlight-1" : "row-highlight-2")}
+          rowHoverable={false}
           expandable={{
             expandedRowKeys: expandedRowKeys,
             onExpand: handleTableRowExpand,
