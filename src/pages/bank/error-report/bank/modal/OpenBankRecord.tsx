@@ -1,10 +1,10 @@
-import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
+import { Button, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
 import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../../type/main.interface";
 import { BankOutlined } from "@ant-design/icons";
-import { LogApi, mainApi } from "../../../../../service/CallApi";
+import { LogApi } from "../../../../../service/CallApi";
 import CommonButton from "../../../../../components/CommonButton";
 import dayjs from "dayjs";
 import { Api } from "../../../../../context/ApiContext";

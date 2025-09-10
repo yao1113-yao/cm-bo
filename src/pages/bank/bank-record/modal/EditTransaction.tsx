@@ -20,7 +20,7 @@ const EditTransaction = ({ messageApi, openEditTransaction, allBankList, selecte
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
   }, []);
-  console.log(selectedPendingDeposit);
+  console.log(isLoading);
 
   const initialValues = {
     mGame: selectedPendingDeposit?.mGame,
