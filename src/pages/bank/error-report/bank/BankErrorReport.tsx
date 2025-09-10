@@ -1,11 +1,13 @@
-import { Card, Col, Divider, Form, Input, InputNumber, Row, Select, Table } from "antd";
+import { Card, Col, DatePicker, Divider, Form, Input, InputNumber, Row, Select, Table } from "antd";
 import CommonButton from "../../../../components/CommonButton";
 import Staff from "../../../../components/Staff";
 import { useBankErrorReport } from "./hook/useBankErrorReport";
 import Device from "../../../../components/Device";
+import OpenBankRecord from "./modal/OpenBankRecord";
 
+const { RangePicker } = DatePicker;
 const BankErrorReport = () => {
-  const { t, isLoading, isKioskReportLoading, contextHolder, form, allBankList, allStaffList, apiData, initialValues, columns, handleInsertBankError, handleGetBankErrorReport } = useBankErrorReport();
+  const { t, isLoading, messageApi, isKioskReportLoading, contextHolder, form, allBankList, allStaffList, apiData, selectedPendingDeposit, openBankRecord, setOpenBankRecord, initialValues, columns, handleInsertBankError, handleGetBankErrorReport } = useBankErrorReport();
 
   return (
     <div>
@@ -24,12 +26,12 @@ const BankErrorReport = () => {
             <Col xs={6}>
               <Device list={allBankList} label="bank" selectAll={false} required />
             </Col>
-
+            {/* 
             <Col xs={6}>
               <Staff list={allStaffList} selectAll={false} label="staffSrno" required={false} />
-            </Col>
+            </Col> */}
             <Col xs={6}>
-              <Form.Item label={t("point")} name="point" required>
+              <Form.Item label={t("amount")} name="amount" required>
                 <InputNumber style={{ width: "100%" }} />
               </Form.Item>
             </Col>
@@ -52,6 +54,11 @@ const BankErrorReport = () => {
         <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankErrorReport}>
           <Row gutter={20}>
             <Col xs={6}>
+              <Form.Item label={t("searchDate")} name="searchDate">
+                <RangePicker style={{ width: "100%" }} showTime />
+              </Form.Item>
+            </Col>
+            <Col xs={6}>
               <Device list={allBankList} label="bank" selectAll={true} required />
             </Col>
 
@@ -73,6 +80,9 @@ const BankErrorReport = () => {
 
         <Table columns={columns} dataSource={apiData} rowClassName={(_record, index) => (index % 2 === 0 ? "row-highlight-1" : "row-highlight-2")} rowHoverable={false}></Table>
       </Card>
+
+      {/* open bank list assign bank */}
+      {openBankRecord && <OpenBankRecord messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetBankErrorReport={handleGetBankErrorReport} />}
     </div>
   );
 };

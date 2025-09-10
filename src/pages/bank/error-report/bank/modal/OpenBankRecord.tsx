@@ -1,17 +1,17 @@
-import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, Space, Table, TableProps, Tooltip } from "antd";
+import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
+import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { ITransactionType } from "../../../../../type/main.interface";
 import { BankOutlined } from "@ant-design/icons";
+import { LogApi, mainApi } from "../../../../../service/CallApi";
+import CommonButton from "../../../../../components/CommonButton";
 import dayjs from "dayjs";
-import { Api } from "../../../../context/ApiContext";
-import { ITransactionType } from "../../../../type/main.interface";
-import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
-import { mainApi } from "../../../../service/CallApi";
-import CommonButton from "../../../../components/CommonButton";
+import { Api } from "../../../../../context/ApiContext";
 
 const { RangePicker } = DatePicker;
 
-const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, allBankList, selectedPendingDeposit, openBankRecord, setOpenBankRecord, handleGetBankRecordMarketingList }: any) => {
+const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, setOpenBankRecord, handleGetBankErrorReport }: any) => {
   const { t } = useTranslation();
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
@@ -22,13 +22,12 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
 
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
-    mBank: selectedPendingDeposit?.mBank,
-    amount: selectedPendingDeposit?.inCredit,
+    bankCode: selectedPendingDeposit?.bankCode,
+    amount: selectedPendingDeposit?.amount,
   };
 
   useEffect(() => {
     handleGetBankRecord(initialValues);
-
     console.log("first");
   }, []);
 
@@ -100,17 +99,17 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
 
   async function handleAssignBank(values: any) {
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append("userID", userID as string);
-    formData.append("userToken", userToken as string);
-    formData.append("mktDetailsSrno", selectedPendingDeposit?.mktDetailsSrno);
-    formData.append("bankRecordSrno", values?.bankRecordSrno);
+    const object = {
+      UserID: userID,
+      UserToken: userToken,
+      bankAdjustmentSrno: selectedPendingDeposit?.srno,
+      bankRecordSrno: values?.bankRecordSrno,
+    };
 
-    await mainApi("/assign-bank", formData)
+    await LogApi("/assign-bank-adjustment", object)
       .then(() => {
         setOpenBankRecord(false);
-        setIsCheckAllAmount(false);
-        handleGetBankRecordMarketingList();
+        handleGetBankErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, bank: "all", remark: "" });
         messageApi.open({
           type: "success",
           content: "Assign Success",
@@ -125,24 +124,18 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
     setIsLoading(false);
   }
 
-  function handleCheckFreeCredit() {
-    setIsCheckAllAmount(!isCheckAllAmount);
-  }
-
   async function handleGetBankRecord(values: any) {
-    console.log(isCheckAllAmount);
     setIsLoading(true);
     const object = {
       UserID: userID,
       UserToken: userToken,
-      Type: "Deposit",
-      Bank: values?.mBank,
+      Bank: values?.bankCode,
+      CompanyID: subdomain,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
-      Amount: isCheckAllAmount === true ? -1 : values?.amount,
-      CompanyID: subdomain,
+      amount: values?.amount,
     };
-    await mainApi("/bank-record", object)
+    await LogApi("/bank-record", object)
       .then((result: any) => {
         setBankRecord(result.data);
       })
@@ -157,13 +150,12 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
 
   function handleOnCloseModal() {
     setOpenBankRecord(false);
-    setIsCheckAllAmount(false);
   }
 
   return (
     <>
       <Modal width="70vw" open={openBankRecord} onCancel={() => handleOnCloseModal()} footer={null} closable={false} loading={isLoading}>
-        <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankRecord}>
+        <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankErrorReport}>
           <Row gutter={10}>
             <Col xs={6}>
               <Form.Item label={t("searchDate")} name="searchDate">
@@ -171,29 +163,13 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
               </Form.Item>
             </Col>
             <Col xs={6}>
-              <Form.Item label="bank" name="mBank">
-                <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("bank")} optionFilterProp="label">
-                  {allBankList?.map((items: any) => (
-                    <Select.Option value={items.item} key={items.item}>
-                      {items?.item}
-                    </Select.Option>
-                  ))}
-                </Select>
+              <Form.Item label={t("bank")} name="bankCode">
+                <Input disabled />
               </Form.Item>
             </Col>
             <Col xs={6}>
-              <Form.Item
-                label={
-                  <Space>
-                    {t("amount")}
-                    <Checkbox onChange={handleCheckFreeCredit} checked={isCheckAllAmount}>
-                      <div>&nbsp;All Amount</div>
-                    </Checkbox>
-                  </Space>
-                }
-                name="amount"
-              >
-                <Input disabled={isCheckAllAmount} />
+              <Form.Item label={t("amount")} name="amount">
+                <Input disabled />
               </Form.Item>
             </Col>
 

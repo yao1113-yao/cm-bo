@@ -1,11 +1,11 @@
-import { Card, Col, Divider, Form, Input, InputNumber, Row, Select, Table } from "antd";
+import { Card, Col, DatePicker, Divider, Form, Input, InputNumber, Row, Select, Table } from "antd";
 import { useKioskErrorReport } from "./hook/useKioskErrorReport";
 import GameProvider from "../../../../components/GameProvider";
 import CommonButton from "../../../../components/CommonButton";
-import Staff from "../../../../components/Staff";
+const { RangePicker } = DatePicker;
 
 const KioskErrorReport = () => {
-  const { t, isLoading, isKioskReportLoading, contextHolder, form, allGameList, allStaffList, apiData, initialValues, columns, handleInsertKioskError, handleGetKioskErrorReport } = useKioskErrorReport();
+  const { t, isLoading, isKioskReportLoading, contextHolder, form, allGameList, apiData, initialValues, columns, handleInsertKioskError, handleGetKioskErrorReport } = useKioskErrorReport();
 
   return (
     <div>
@@ -17,17 +17,16 @@ const KioskErrorReport = () => {
               <Form.Item label={t("type")} name="type" rules={[{ required: true }]}>
                 <Select defaultActiveFirstOption={true} filterOption={(inputValue: any, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("type")} optionFilterProp="label">
                   <Select.Option value="Edit Point">Edit Point</Select.Option>
-                  <Select.Option value="Error">Error</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col xs={6}>
               <GameProvider list={allGameList} required={true} selectAll={false} label="gameName" />
             </Col>
-
+            {/* 
             <Col xs={6}>
               <Staff list={allStaffList} required={false} selectAll={false} label="staffSrno" />
-            </Col>
+            </Col> */}
             <Col xs={6}>
               <Form.Item label={t("point")} name="point" required>
                 <InputNumber style={{ width: "100%" }} />
@@ -48,16 +47,21 @@ const KioskErrorReport = () => {
         </Form>
       </Card>
       <Divider>Kiosk Adjustment Report</Divider>
-      <Card loading={isKioskReportLoading}>
+      <Card>
         <Form layout="vertical" initialValues={initialValues} onFinish={handleGetKioskErrorReport}>
           <Row gutter={20}>
             <Col xs={6}>
+              <Form.Item label={t("searchDate")} name="searchDate">
+                <RangePicker style={{ width: "100%" }} showTime />
+              </Form.Item>
+            </Col>
+            <Col xs={6}>
               <GameProvider list={allGameList} required={true} selectAll={true} label="gameName" />
             </Col>
-
+            {/* 
             <Col xs={6}>
               <Staff list={allStaffList} required={true} selectAll={true} label="staffSrno" />
-            </Col>
+            </Col> */}
 
             <Col xs={6}>
               <Form.Item label={t("remark")} name="remark" required>
@@ -71,7 +75,7 @@ const KioskErrorReport = () => {
 
         <Divider />
 
-        <Table columns={columns} dataSource={apiData} rowClassName={(_record, index) => (index % 2 === 0 ? "row-highlight-1" : "row-highlight-2")} rowHoverable={false}></Table>
+        <Table loading={isKioskReportLoading} columns={columns} dataSource={apiData} rowClassName={(_record, index) => (index % 2 === 0 ? "row-highlight-1" : "row-highlight-2")} rowHoverable={false}></Table>
       </Card>
     </div>
   );

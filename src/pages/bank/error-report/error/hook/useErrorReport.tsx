@@ -1,12 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Form, message, TableProps } from "antd";
-import { IDeviceType, IGameProviderType, ILogType, IUserType } from "../../../../../type/main.interface";
+import { Button, Form, message, TableProps, Tooltip } from "antd";
+import { IBankErrorType, IDeviceType, IGameProviderType, ILogType, IUserType } from "../../../../../type/main.interface";
 import { getAllGameProviderList, getAllItemCodeList, getAllStaffList } from "../../../../../function/ApiFunction";
 import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
+import dayjs from "dayjs";
+
+import { BankOutlined, ExceptionOutlined } from "@ant-design/icons";
 
 export const useErrorReport = () => {
   const { t } = useTranslation();
@@ -19,25 +22,49 @@ export const useErrorReport = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isKioskReportLoading, setKioskReportIsLoading] = useState<boolean>(false);
   const [apiData, setApiData] = useState<ILogType[] | undefined>();
+  const [apiData2, setApiData2] = useState<IBankErrorType[] | undefined>();
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
   const [allStaffList, setAllStaffList] = useState<[IUserType] | undefined>();
   const [type, setType] = useState<string>("");
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
 
+  const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<IBankErrorType | undefined>();
+  const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
+  const [openErrorMarketingRecord, setOpenErrorMarketingRecord] = useState<boolean>(false);
+  const [selectedKioskError, setSelectedKioskDeposit] = useState<ILogType | undefined>();
+
   const initialValues = {
+    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     staffSrno: 0,
+    type: "Bank Error",
     gameName: "all",
+    bankCode: "all",
     remark: "",
   };
+
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
 
     getAllStaffList(setIsLoading, subdomain, setAllStaffList);
-    handleGetKioskErrorReport(initialValues);
+    // handleGetErrorReport(initialValues);
   }, []);
 
   const columns: TableProps<ILogType>["columns"] = [
+    {
+      title: "action",
+      align: "center",
+      ellipsis: true,
+      render: (record) => {
+        return (
+          record?.mktSrno === 0 && (
+            <Tooltip title={t("assignMarketingRecord")}>
+              <Button icon={<ExceptionOutlined />} onClick={() => OpenModalErrorMarketingRecord(record)}></Button>
+            </Tooltip>
+          )
+        );
+      },
+    },
     {
       title: "createDate",
       dataIndex: "createDate",
@@ -70,33 +97,10 @@ export const useErrorReport = () => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
+
     {
-      title: t("bankCode"),
-      dataIndex: "bankCode",
-      ellipsis: true,
-      render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
-      },
-    },
-    {
-      title: t("beforeBalance"),
-      dataIndex: "beforeBalance",
-      ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
-      },
-    },
-    {
-      title: t("balance"),
-      dataIndex: "balance",
-      ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600", color: text < 0 ? "red" : "green" }}>{formatNumber(text)}</div>;
-      },
-    },
-    {
-      title: t("afterBalance"),
-      dataIndex: "afterBalance",
+      title: t("amount"),
+      dataIndex: "amount",
       ellipsis: true,
       render: (text: number) => {
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
@@ -118,9 +122,132 @@ export const useErrorReport = () => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
+    {
+      title: "createDate",
+      dataIndex: "createDate",
+      hidden: false,
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+    {
+      title: t("updateBy"),
+      dataIndex: "updateBy",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("updateDate"),
+      dataIndex: "updateDate",
+      ellipsis: true,
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
   ];
 
-  async function handleInsertKioskError(values: any) {
+  const bankColumns: TableProps<IBankErrorType>["columns"] = [
+    {
+      title: "action",
+      align: "center",
+      ellipsis: true,
+      render: (record) => {
+        return (
+          record?.bankRecordSrno === 0 && (
+            <Tooltip title={t("assignBank")}>
+              <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
+            </Tooltip>
+          )
+        );
+      },
+    },
+    {
+      title: t("type"),
+      dataIndex: "type",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("bankCode"),
+      dataIndex: "bankCode",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("staffID"),
+      dataIndex: "staffID",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+
+    {
+      title: t("amount"),
+      dataIndex: "amount",
+      ellipsis: true,
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600", color: text < 0 ? "red" : "green" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("remark"),
+      dataIndex: "remark",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("createBy"),
+      dataIndex: "createBy",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: "createDate",
+      dataIndex: "createDate",
+      hidden: false,
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+    {
+      title: t("updateBy"),
+      dataIndex: "updateBy",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("updateDate"),
+      dataIndex: "updateDate",
+      ellipsis: true,
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+  ];
+
+  function OpenModalBankRecord(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenBankRecord(!openBankRecord);
+  }
+
+  function OpenModalErrorMarketingRecord(values: any) {
+    setSelectedKioskDeposit(values);
+    setOpenErrorMarketingRecord(!openBankRecord);
+  }
+
+  async function handleInsertError(values: any) {
     setIsLoading(true);
     const object = {
       UserID: userID,
@@ -135,7 +262,7 @@ export const useErrorReport = () => {
           type: "success",
           content: "Insert Success",
         });
-        handleGetKioskErrorReport(initialValues);
+        type === "Kiosk Error" ? handleGetKioskErrorReport(initialValues) : handleGetBankErrorReport(initialValues);
       })
       .catch(() => {
         messageApi.open({
@@ -146,20 +273,44 @@ export const useErrorReport = () => {
     setIsLoading(false);
   }
 
-  async function handleGetKioskErrorReport(values: any) {
+  async function handleGetBankErrorReport(values: any) {
     setKioskReportIsLoading(true);
-
     const object = {
       UserID: userID,
       UserToken: userToken,
       companyID: subdomain,
+      startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
+      endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
+      staffSrno: values?.staffSrno,
+      remark: values?.remark,
+      bankCode: values?.bankCode,
+    };
+    await LogApi("/bank-error-report", object)
+      .then((result) => {
+        setApiData2(result.data);
+        setKioskReportIsLoading(false);
+      })
+      .catch((error) => {
+        message.error(error?.response?.data?.message);
+      });
+    setKioskReportIsLoading(false);
+  }
+
+  async function handleGetKioskErrorReport(values: any) {
+    setKioskReportIsLoading(true);
+    const object = {
+      UserID: userID,
+      UserToken: userToken,
+      companyID: subdomain,
+      startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
+      endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       staffSrno: values?.staffSrno,
       gameName: values?.gameName,
       remark: values?.remark,
       type: values?.type,
-      bankCode: "all",
+      bankCode: values?.bankCode,
     };
-    await LogApi(values?.type === "Kiosk Error" ? "/kiosk-error-report" : "/bank-error-report", object)
+    await LogApi("/kiosk-error-report", object)
       .then((result) => {
         setApiData(result.data);
         setKioskReportIsLoading(false);
@@ -171,9 +322,18 @@ export const useErrorReport = () => {
   }
 
   function handleOnChangeType(value: any) {
-    console.log(value);
+    form.setFieldValue("oriWithdraw", 0);
+    form.setFieldValue("wrongWithdraw", 0);
+    form.setFieldValue("errorWithdraw", 0);
     setType(value);
   }
 
-  return { t, contextHolder, isLoading, isKioskReportLoading, form, allGameList, allStaffList, apiData, type, allBankList, initialValues, columns, handleInsertKioskError, handleGetKioskErrorReport, handleOnChangeType };
+  function handleOnChangeAmount() {
+    const ori = form.getFieldValue("oriWithdraw") ?? 0;
+    const wrong = form.getFieldValue("wrongWithdraw") ?? 0;
+
+    form.setFieldValue("errorWithdraw", ori - wrong);
+  }
+
+  return { t, messageApi, contextHolder, isLoading, isKioskReportLoading, form, allGameList, allStaffList, apiData, apiData2, selectedPendingDeposit, openBankRecord, setOpenBankRecord, openErrorMarketingRecord, setOpenErrorMarketingRecord, selectedKioskError, type, allBankList, initialValues, columns, bankColumns, handleGetBankErrorReport, handleGetKioskErrorReport, handleInsertError, handleOnChangeType, handleOnChangeAmount };
 };

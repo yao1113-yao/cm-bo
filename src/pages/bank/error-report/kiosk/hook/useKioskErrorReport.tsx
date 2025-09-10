@@ -7,6 +7,7 @@ import { getAllGameProviderList, getAllStaffList } from "../../../../../function
 import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
+import dayjs from "dayjs";
 
 export const useKioskErrorReport = () => {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ export const useKioskErrorReport = () => {
   const [allStaffList, setAllStaffList] = useState<[IUserType] | undefined>();
 
   const initialValues = {
+    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     staffSrno: 0,
     gameName: "all",
     remark: "",
@@ -43,8 +45,8 @@ export const useKioskErrorReport = () => {
       },
     },
     {
-      title: t("staffID"),
-      dataIndex: "staffID",
+      title: t("type"),
+      dataIndex: "type",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
@@ -107,14 +109,15 @@ export const useKioskErrorReport = () => {
       companyID: subdomain,
       ...values,
     };
-    await LogApi("/insert-kiosk-error-report", object)
+    await LogApi("/insert-kiosk-adjustment", object)
       .then(() => {
         form.resetFields();
         messageApi.open({
           type: "success",
-          content: "Insert Success",
+          content: "success",
         });
-        handleGetKioskErrorReport(initialValues);
+        form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
+        handleGetKioskErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, gameName: "all", remark: "" });
       })
       .catch(() => {
         messageApi.open({
@@ -132,12 +135,12 @@ export const useKioskErrorReport = () => {
       UserID: userID,
       UserToken: userToken,
       companyID: subdomain,
-      staffSrno: values?.staffSrno,
+      startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
+      endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       gameName: values?.gameName,
       remark: values?.remark,
-      type: "all",
     };
-    await LogApi("/kiosk-error-report", object)
+    await LogApi("/kiosk-adjustment-list", object)
       .then((result) => {
         setApiData(result.data);
         setKioskReportIsLoading(false);

@@ -56,9 +56,12 @@ export interface ITransactionType {
   mBank: string;
   iNValue: number;
   oUTValue: number;
+  mktBankIn: number;
+  mktBankOut: number;
   remark: string;
   bonusPer: number;
   bonus: number;
+  credit: number;
   cuci: number;
   status: number;
   beforeBalance: number;
@@ -68,6 +71,7 @@ export interface ITransactionType {
   createDate: Date;
   recordType: string;
   bankRecordSrno: number;
+  kioskErrorSrno: number;
   bankDate: string;
   bankRemark: string;
   bankAmount: number;
@@ -156,14 +160,30 @@ export interface IBankRecordMarketingType {
   gameName: string;
 }
 
+export interface IBankErrorType {
+  srno: number;
+  companyBankSrno: number;
+  bankRecordSrno: number;
+  type: string;
+  staffID: string;
+  amount: number;
+  remark: string;
+  createBy: string;
+  createDate: Date;
+  updateBy: string;
+  UpdateDate: Date;
+}
+
 export interface ILogType {
   srno: number;
   companyGameProviderSrno: number;
+  bankRecordSrno: number;
   type: string;
   staffID: string;
   beforeBalance: number;
   balance: number;
   afterBalance: number;
+  mktSrno: number;
   remark: string;
   gameName: string;
   createBy: string;
@@ -200,6 +220,8 @@ export interface ITotalValueType {
   totalWithdraw: number;
   totalProfit: number;
   totalBonus: number;
+  totalMktBankIn: number;
+  totalMktBankOut: number;
 }
 export interface ITeamSalesDetailsType {
   srno: number;
@@ -215,6 +237,7 @@ export interface IKioskLogType {
   srno: number;
   companyID: string;
   gameName: string;
+  gameID: string;
   beforeBalance: number;
   balance: number;
   afterBalance: number;
@@ -248,4 +271,16 @@ export interface IPendingMarketingCountType {
   countWithdraw: number;
   countTransfer: number;
   countRekemen: number;
+}
+
+export interface IErrorKioskMarketingRecord {
+  srno: number;
+  companySrno: number;
+  iNValue: number;
+  remark: string;
+  total: number;
+  customerBank: string;
+  bankCode: string;
+  bankRemark: string;
+  bankDate: string;
 }

@@ -5,10 +5,11 @@ import dayjs from "dayjs";
 import { Button, Form, message, Space, TableProps, Tag, Tooltip } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi, mainApi } from "../../../../service/CallApi";
-import { ITotalValueType, ITransactionType } from "../../../../type/main.interface";
-import { CloseOutlined, ClockCircleOutlined, BankOutlined, FileAddOutlined } from "@ant-design/icons";
+import { IDeviceType, ITotalValueType, ITransactionType } from "../../../../type/main.interface";
+import { CloseOutlined, ClockCircleOutlined, BankOutlined, EditOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { Api } from "../../../../context/ApiContext";
+import { getAllItemCodeList, handleEditingTransaction } from "../../../../function/ApiFunction";
 
 export const useBankRecord = () => {
   const { userInfo, subdomain } = useContext(Api);
@@ -26,14 +27,16 @@ export const useBankRecord = () => {
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
-  const [timer, setTimer] = useState<number>(4);
+  const [timer, setTimer] = useState<number>(5);
+  const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
+  const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
 
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
   const handleTableChange = (pagination: any) => {
     setPagination(pagination);
   };
-  let count = 4;
+  let count = 5;
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     companyID: "all",
@@ -43,6 +46,7 @@ export const useBankRecord = () => {
     keyword: "",
   };
   useEffect(() => {
+    getAllItemCodeList("MBank", setIsLoading, setAllBankList);
     handleGetBankRecordMarketingList(initialValues);
   }, []);
 
@@ -60,24 +64,28 @@ export const useBankRecord = () => {
       render: (record) => {
         return record?.status === 1 ? (
           <Space>
-            <Tooltip title={t("takeOutBank")}>
-              <Button icon={<CloseOutlined />} onClick={() => handleTakeOutBankTransaction(record)}></Button>
-            </Tooltip>
-
             <Tooltip title={t("ShowRecordToMkt")}>
               <Button onClick={() => handleShowRecord(record)}>
                 <ClockCircleOutlined />
               </Button>
             </Tooltip>
+            {record?.kioskErrorSrno === 0 && (
+              <>
+                <Tooltip title={t("Error(Take Out Bank)")}>
+                  <Button icon={<CloseOutlined />} onClick={() => handleTakeOutBankTransaction(record)}></Button>
+                </Tooltip>
+                <Tooltip title={t("assignBank")}>
+                  <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
+                </Tooltip>
+              </>
+            )}
 
-            <Tooltip title={t("assignBank")}>
-              <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
-            </Tooltip>
+            {record?.credit > record?.mktBankIn && (
+              <Tooltip title={t("editRecord")}>
+                <Button icon={<EditOutlined />} onClick={() => OpenModalEditTransaction(record)} disabled={record?.isEditing === 1}></Button>
+              </Tooltip>
+            )}
           </Space>
-        ) : record?.status === 0 ? (
-          <Tooltip title={t("assignPayment")}>
-            <Button icon={<FileAddOutlined />} onClick={() => handleAssignPaymentTransaction(record)} disabled={record?.isEditing === 1}></Button>
-          </Tooltip>
         ) : (
           ""
         );
@@ -197,13 +205,35 @@ export const useBankRecord = () => {
       align: "center",
       render: (text: number, record, index: number) => {
         if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno) return <div>-</div>;
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+        return <div style={{ fontWeight: "600", backgroundColor: (record?.mktBankIn !== 0 ? "black" : "") && (record?.kioskErrorSrno === 0 && record?.mktBankIn > text ? "red" : record?.mktBankIn < text ? "green" : record?.kioskErrorSrno !== 0 ? "yellow" : "") }}>{formatNumber(text)}</div>;
       },
     },
     {
       title: t("bankOut"),
       dataIndex: "debit",
       align: "center",
+      render: (text: number, record, index: number) => {
+        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno) return <div>-</div>;
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("mktBankIn"),
+      dataIndex: "mktBankIn",
+      hidden: false,
+      align: "center",
+
+      render: (text: number, record, index: number) => {
+        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno) return <div>-</div>;
+        return <div style={{ fontWeight: "600", backgroundColor: (record?.credit !== 0 ? "black" : "") && (record?.kioskErrorSrno === 0 && text > record?.credit ? "red" : record?.kioskErrorSrno === 0 && text < record?.credit ? "green" : record?.kioskErrorSrno !== 0 ? "yellow" : "") }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("mktBankOut"),
+      dataIndex: "mktBankOut",
+      hidden: false,
+      align: "center",
+
       render: (text: number, record, index: number) => {
         if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno) return <div>-</div>;
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
@@ -223,6 +253,22 @@ export const useBankRecord = () => {
       align: "center",
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("mktInCredit"),
+      dataIndex: "inValue",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("mktOutCredit"),
+      dataIndex: "outValue",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
     {
@@ -267,6 +313,12 @@ export const useBankRecord = () => {
     },
   ];
 
+  function OpenModalEditTransaction(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenEditTransaction(true);
+    handleEditingTransaction(values, 1);
+  }
+
   async function handleShowRecord(values: any) {
     Swal.fire({
       title: "Confirm show the record to MKT?",
@@ -302,7 +354,7 @@ export const useBankRecord = () => {
   console.log(timer);
   async function handleTakeOutBankTransaction(values: any) {
     Swal.fire({
-      title: `Waiting Count Down`,
+      title: `Do you want to take out the bank?`,
       showConfirmButton: false,
       showCancelButton: true,
       didOpen: () => {
@@ -357,38 +409,38 @@ export const useBankRecord = () => {
     });
   }
 
-  async function handleAssignPaymentTransaction(values: any) {
-    Swal.fire({
-      title: "Do you want to assign bank?",
-      showCancelButton: true,
-      confirmButtonText: "Assign Payment",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true);
-        const object = {
-          UserID: userID,
-          UserToken: userToken,
-          bankRecordSrno: values?.srno,
-        };
-        await bankApi("/assign-payment", object)
-          .then(() => {
-            handleGetBankRecordMarketingList(initialValues);
-            messageApi.open({
-              type: "success",
-              content: "done",
-            });
-          })
-          .catch(() => {
-            messageApi.open({
-              type: "error",
-              content: "",
-            });
-          });
-      }
+  // async function handleAssignPaymentTransaction(values: any) {
+  //   Swal.fire({
+  //     title: "Do you want to assign bank?",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Assign Payment",
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       setIsLoading(true);
+  //       const object = {
+  //         UserID: userID,
+  //         UserToken: userToken,
+  //         bankRecordSrno: values?.srno,
+  //       };
+  //       await bankApi("/assign-payment", object)
+  //         .then(() => {
+  //           handleGetBankRecordMarketingList(initialValues);
+  //           messageApi.open({
+  //             type: "success",
+  //             content: "done",
+  //           });
+  //         })
+  //         .catch(() => {
+  //           messageApi.open({
+  //             type: "error",
+  //             content: "",
+  //           });
+  //         });
+  //     }
 
-      setIsLoading(false);
-    });
-  }
+  //     setIsLoading(false);
+  //   });
+  // }
 
   const samePrev = useRef<boolean>(false);
   const prevClass = useRef<string>("row-highlight-1");
@@ -439,5 +491,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, form, contextHolder, isLoading, apiData, setApiData, apiData2, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
+  return { t, userInfo, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
 };

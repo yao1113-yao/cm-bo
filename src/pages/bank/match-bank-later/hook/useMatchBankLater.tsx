@@ -6,9 +6,10 @@ import { Button, Form, message, Space, TableProps, Tooltip } from "antd";
 import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { bankApi } from "../../../../service/CallApi";
 import { ITransactionType } from "../../../../type/main.interface";
-import { BankOutlined, EditOutlined } from "@ant-design/icons";
+import { BankOutlined, EditOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { handleEditingTransaction } from "../../../../function/ApiFunction";
 import { Api } from "../../../../context/ApiContext";
+import Swal from "sweetalert2";
 // import { getAllItem,CodeList } from "../../../../function/ApiFunction";
 
 export const useMatchBankLater = () => {
@@ -51,6 +52,12 @@ export const useMatchBankLater = () => {
             <Tooltip title={t("editDetails")}>
               <Button onClick={() => OpenModalEditTransaction(record)}>
                 <EditOutlined />
+              </Button>
+            </Tooltip>
+
+            <Tooltip title={t("Error")}>
+              <Button onClick={() => handleAssignError(record)}>
+                <CloseCircleOutlined />
               </Button>
             </Tooltip>
           </Space>
@@ -166,24 +173,8 @@ export const useMatchBankLater = () => {
       },
     },
     {
-      title: t("bonus") + "%",
-      dataIndex: "bonusPer",
-      align: "center",
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text * 100)}</div>;
-      },
-    },
-    {
-      title: t("bonus") + "%",
-      dataIndex: "bonusPer",
-      align: "center",
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text * 100)}</div>;
-      },
-    },
-    {
-      title: t("total"),
-      dataIndex: "total",
+      title: t("inCredit"),
+      dataIndex: "inCredit",
       align: "center",
       render: (text: number) => {
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
@@ -192,6 +183,30 @@ export const useMatchBankLater = () => {
     {
       title: t("freeCredit"),
       dataIndex: "freeCredit",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("bonus"),
+      dataIndex: "bonusPer",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(formatNumber(text * 100)) + " %"}</div>;
+      },
+    },
+    {
+      title: t("bonus"),
+      dataIndex: "bonus",
+      align: "center",
+      render: (text: number) => {
+        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      },
+    },
+    {
+      title: t("total"),
+      dataIndex: "total",
       align: "center",
       render: (text: number) => {
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
@@ -251,6 +266,43 @@ export const useMatchBankLater = () => {
         message.error(error?.response?.data?.message);
       });
     setIsLoading(false);
+  }
+
+  async function handleAssignError(values: any) {
+    Swal.fire({
+      title: "Are you sure this record is wrong?",
+      showCancelButton: true,
+      text: "Remark:",
+      input: "text",
+      // inputValue: values?.remark,
+      confirmButtonText: "Reject",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktSrno: values?.mktSrno,
+          remark: result.value,
+        };
+        await bankApi("/assign-error", object)
+          .then(() => {
+            handleGetMatchBankLaterList(initialValues);
+            messageApi.open({
+              type: "success",
+              content: "done",
+            });
+          })
+          .catch(() => {
+            messageApi.open({
+              type: "error",
+              content: "",
+            });
+          });
+      }
+
+      setIsLoading(false);
+    });
   }
 
   function handleSearchByFilter(values: any) {

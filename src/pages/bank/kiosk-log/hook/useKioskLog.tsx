@@ -61,6 +61,14 @@ export const useKioskLog = () => {
       },
     },
     {
+      title: t("gameID"),
+      dataIndex: "gameID",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("remark"),
       dataIndex: "remark",
       align: "center",

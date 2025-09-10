@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Form, message, TableProps } from "antd";
-import { IDeviceType, ILogType, IUserType } from "../../../../../type/main.interface";
+import { Button, Form, message, TableProps, Tooltip } from "antd";
+import { IBankErrorType, IDeviceType, ILogType, IUserType } from "../../../../../type/main.interface";
 import { getAllItemCodeList, getAllStaffList } from "../../../../../function/ApiFunction";
 import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
+import { BankOutlined } from "@ant-design/icons";
+import dayjs from "dayjs";
 
 export const useBankErrorReport = () => {
   const { t } = useTranslation();
@@ -18,11 +20,14 @@ export const useBankErrorReport = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isKioskReportLoading, setKioskReportIsLoading] = useState<boolean>(false);
-  const [apiData, setApiData] = useState<ILogType[] | undefined>();
+  const [apiData, setApiData] = useState<IBankErrorType[] | undefined>();
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
   const [allStaffList, setAllStaffList] = useState<[IUserType] | undefined>();
+  const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ILogType | undefined>();
+  const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
 
   const initialValues = {
+    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     staffSrno: 0,
     bank: "all",
     remark: "",
@@ -34,26 +39,24 @@ export const useBankErrorReport = () => {
     handleGetBankErrorReport(initialValues);
   }, []);
 
-  const columns: TableProps<ILogType>["columns"] = [
+  const columns: TableProps<IBankErrorType>["columns"] = [
     {
-      title: "createDate",
-      dataIndex: "createDate",
-      hidden: false,
-      render: (text: any) => {
-        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      title: "action",
+      align: "center",
+      ellipsis: true,
+      render: (record) => {
+        return (
+          record?.bankRecordSrno === 0 && (
+            <Tooltip title={t("assignBank")}>
+              <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
+            </Tooltip>
+          )
+        );
       },
     },
     {
       title: t("type"),
       dataIndex: "type",
-      ellipsis: true,
-      render: (text: string) => {
-        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
-      },
-    },
-    {
-      title: t("staffID"),
-      dataIndex: "staffID",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
@@ -68,27 +71,20 @@ export const useBankErrorReport = () => {
       },
     },
     {
-      title: t("beforeBalance"),
-      dataIndex: "beforeBalance",
+      title: t("staffID"),
+      dataIndex: "staffID",
       ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
+
     {
-      title: t("balance"),
-      dataIndex: "balance",
+      title: t("amount"),
+      dataIndex: "amount",
       ellipsis: true,
       render: (text: number) => {
         return <div style={{ fontWeight: "600", color: text < 0 ? "red" : "green" }}>{formatNumber(text)}</div>;
-      },
-    },
-    {
-      title: t("afterBalance"),
-      dataIndex: "afterBalance",
-      ellipsis: true,
-      render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
     {
@@ -106,7 +102,36 @@ export const useBankErrorReport = () => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
+    {
+      title: "createDate",
+      dataIndex: "createDate",
+      hidden: false,
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+    {
+      title: t("updateBy"),
+      dataIndex: "updateBy",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("updateDate"),
+      dataIndex: "updateDate",
+      ellipsis: true,
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
   ];
+
+  function OpenModalBankRecord(values: any) {
+    setSelectedPendingDeposit(values);
+    setOpenBankRecord(!openBankRecord);
+  }
 
   async function handleInsertBankError(values: any) {
     setIsLoading(true);
@@ -115,19 +140,20 @@ export const useBankErrorReport = () => {
       UserToken: userToken,
       companyID: subdomain,
       type: values?.type,
-      staffSrno: values?.staffSrno,
+      // staffSrno: values?.staffSrno,
       bankCode: values?.bank,
-      point: values?.point,
+      amount: values?.amount,
       remark: values?.remark,
     };
-    await LogApi("/insert-bank-error-report", object)
+    await LogApi("/insert-bank-adjustment", object)
       .then(() => {
         form.resetFields();
         messageApi.open({
           type: "success",
           content: "Insert Success",
         });
-        handleGetBankErrorReport(initialValues);
+        form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
+        handleGetBankErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, bank: "all", remark: "" });
       })
       .catch(() => {
         messageApi.open({
@@ -145,12 +171,14 @@ export const useBankErrorReport = () => {
       UserID: userID,
       UserToken: userToken,
       companyID: subdomain,
+      startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
+      endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       staffSrno: values?.staffSrno,
       bankCode: values?.bank,
       remark: values?.remark,
       type: "all",
     };
-    await LogApi("/bank-error-report", object)
+    await LogApi("/bank-adjustment-list", object)
       .then((result) => {
         setApiData(result.data);
         setKioskReportIsLoading(false);
@@ -161,5 +189,5 @@ export const useBankErrorReport = () => {
     setKioskReportIsLoading(false);
   }
 
-  return { t, contextHolder, isLoading, isKioskReportLoading, form, allBankList, allStaffList, apiData, initialValues, columns, handleInsertBankError, handleGetBankErrorReport };
+  return { t, messageApi, contextHolder, isLoading, isKioskReportLoading, form, allBankList, allStaffList, apiData, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, initialValues, columns, handleInsertBankError, handleGetBankErrorReport };
 };

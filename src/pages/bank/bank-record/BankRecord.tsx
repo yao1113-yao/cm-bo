@@ -3,10 +3,11 @@ import { useBankRecord } from "./hook/useBankRecord";
 import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Statistic, Table } from "antd";
 import { DownCircleOutlined, LeftCircleOutlined, DollarOutlined } from "@ant-design/icons";
 import OpenBankRecord from "./modal/OpenbankRecord";
+import EditTransaction from "./modal/EditTransaction";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, form, contextHolder, isLoading, apiData, apiData2, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
+  const { t, userInfo, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
 
   return (
     <Card>
@@ -78,13 +79,23 @@ const BankRecord = () => {
         <Col xs={3}>
           <Statistic title="Total Profit" value={apiData2?.totalProfit} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalProfit ?? 0 < 0 ? "red" : apiData2?.totalProfit ?? 0 > 0 ? "green" : "black" }} />
         </Col>
+
+        <Col xs={3}>
+          <Statistic title="Total Marketing BankIn" value={apiData2?.totalMktBankIn} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalMktBankIn === apiData2?.totalDeposit ? "green" : "red" }} />
+        </Col>
+
+        <Col xs={3}>
+          <Statistic title="Total Marketing BankOut" value={apiData2?.totalMktBankOut} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalMktBankOut === apiData2?.totalWithdraw ? "green" : "red" }} />
+        </Col>
       </Row>
 
       <Card loading={isLoading}>
         <Table columns={columns} dataSource={apiData} rowKey="" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} pagination={pagination} onChange={handleTableChange} />
       </Card>
 
-      {openBankRecord && <OpenBankRecord messageApi={messageApi} isCheckAllAmount={isCheckAllAmount} setIsCheckAllAmount={setIsCheckAllAmount} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
+      {openBankRecord && <OpenBankRecord messageApi={messageApi} isCheckAllAmount={isCheckAllAmount} allBankList={allBankList} setIsCheckAllAmount={setIsCheckAllAmount} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
+
+      {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} allBankList={allBankList} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
     </Card>
   );
 };
