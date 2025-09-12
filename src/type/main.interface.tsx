@@ -64,6 +64,7 @@ export interface ITransactionType {
   credit: number;
   cuci: number;
   status: number;
+  taskStatus: number;
   beforeBalance: number;
   afterBalance: number;
   createBy: string;
