@@ -102,6 +102,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
     const formData = new FormData();
     formData.append("userID", userID as string);
     formData.append("userToken", userToken as string);
+    formData.append("companyID", subdomain as string);
     formData.append("mktDetailsSrno", selectedPendingDeposit?.srno);
     formData.append("bankRecordSrno", values?.bankRecordSrno);
     formData.append("receiptImage", temp[0]?.originFileObj);
