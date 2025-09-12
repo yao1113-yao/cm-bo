@@ -4,7 +4,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { useContext, useRef, useState } from "react";
 import { Api } from "../../../../context/ApiContext";
-import { SendOutlined, CloseOutlined, UploadOutlined, EditOutlined, CheckOutlined, RollbackOutlined } from "@ant-design/icons";
+import { SendOutlined, CloseOutlined, UploadOutlined, EditOutlined, CheckOutlined, RollbackOutlined, IssuesCloseOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 import OpenBankRecord from "./modal/OpenBankRecord";
 import Swal from "sweetalert2";
@@ -123,6 +123,12 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                   </Tooltip>
                 </>
               )}
+
+              {record?.taskStatus !== -1 && record?.mStatus === "BOT PROCESSING" && (
+                <Tooltip title={t("cancelTask")}>
+                  <Button icon={<IssuesCloseOutlined />} onClick={() => handleCancelDepositTask(record)}></Button>
+                </Tooltip>
+              )}
             </Space>
           </>
         );
@@ -133,7 +139,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       dataIndex: "mStatus",
       align: "center",
       render: (text: string, record) => {
-        return record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "PROCESSING" ? "#4096ff" : text === "TOP UP" ? "#36cfc9" : ""}>{text}</Tag>;
+        return record?.taskStatus === -1 ? <Tag>BOT PROCESSING</Tag> : record?.isManual === 1 && text === "DONE" ? <Tag color="#13c2c2">MANUAL SUCCESS</Tag> : <Tag color={text === "WAITING" ? "#2db7f5" : text === "HOLD" ? "#ad8b00" : text === "DONE" ? "#87d068" : text === "REJECT" ? "#f50" : text === "PROCESSING" ? "#4096ff" : text === "TOP UP" ? "#36cfc9" : ""}>{text === "BOT PROCESSING" ? "BOT PROCESS" : text}</Tag>;
       },
     },
     {
@@ -318,6 +324,39 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
     handleEditingTransaction(values, 1);
   }
 
+  function handleCancelDepositTask(values: any) {
+    Swal.fire({
+      title: "Do you want to cancel the task?",
+      showCancelButton: true,
+      confirmButtonText: "yes",
+      cancelButtonText: "no",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          mktSrno: values?.mktSrno,
+          companyID: subdomain,
+        };
+        await mainApi("/cancel-task", object)
+          .then((result: any) => {
+            handleGetPendingTransactionRecord("deposit");
+            messageApi.open({
+              type: "success",
+              content: result.message,
+            });
+          })
+          .catch((error: any) => {
+            messageApi.open({
+              type: "error",
+              content: error?.response?.data?.message,
+            });
+          });
+        setIsLoading(false);
+      }
+    });
+  }
   // function handleRevertCredit(values: any) {
   //     Swal.fire({
   //       title: "Please confirm that later will match the transaction!",

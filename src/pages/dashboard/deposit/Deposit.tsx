@@ -1,7 +1,6 @@
-import { Button, Col, Divider, Form, Input, InputNumber, message, Row, Select, Spin } from "antd";
+import { Button, Col, Divider, Form, Input, InputNumber, message, Row, Select, Space, Spin } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import CommonButton from "../../../components/CommonButton";
 import { getAllBankList, getAllGameProviderList, getAllItemCodeList } from "../../../function/ApiFunction";
 import { ICompanyBankType, IDeviceType, IGameProviderType, ITransactionType } from "../../../type/main.interface";
 import Action from "./action/Action";
@@ -9,6 +8,8 @@ import DepositTable from "./table/DepositTable";
 import { mainApi } from "../../../service/CallApi";
 import PendingDepositTable from "./table/PendingDepositTable";
 import { Api } from "../../../context/ApiContext";
+
+import { ClearOutlined, SearchOutlined } from "@ant-design/icons";
 
 interface DepositProps extends React.HTMLAttributes<HTMLElement> {
   type: string;
@@ -190,7 +191,15 @@ const Deposit = ({ type }: DepositProps) => {
               </Col>
             </Row>
             <Row>
-              <CommonButton text="submit" />
+              <Space>
+                <Button danger icon={<ClearOutlined />} type="primary" htmlType="reset">
+                  {t("clear")}
+                </Button>
+
+                <Button icon={<SearchOutlined />} type="primary" htmlType="submit" loading={isActionLoading}>
+                  {t("submit")}
+                </Button>
+              </Space>
             </Row>
           </Form>
         )}
