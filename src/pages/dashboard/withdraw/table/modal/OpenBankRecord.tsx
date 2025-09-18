@@ -1,4 +1,4 @@
-import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, Space, Table, TableProps, Tooltip, Upload } from "antd";
+import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, Space, Table, TableProps, Tooltip } from "antd";
 import { formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { useContext, useEffect, useState } from "react";
 import { IDeviceType, ITransactionType } from "../../../../../type/main.interface";
