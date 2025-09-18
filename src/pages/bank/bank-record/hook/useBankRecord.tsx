@@ -204,7 +204,7 @@ export const useBankRecord = () => {
       dataIndex: "credit",
       align: "center",
       render: (text: number, record, index: number) => {
-        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno) return <div>-</div>;
+        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno && record?.recordType !== "Withdraw") return <div>-</div>;
         return <div style={{ fontWeight: "600", backgroundColor: (record?.mktBankIn !== 0 ? "black" : "") && (record?.kioskErrorSrno === 0 && record?.mktBankIn > text ? "red" : record?.mktBankIn < text ? "green" : record?.kioskErrorSrno !== 0 ? "yellow" : "") }}>{formatNumber(text)}</div>;
       },
     },
@@ -213,7 +213,7 @@ export const useBankRecord = () => {
       dataIndex: "debit",
       align: "center",
       render: (text: number, record, index: number) => {
-        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno) return <div>-</div>;
+        if (index > 0 && record.mktSrno !== 0 && record.mktSrno === apiData[(pagination?.current - 1) * pagination.pageSize + index - 1]?.mktSrno && record?.recordType !== "Withdraw") return <div>-</div>;
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },

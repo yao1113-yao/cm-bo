@@ -23,7 +23,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
     mBank: selectedPendingDeposit?.mBank,
-    amount: selectedPendingDeposit?.inCredit,
+    amount: selectedPendingDeposit?.recordType === "Main" ? selectedPendingDeposit?.mktBankIn : selectedPendingDeposit?.mktBankOut,
   };
 
   useEffect(() => {
@@ -100,13 +100,19 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
 
   async function handleAssignBank(values: any) {
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append("userID", userID as string);
-    formData.append("userToken", userToken as string);
-    formData.append("mktDetailsSrno", selectedPendingDeposit?.mktDetailsSrno);
-    formData.append("bankRecordSrno", values?.bankRecordSrno);
-
-    await mainApi("/assign-bank", formData)
+    // const formData = new FormData();
+    // formData.append("userID", userID as string);
+    // formData.append("userToken", userToken as string);
+    // formData.append("mktDetailsSrno", selectedPendingDeposit?.mktDetailsSrno);
+    // formData.append("bankRecordSrno", values?.bankRecordSrno);
+    const object = {
+      userID: userID,
+      userToken: userToken,
+      companyID: subdomain,
+      mktDetailsSrno: selectedPendingDeposit?.mktDetailsSrno,
+      bankRecordSrno: values?.bankRecordSrno,
+    };
+    await mainApi("/assign-bank", object)
       .then(() => {
         setOpenBankRecord(false);
         setIsCheckAllAmount(false);
@@ -135,7 +141,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
     const object = {
       UserID: userID,
       UserToken: userToken,
-      Type: "Deposit",
+      Type: selectedPendingDeposit?.recordType === "Main" ? "DEPOSIT" : selectedPendingDeposit?.recordType,
       Bank: values?.mBank,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),

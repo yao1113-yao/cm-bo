@@ -99,13 +99,19 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
 
   async function handleAssignBank(values: any) {
     setIsLoading(true);
-    const formData = new FormData();
-    formData.append("userID", userID as string);
-    formData.append("userToken", userToken as string);
-    formData.append("mktDetailsSrno", selectedPendingDeposit?.srno);
-    formData.append("bankRecordSrno", values?.bankRecordSrno);
-
-    await mainApi("/assign-bank", formData)
+    // const formData = new FormData();
+    // formData.append("userID", userID as string);
+    // formData.append("userToken", userToken as string);
+    // formData.append("mktDetailsSrno", selectedPendingDeposit?.srno);
+    // formData.append("bankRecordSrno", values?.bankRecordSrno);
+    const object = {
+      userID: userID,
+      userToken: userToken,
+      companyID: subdomain,
+      mktDetailsSrno: selectedPendingDeposit?.srno,
+      bankRecordSrno: values?.bankRecordSrno,
+    };
+    await mainApi("/assign-bank", object)
       .then(() => {
         setOpenBankRecord(false);
         setIsCheckAllAmount(false);
