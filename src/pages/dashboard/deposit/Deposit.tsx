@@ -127,7 +127,7 @@ const Deposit = ({ type }: DepositProps) => {
       users[key].freeCredit = e.target.value;
     }
 
-    Object.assign(users[key], { credit: users[key].credit, bonus: Number(users[key].credit * users[key].bonusPer) / 100, total: Number((users[key].credit * users[key].bonusPer) / 100) + Number(users[key].credit) + Number(users[key].freeCredit ?? 0), cuci: Number(((users[key].credit * users[key].bonusPer) / 100 + Number(users[key].credit) + Number(users[key].freeCredit ?? 0)) * 2) });
+    Object.assign(users[key], { credit: users[key].credit, bonus: (Number(users[key].credit * users[key].bonusPer) / 100).toFixed(2), total: (Number((users[key].credit * users[key].bonusPer) / 100) + Number(users[key].credit) + Number(users[key].freeCredit ?? 0)).toFixed(2), cuci: Number(((users[key].credit * users[key].bonusPer) / 100 + Number(users[key].credit) + Number(users[key].freeCredit ?? 0)) * 2).toFixed(2) });
 
     form.setFieldsValue({ users });
 

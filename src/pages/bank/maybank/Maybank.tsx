@@ -11,6 +11,13 @@ const Maybank = () => {
     <Spin spinning={isLoading}>
       {contextHolder}
 
+      <div className="" style={{ color: "red", fontWeight: "600" }}>
+        When the sheet do not open , can click this link :{" "}
+        <span style={{ color: "blue", fontWeight: "700", cursor: "point", textDecoration: "underline", fontSize: "20px" }} onClick={() => window.open(selectedCompany?.googleSheetUrl)}>
+          Google Sheet Link
+        </span>
+      </div>
+
       {selectedCompany?.googleSheetUrl ? <iframe src={selectedCompany?.googleSheetUrl} width="100%" height={600} /> : "Please contact admin to open google sheet"}
 
       <Form layout="vertical" onFinish={handleInsertBankTransaction} form={form}>
