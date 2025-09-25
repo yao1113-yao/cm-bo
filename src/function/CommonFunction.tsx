@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import { message, Tag } from "antd";
+import { download, generateCsv, mkConfig } from "export-to-csv";
 
 export const DATE_FORMAT = "YYYY-MM-DD";
 export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm:ss";
@@ -71,4 +72,14 @@ export function handleCopyAndPaste(Component: any, values: any, t: any) {
 export function selectFilter(input: string, option: any) {
   const temp = typeof option.children === "string" ? option.children : option.children.join("");
   return temp.toLowerCase().includes(input.toLowerCase());
+}
+
+export function handleExportExcel(fileName: string, userInput: any, apiData: any) {
+  const csvConfig = mkConfig({
+    useKeysAsHeaders: true,
+    filename: `${fileName}_${dayjs(userInput?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss")}-${dayjs(userInput?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss")}`,
+  });
+  // @ts-ignore
+  const csv = generateCsv(csvConfig)(apiData);
+  download(csvConfig)(csv);
 }

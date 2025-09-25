@@ -1,10 +1,11 @@
-import { Card, Col, DatePicker, Divider, Form, Input, Row, Statistic, Table } from "antd";
+import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Statistic, Table } from "antd";
 import CommonButton from "../../../../components/CommonButton";
-import { DollarOutlined } from "@ant-design/icons";
+import { DollarOutlined, FileOutlined } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 import { useState } from "react";
 import { useStaffSalesReport } from "./hook/useStaffSalesReport";
 import ExpandData from "./ExpandData";
+import { handleExportExcel } from "../../../../function/CommonFunction";
 
 const StaffSalesReport = () => {
   const { t, form, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails } = useStaffSalesReport();
@@ -36,6 +37,9 @@ const StaffSalesReport = () => {
           </Col>
         </Row>
         <CommonButton text="Submit" />
+        <Button icon={<FileOutlined />} type="primary" style={{ background: "green", marginLeft: "10px" }} onClick={() => handleExportExcel("Staff Sales Report", userInput, apiData)}>
+          {t("Export Excel")}
+        </Button>
         &nbsp;
         {/* <Button icon={<LeftCircleOutlined />} type="primary" style={{ background: "blue" }} onClick={() => handleSearchByFilter("day")}>
           {t("today")}

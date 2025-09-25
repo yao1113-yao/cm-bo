@@ -12,6 +12,7 @@
   "dependencies": {
     "antd": "^5.24.3",
     "axios": "^1.8.2",
+    "export-to-csv": "^1.4.0",
     "react": "^19.0.0",
     "react-circle-flags": "^0.0.23",
     "react-countup": "^6.5.3",
