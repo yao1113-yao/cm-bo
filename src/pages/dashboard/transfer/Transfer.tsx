@@ -91,7 +91,7 @@ const Transfer = ({ type }: DepositProps) => {
     users.map((items: any) => {
       credit += Number(items.credit);
     });
-    if (values?.credit === credit) {
+    if (values?.credit === credit || freeCredit) {
       setIsActionLoading(true);
       const object = {
         UserID: userID,

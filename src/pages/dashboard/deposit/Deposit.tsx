@@ -34,6 +34,7 @@ const Deposit = ({ type }: DepositProps) => {
   const [depositRecod, setDepositRecord] = useState<[ITransactionType] | undefined>();
   const [pendingDepositRecod, setPendingDepositRecord] = useState<[ITransactionType] | undefined>();
   const [welcomeBonusEnable, setWelcomeBonusEnable] = useState<boolean>(false);
+  const [hiBonusEnable, setHiBonusEnable] = useState<boolean>(false);
 
   useEffect(() => {
     getAllGameProviderList(setIsLoading, setAllGameList);
@@ -102,6 +103,7 @@ const Deposit = ({ type }: DepositProps) => {
         });
         handleGetPendingTransactionRecord("deposit");
         setWelcomeBonusEnable(false);
+        setHiBonusEnable(false);
         form.resetFields();
       })
       .catch((error) => {
@@ -146,7 +148,7 @@ const Deposit = ({ type }: DepositProps) => {
                 <>
                   {fields.map(({ key, name, ...restField }) => (
                     <>
-                      <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} form={form} allBankList={allBankList} {...restField} welcomeBonusEnable={welcomeBonusEnable} setWelcomeBonusEnable={setWelcomeBonusEnable} />
+                      <Action onChange={onChange} allGameList={allGameList} allDeviceList={allDeviceList} key={key} name={name} remove={remove} form={form} allBankList={allBankList} {...restField} welcomeBonusEnable={welcomeBonusEnable} setWelcomeBonusEnable={setWelcomeBonusEnable} hiBonusEnable={hiBonusEnable} setHiBonusEnable={setHiBonusEnable} />
                     </>
                   ))}
                   <Form.Item>

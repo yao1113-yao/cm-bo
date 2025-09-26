@@ -4,7 +4,7 @@ import { MinusCircleOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
-const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form, welcomeBonusEnable, setWelcomeBonusEnable, ...rest }: any) => {
+const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form, welcomeBonusEnable, setWelcomeBonusEnable, hiBonusEnable, setHiBonusEnable, ...rest }: any) => {
   const { t } = useTranslation();
 
   const [newIDEnable, setNewIDEnable] = useState<boolean>(false);
@@ -25,6 +25,24 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
 
     const { users } = fields;
     if (users) {
+      users[0].bonusPer = "";
+
+      users[0].customerBank = "";
+      users[0].customerBankAccName = "";
+      users[0].customerBankAccNo = "";
+    }
+
+    console.log(users);
+  }
+
+  function handleCheckHiBonus() {
+    setHiBonusEnable(!hiBonusEnable);
+
+    const fields = form.getFieldsValue();
+
+    const { users } = fields;
+    if (users) {
+      users[0].bonusPer = "";
       users[0].customerBank = "";
       users[0].customerBankAccName = "";
       users[0].customerBankAccNo = "";
@@ -121,22 +139,27 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
             <Input style={{ width: "100%" }} onChange={(e) => onChange(e, rest.fieldKey, "bonusPer")} />
           </Form.Item>
         </Col> */}
-        <Col xs={4}>
+        <Col xs={6}>
           <Form.Item
             label={
               <Space>
                 {t("bonus(%)")}
                 {name === 0 && (
-                  <Checkbox onChange={handleCheckWelcomeBonus}>
-                    <div>&nbsp;Welcome Bonus</div>
-                  </Checkbox>
+                  <>
+                    <Checkbox onChange={handleCheckWelcomeBonus} disabled={hiBonusEnable}>
+                      <div>&nbsp;Welcome Bonus</div>
+                    </Checkbox>
+                    <Checkbox onChange={handleCheckHiBonus} disabled={welcomeBonusEnable}>
+                      <div>&nbsp;Hi Bonus</div>
+                    </Checkbox>
+                  </>
                 )}
               </Space>
             }
             name={[name, "bonusPer"]}
             rules={[{ required: true, message: t("pleaseSelect") }]}
           >
-            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, name, "bonusPer")} max={name === 0 && welcomeBonusEnable ? 100 : 25} />
+            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, name, "bonusPer")} max={name === 0 && welcomeBonusEnable ? 30 : name === 0 && hiBonusEnable ? 100 : 25} />
           </Form.Item>
         </Col>
 
