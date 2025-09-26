@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Statistic, Table } from "antd";
+import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Statistic, Table } from "antd";
 import { useTeamSalesReport } from "./hook/useTeamSalesReport";
 import CommonButton from "../../../../components/CommonButton";
 import { DollarOutlined, FileOutlined } from "@ant-design/icons";
@@ -8,7 +8,7 @@ import ExpandData from "./ExpandData";
 import { handleExportExcel } from "../../../../function/CommonFunction";
 
 const TeamSalesReport = () => {
-  const { t, form, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamCase } = useTeamSalesReport();
+  const { t, form, companyList, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamCase } = useTeamSalesReport();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -32,7 +32,12 @@ const TeamSalesReport = () => {
           </Col>
           <Col xs={6}>
             <Form.Item label={t("companyID")} name="companyID">
-              <Input disabled />
+              <Select>
+                <Select.Option value="all">All</Select.Option>
+                {companyList?.map((items) => {
+                  return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                })}
+              </Select>
             </Form.Item>
           </Col>
         </Row>

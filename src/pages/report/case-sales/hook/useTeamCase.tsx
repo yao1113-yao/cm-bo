@@ -1,13 +1,15 @@
 import { Form, message, TableProps } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ITeamCaseType } from "../../../../type/main.interface";
 import { formatIndex, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { reportApi } from "../../../../service/CallApi";
 import dayjs from "dayjs";
+import { Api } from "../../../../context/ApiContext";
 
 export const useTeamCase = () => {
   const { t } = useTranslation();
+  const { companyList } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -104,5 +106,5 @@ export const useTeamCase = () => {
     },
   ];
 
-  return { t, form, isLoading, initialValues, columns, apiData, handleGetTeamCase };
+  return { t, companyList, form, isLoading, initialValues, columns, apiData, handleGetTeamCase };
 };

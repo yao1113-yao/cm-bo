@@ -12,7 +12,7 @@ import { Api } from "../../../../context/ApiContext";
 import { getAllItemCodeList, handleEditingTransaction } from "../../../../function/ApiFunction";
 
 export const useBankRecord = () => {
-  const { userInfo, subdomain } = useContext(Api);
+  const { userInfo, subdomain, companyList } = useContext(Api);
   const { t } = useTranslation();
   const [form] = Form.useForm();
 
@@ -491,5 +491,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
+  return { t, userInfo, companyList, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
 };

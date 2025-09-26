@@ -1,11 +1,11 @@
 import CommonButton from "../../../components/CommonButton";
-import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Table } from "antd";
+import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Table } from "antd";
 import { useRekemenRecord } from "./hook/useRekemenRecord";
 import { DownCircleOutlined, LeftCircleOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 const RekemenRecord = () => {
-  const { userInfo, t, form, isLoading, apiData, columns, initialValues, handleGetRekemenRecordMarketing, handleSearchByFilter } = useRekemenRecord();
+  const { userInfo, companyList, t, form, isLoading, apiData, columns, initialValues, handleGetRekemenRecordMarketing, handleSearchByFilter } = useRekemenRecord();
   return (
     <Card>
       <Form layout="vertical" onFinish={handleGetRekemenRecordMarketing} initialValues={initialValues} form={form}>
@@ -19,7 +19,12 @@ const RekemenRecord = () => {
           {userInfo && userInfo?.userType !== 2 && (
             <Col xs={6}>
               <Form.Item label={t("companyID")} name="companyID">
-                <Input disabled />
+                <Select>
+                  <Select.Option value="all">All</Select.Option>
+                  {companyList?.map((items) => {
+                    return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                  })}
+                </Select>
               </Form.Item>
             </Col>
           )}

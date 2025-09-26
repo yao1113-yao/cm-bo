@@ -1,10 +1,10 @@
-import { Card, Col, DatePicker, Divider, Form, Input, Row, Table } from "antd";
+import { Card, Col, DatePicker, Divider, Form, Row, Select, Table } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import { useTeamCase } from "./hook/useTeamCase";
 const { RangePicker } = DatePicker;
 
 const TeamCase = () => {
-  const { t, form, isLoading, initialValues, columns, apiData, handleGetTeamCase } = useTeamCase();
+  const { t, companyList, form, isLoading, initialValues, columns, apiData, handleGetTeamCase } = useTeamCase();
   return (
     <Card>
       <Form layout="vertical" initialValues={initialValues} form={form} onFinish={handleGetTeamCase}>
@@ -17,7 +17,12 @@ const TeamCase = () => {
 
           <Col xs={6}>
             <Form.Item label={t("companyID")} name="companyID">
-              <Input value="all" disabled />
+              <Select>
+                <Select.Option value="all">All</Select.Option>
+                {companyList?.map((items) => {
+                  return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                })}
+              </Select>
             </Form.Item>
           </Col>
         </Row>

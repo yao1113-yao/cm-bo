@@ -1,13 +1,15 @@
 import { Form, message, TableProps } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { reportApi } from "../../../../service/CallApi";
 import { ITeamErrorReportType } from "../../../../type/main.interface";
 import { formatIndex, formatString, searchDateRange } from "../../../../function/CommonFunction";
+import { Api } from "../../../../context/ApiContext";
 
 export const useError = () => {
   const { t } = useTranslation();
+  const { companyList } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -91,5 +93,5 @@ export const useError = () => {
     },
   ];
 
-  return { t, form, isLoading, userInput, initialValues, columns, apiData, handleGetErrorSummary };
+  return { t, companyList, form, isLoading, userInput, initialValues, columns, apiData, handleGetErrorSummary };
 };

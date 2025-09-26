@@ -7,7 +7,7 @@ import EditTransaction from "./modal/EditTransaction";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
+  const { t, userInfo, companyList, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
 
   return (
     <Card>
@@ -23,7 +23,12 @@ const BankRecord = () => {
           {userInfo && userInfo?.userType !== 2 && (
             <Col xs={6}>
               <Form.Item label={t("companyID")} name="companyID">
-                <Input disabled />
+                <Select>
+                  <Select.Option value="all">All</Select.Option>
+                  {companyList?.map((items) => {
+                    return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                  })}
+                </Select>
               </Form.Item>
             </Col>
           )}

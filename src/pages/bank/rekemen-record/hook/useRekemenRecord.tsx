@@ -9,7 +9,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { Api } from "../../../../context/ApiContext";
 
 export const useRekemenRecord = () => {
-  const { userInfo, subdomain } = useContext(Api);
+  const { userInfo, subdomain, companyList } = useContext(Api);
 
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -189,5 +189,5 @@ export const useRekemenRecord = () => {
     }
   }
 
-  return { userInfo, t, form, isLoading, apiData, setApiData, initialValues, columns, handleGetRekemenRecordMarketing, handleSearchByFilter };
+  return { userInfo, companyList, t, form, isLoading, apiData, setApiData, initialValues, columns, handleGetRekemenRecordMarketing, handleSearchByFilter };
 };

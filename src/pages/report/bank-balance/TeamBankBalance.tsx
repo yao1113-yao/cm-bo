@@ -1,11 +1,11 @@
-import { Card, Col, Divider, Form, Input, InputNumber, Row, Table } from "antd";
+import { Card, Col, Divider, Form, InputNumber, Row, Select, Table } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import { useState } from "react";
 import { useTeamBankBalance } from "./hook/useTeamBankBalance";
 import ExpandData from "./ExpandData";
 
 const TeamBankBalance = () => {
-  const { t, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance } = useTeamBankBalance();
+  const { t, companyList, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance } = useTeamBankBalance();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -23,7 +23,12 @@ const TeamBankBalance = () => {
         <Row gutter={20}>
           <Col xs={6}>
             <Form.Item label={t("companyID")} name="companyID">
-              <Input value="all" disabled />
+              <Select>
+                <Select.Option value="all">All</Select.Option>
+                {companyList?.map((items) => {
+                  return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                })}
+              </Select>
             </Form.Item>
           </Col>
           {/* <Col xs={6}>

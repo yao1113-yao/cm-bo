@@ -1,13 +1,15 @@
 import { Form, message, TableProps } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { formatIndex, formatNumber, formatString, searchDateRange } from "../../../../../function/CommonFunction";
 import { ITeamStaffSalesType, ITotalValueType } from "../../../../../type/main.interface";
 import { reportApi } from "../../../../../service/CallApi";
+import { Api } from "../../../../../context/ApiContext";
 
 export const useTeamSalesReport = () => {
   const { t } = useTranslation();
+  const { companyList } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -98,5 +100,5 @@ export const useTeamSalesReport = () => {
     },
   ];
 
-  return { t, form, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamCase };
+  return { t, form, companyList, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamCase };
 };

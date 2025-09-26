@@ -9,7 +9,7 @@ import { ITransactionType } from "../../../../type/main.interface";
 import { Api } from "../../../../context/ApiContext";
 
 export const useTransferRecord = () => {
-  const { userInfo, subdomain } = useContext(Api);
+  const { userInfo, subdomain, companyList } = useContext(Api);
 
   const { t } = useTranslation();
   const [form] = Form.useForm();
@@ -167,5 +167,5 @@ export const useTransferRecord = () => {
     }
   }
 
-  return { userInfo, t, form, isLoading, apiData, setApiData, initialValues, columns, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter };
+  return { userInfo, companyList, t, form, isLoading, apiData, setApiData, initialValues, columns, handleGetTransferRecordMarketing, rowClassName, handleSearchByFilter };
 };

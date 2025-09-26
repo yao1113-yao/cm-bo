@@ -6,7 +6,7 @@ import { useError } from "./hook/useError";
 import ExpandData from "./ExpandData";
 
 const Error = () => {
-  const { t, form, isLoading, userInput, initialValues, columns, apiData, handleGetErrorSummary } = useError();
+  const { t, companyList, form, isLoading, userInput, initialValues, columns, apiData, handleGetErrorSummary } = useError();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -39,7 +39,12 @@ const Error = () => {
           </Col>
           <Col xs={6}>
             <Form.Item label={t("companyID")} name="companyID">
-              <Input disabled />
+              <Select>
+                <Select.Option value="all">All</Select.Option>
+                {companyList?.map((items) => {
+                  return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                })}
+              </Select>
             </Form.Item>
           </Col>
           <Col xs={6}>

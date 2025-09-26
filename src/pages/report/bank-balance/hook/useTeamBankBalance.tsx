@@ -1,12 +1,14 @@
 import { Form, message, TableProps } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ITeamKioskBalance } from "../../../../type/main.interface";
 import { formatIndex, formatString } from "../../../../function/CommonFunction";
 import { reportApi } from "../../../../service/CallApi";
+import { Api } from "../../../../context/ApiContext";
 
 export const useTeamBankBalance = () => {
   const { t } = useTranslation();
+  const { companyList } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -84,5 +86,5 @@ export const useTeamBankBalance = () => {
     },
   ];
 
-  return { t, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance };
+  return { t, companyList, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance };
 };
