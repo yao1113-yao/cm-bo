@@ -5,7 +5,7 @@ import { useTeamBankBalance } from "./hook/useTeamBankBalance";
 import ExpandData from "./ExpandData";
 
 const TeamBankBalance = () => {
-  const { t, companyList, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance } = useTeamBankBalance();
+  const { t, companyList, form, isLoading, initialValues, columns, userInput, apiData, handleGetBankKioskBalance } = useTeamBankBalance();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -19,7 +19,7 @@ const TeamBankBalance = () => {
   }
   return (
     <Card>
-      <Form layout="vertical" initialValues={initialValues} form={form} onFinish={handleGetTeamKioskBalance}>
+      <Form layout="vertical" initialValues={initialValues} form={form} onFinish={handleGetBankKioskBalance}>
         <Row gutter={20}>
           <Col xs={6}>
             <Form.Item label={t("companyID")} name="companyID">

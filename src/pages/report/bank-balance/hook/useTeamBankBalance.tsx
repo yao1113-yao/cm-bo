@@ -1,7 +1,7 @@
 import { Form, message, TableProps } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ITeamKioskBalance } from "../../../../type/main.interface";
+import { ITeamBankBalance } from "../../../../type/main.interface";
 import { formatIndex, formatString } from "../../../../function/CommonFunction";
 import { reportApi } from "../../../../service/CallApi";
 import { Api } from "../../../../context/ApiContext";
@@ -16,7 +16,7 @@ export const useTeamBankBalance = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userInput, setUserInput] = useState();
-  const [apiData, setApiData] = useState<ITeamKioskBalance[] | undefined>();
+  const [apiData, setApiData] = useState<ITeamBankBalance[] | undefined>();
 
   const initialValues = {
     companyID: "all",
@@ -24,10 +24,10 @@ export const useTeamBankBalance = () => {
     max: 0,
   };
   useEffect(() => {
-    handleGetTeamKioskBalance(initialValues);
+    handleGetBankKioskBalance(initialValues);
   }, []);
 
-  async function handleGetTeamKioskBalance(values: any) {
+  async function handleGetBankKioskBalance(values: any) {
     setIsLoading(true);
     setUserInput(values);
     const object = {
@@ -37,7 +37,7 @@ export const useTeamBankBalance = () => {
       min: values?.min,
       max: values?.max,
     };
-    await reportApi("/team-kiosk-balance", object)
+    await reportApi("/team-bank-balance", object)
       .then((result) => {
         setApiData(result.data);
         setIsLoading(false);
@@ -48,7 +48,7 @@ export const useTeamBankBalance = () => {
     setIsLoading(false);
   }
 
-  const columns: TableProps<ITeamKioskBalance>["columns"] = [
+  const columns: TableProps<ITeamBankBalance>["columns"] = [
     {
       title: "#",
       key: "srno",
@@ -66,9 +66,9 @@ export const useTeamBankBalance = () => {
       },
     },
     {
-      title: t("GpCount"),
-      key: "GpCount",
-      dataIndex: "gpCount",
+      title: t("bankCount"),
+      key: "bankCount",
+      dataIndex: "bankCount",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
@@ -86,5 +86,5 @@ export const useTeamBankBalance = () => {
     },
   ];
 
-  return { t, companyList, form, isLoading, initialValues, columns, userInput, apiData, handleGetTeamKioskBalance };
+  return { t, companyList, form, isLoading, initialValues, columns, userInput, apiData, handleGetBankKioskBalance };
 };

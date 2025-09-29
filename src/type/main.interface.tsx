@@ -208,6 +208,15 @@ export interface ITeamKioskBalance {
   balance: number;
   balanceGP: number;
 }
+
+export interface ITeamBankBalance {
+  srno: number;
+  companyID: string;
+  bankCount: number;
+  bankCode: string;
+  balance: number;
+  status: number;
+}
 export interface ITeamStaffSalesType {
   srno: number;
   companyID: string;
