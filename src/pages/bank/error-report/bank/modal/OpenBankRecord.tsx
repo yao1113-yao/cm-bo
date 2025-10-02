@@ -155,7 +155,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
   return (
     <>
       <Modal width="70vw" open={openBankRecord} onCancel={() => handleOnCloseModal()} footer={null} closable={false} loading={isLoading}>
-        <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankErrorReport}>
+        <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankRecord}>
           <Row gutter={10}>
             <Col xs={6}>
               <Form.Item label={t("searchDate")} name="searchDate">
