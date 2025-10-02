@@ -1,11 +1,10 @@
 import { Card, Col, DatePicker, Form, Input, InputNumber, Row, Select, Table } from "antd";
-import React from "react";
 import { useBankRecordHaventAssign } from "./hook/useBankRecordHaventAssign";
 import CommonButton from "../../../components/CommonButton";
 const { RangePicker } = DatePicker;
 
 const BankRecordHaventAssign = () => {
-  const { t, form, contextHolder, isLoading, initialValues, allBankList, apiData, columns, handleGetBankRecordHaventAssingList } = useBankRecordHaventAssign();
+  const { form, contextHolder, isLoading, initialValues, allBankList, apiData, columns, handleGetBankRecordHaventAssingList } = useBankRecordHaventAssign();
   return (
     <Card loading={isLoading}>
       {contextHolder}

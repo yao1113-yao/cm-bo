@@ -6,7 +6,7 @@ import { useContext, useRef, useState } from "react";
 import { FileImageOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { Api } from "../../../../context/ApiContext";
-import { CheckOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { ClockCircleOutlined } from "@ant-design/icons";
 import { mainApi } from "../../../../service/CallApi";
 
 const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
