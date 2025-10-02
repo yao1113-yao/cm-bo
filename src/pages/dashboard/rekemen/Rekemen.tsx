@@ -1,4 +1,4 @@
-import { Checkbox, Col, Divider, Form, Input, InputNumber, message, Row, Space, Spin } from "antd";
+import { Col, Divider, Form, Input, InputNumber, message, Row, Spin } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import GameProvider from "../../../components/GameProvider";
 import { mainApi } from "../../../service/CallApi";
@@ -26,7 +26,6 @@ const Rekemen = ({ type }: DepositProps) => {
   const [depositRecod, setDepositRecord] = useState<[ITransactionType] | undefined>();
   const [pendingWithdrawRecod, setPendingWithdrawRecod] = useState<[ITransactionType] | undefined>();
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
-  const [newIDEnable, setNewIDEnable] = useState<boolean>(false);
 
   const initialValues = { bonusPer: "20" };
 
@@ -46,10 +45,6 @@ const Rekemen = ({ type }: DepositProps) => {
       clearInterval(intervalId); // Clear the interval on unmount
     };
   }, []);
-
-  function handleCheckNewID() {
-    setNewIDEnable(!newIDEnable);
-  }
 
   function handleOnChangeBonus(current: any, all: any) {
     if ("credit" in current) {
@@ -146,20 +141,9 @@ const Rekemen = ({ type }: DepositProps) => {
                 <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
               </Col>
 
-              <Col xs={4}>
-                <Form.Item
-                  label={
-                    <Space>
-                      {t("rekemenGameLoginID")}
-                      <Checkbox onChange={handleCheckNewID}>
-                        <div>&nbsp;New ID</div>
-                      </Checkbox>
-                    </Space>
-                  }
-                  name="gameLoginID"
-                  rules={[{ required: !newIDEnable, message: t("pleaseSelect") }]}
-                >
-                  <Input disabled={newIDEnable} autoComplete="off" />
+              <Col xs={3}>
+                <Form.Item label={t("rekemenGameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input autoComplete="off" />
                 </Form.Item>
               </Col>
 

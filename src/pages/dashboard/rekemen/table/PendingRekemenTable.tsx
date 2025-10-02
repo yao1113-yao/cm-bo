@@ -67,14 +67,14 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
                   <Tooltip title={t("manualSuccess")}>
                     <Button icon={<FaHandPaper />} onClick={() => handleInsertManualSuccess(record)} disabled={record?.isEditing === 1}></Button>
                   </Tooltip>
+
+                  <Tooltip title={t("reject")}>
+                    <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                  </Tooltip>
                 </>
               ) : (
                 ""
               )}
-
-              <Tooltip title={t("reject")}>
-                <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
-              </Tooltip>
             </Space>
           </>
         );
