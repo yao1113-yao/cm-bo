@@ -63,3 +63,10 @@ export async function reportApi(url: string, object: object) {
 
   return result;
 }
+
+export async function settingApi(url: string, object: object) {
+  const response = await ApiBaseUrl(api1).post("/api/setting" + url, object);
+  const result = response.data;
+
+  return result;
+}
