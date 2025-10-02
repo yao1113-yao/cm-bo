@@ -26,24 +26,22 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
       render: (record: any) => {
         return (
           <>
-            <Tooltip title={t("viewReceipt")}>
-              <Button icon={<FileImageOutlined />} onClick={() => handleViewReceipt(record)}></Button>
-            </Tooltip>
-
-            {userInfo?.userType === 3 && record?.mStatus === "DONE" ? (
-              record?.isSeen === 0 && (
-                <Tooltip title={t("Noted")}>
-                  <Button onClick={() => handleNotedTransaction(record)}>
-                    <CheckOutlined />
-                  </Button>
+            {record?.mStatus !== "REVERT CREDIT" ? (
+              <>
+                <Tooltip title={t("viewReceipt")}>
+                  <Button icon={<FileImageOutlined />} onClick={() => handleViewReceipt(record)}></Button>
                 </Tooltip>
-              )
+
+                {userInfo?.userType !== 3 && (
+                  <Tooltip title={t("ShowRecordToMkt")}>
+                    <Button onClick={() => handleShowRecord(record)}>
+                      <ClockCircleOutlined />
+                    </Button>
+                  </Tooltip>
+                )}
+              </>
             ) : (
-              <Tooltip title={t("ShowRecordToMkt")}>
-                <Button onClick={() => handleShowRecord(record)}>
-                  <ClockCircleOutlined />
-                </Button>
-              </Tooltip>
+              ""
             )}
           </>
         );
@@ -249,40 +247,40 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
     setSelectedRecord(values);
   }
 
-  async function handleNotedTransaction(values: any) {
-    Swal.fire({
-      title: "Confirm to noted the transaction?",
-      showCancelButton: true,
-      confirmButtonText: "Noted",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true);
-        const object = {
-          UserID: userID,
-          UserToken: userToken,
-          mktDetailsSrno: values?.srno,
-          status: 1,
-        };
-        await mainApi("/update-transaction-status", object)
-          .then(() => {
-            handleGetPendingTransactionRecord("withdraw");
-            handleGetTransactionRecord("withdraw");
-            messageApi.open({
-              type: "success",
-              content: "done",
-            });
-          })
-          .catch(() => {
-            messageApi.open({
-              type: "error",
-              content: "",
-            });
-          });
-      }
+  // async function handleNotedTransaction(values: any) {
+  //   Swal.fire({
+  //     title: "Confirm to noted the transaction?",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Noted",
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       setIsLoading(true);
+  //       const object = {
+  //         UserID: userID,
+  //         UserToken: userToken,
+  //         mktDetailsSrno: values?.srno,
+  //         status: 1,
+  //       };
+  //       await mainApi("/update-transaction-status", object)
+  //         .then(() => {
+  //           handleGetPendingTransactionRecord("withdraw");
+  //           handleGetTransactionRecord("withdraw");
+  //           messageApi.open({
+  //             type: "success",
+  //             content: "done",
+  //           });
+  //         })
+  //         .catch(() => {
+  //           messageApi.open({
+  //             type: "error",
+  //             content: "",
+  //           });
+  //         });
+  //     }
 
-      setIsLoading(false);
-    });
-  }
+  //     setIsLoading(false);
+  //   });
+  // }
   return (
     <>
       <Spin spinning={isLoading}>

@@ -121,6 +121,7 @@ export interface ICompanyType {
   spreedSheetID: string;
   googleSheetUrl: string;
   status: number;
+  ip: string;
   createBy: string;
   createDate: Date;
   botSrno: number;
@@ -294,4 +295,28 @@ export interface IErrorKioskMarketingRecord {
   bankCode: string;
   bankRemark: string;
   bankDate: string;
+}
+
+export interface IBankRecordHaventAssign {
+  srno: number;
+  companyID: string;
+  bankCode: string;
+  bankDate: string;
+  bankRemark: string;
+  bankAmount: number;
+  debit: number;
+  credit: number;
+  status: number;
+  createBy: string;
+  createDate: Date;
+}
+
+export interface IPlayerTask {
+  srno: number;
+  action: string;
+  countNumber: number;
+  countSuccess: number;
+  status: number;
+  updateDate: Date;
+  gameName: string;
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, message, Table, TableProps } from "antd";
 import { reportApi } from "../../../../service/CallApi";
 import { ITeamSalesDetailsType } from "../../../../type/main.interface";
-import { formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatIndex, formatString } from "../../../../function/CommonFunction";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 
@@ -34,26 +34,35 @@ const ExpandData = ({ record, userInput }: any) => {
       },
     },
     {
-      title: t("totalDeposit(RM)"),
-      dataIndex: "deposit",
+      title: t("cashierDeposit(RM)"),
+      dataIndex: "cashierDeposit",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600", color: "green" }}>{formatString(text)}</div>;
       },
     },
     {
-      title: t("totalWithdraw(RM)"),
-      dataIndex: "withdraw",
+      title: t("cashierWithdraw(RM)"),
+      dataIndex: "cashierWithdraw",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600", color: "red" }}>{formatString(text)}</div>;
       },
     },
     {
-      title: t("totalProfit(RM)"),
+      title: t("marketingDeposit(RM)"),
+      dataIndex: "marketingDeposit",
       ellipsis: true,
-      render: (record) => {
-        return <div style={{ fontWeight: "600", color: record?.deposit - record?.withdraw > 0 ? "green" : record?.deposit - record?.withdraw < 0 ? "red" : "black" }}>{formatNumber(record?.deposit - record?.withdraw)}</div>;
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600", color: "green" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("marketingWithdraw(RM)"),
+      dataIndex: "marketingWithdraw",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600", color: "red" }}>{formatString(text)}</div>;
       },
     },
   ];

@@ -35,7 +35,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
       render: (record: any) => {
         return (
           <Space>
-            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "HOLD" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "REJECT" ? (
+            {record?.mStatus !== "BOT PROCESSING" && record?.mStatus !== "HOLD" && record?.mStatus !== "SUCCESS" && record?.mStatus !== "REJECT" && record?.mStatus !== "REVERT CREDIT" ? (
               <>
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
@@ -47,7 +47,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                   </Button>
                 </Tooltip>
               </>
-            ) : record?.mStatus === "SUCCESS" ? (
+            ) : record?.mStatus === "SUCCESS" || record?.mStatus === "REVERT CREDIT" ? (
               <Tooltip title={t("Noted")}>
                 <Button onClick={() => handleNotedTransaction(record)}>
                   <CheckOutlined />

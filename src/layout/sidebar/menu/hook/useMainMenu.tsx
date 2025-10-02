@@ -33,10 +33,9 @@ export const useMainMenu = () => {
     {
       label: t("dashboard"),
       key: "/dashboard/deposit",
-      hidden: userInfo && (userInfo.userType > 2 || userInfo?.userType === 1),
+      hidden: userInfo && (userInfo.userType > 3 || userInfo?.userType === 1),
       icon: <DashboardOutlined />,
     },
-
     {
       label: t("Team Report"),
       key: "",
@@ -85,9 +84,9 @@ export const useMainMenu = () => {
       label: t("account"),
       key: "account",
       type: "group",
-      hidden: userInfo && userInfo.userType > 2,
+      hidden: userInfo && userInfo.userType > 3,
       children: [
-        { label: t("registerPlayer"), key: "/player/register", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
+        { label: t("registerPlayer"), key: "/player/register", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 3 },
         { label: t("playerList"), key: "/player/list", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType > 2 },
       ],
     },
@@ -103,6 +102,12 @@ export const useMainMenu = () => {
           key: "/bank-transaction",
           icon: <FileSearchOutlined />,
           hidden: userInfo && (userInfo.userType > 2 || userInfo?.userType === 1),
+        },
+        {
+          label: t("Bank Transaction Havent Assign"),
+          key: "/bank-transaction/havent-assign",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType === 3,
         },
         {
           label: t("Bank Balance"),
@@ -178,26 +183,26 @@ export const useMainMenu = () => {
       label: t("setting"),
       key: "setting",
       type: "group",
-      hidden: userInfo && userInfo.userType !== 1,
+      hidden: (userInfo && userInfo?.userType === 2) || userInfo?.userType === 3,
       children: [
         {
           label: t("user"),
           key: "/user",
           icon: <FileSearchOutlined />,
-          hidden: userInfo && userInfo.userType !== 1,
+          hidden: (userInfo && userInfo?.userType === 2) || userInfo?.userType === 3,
           children: [
-            { label: t("registerUser"), key: "/user/register", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType !== 1 },
-            { label: t("userList"), key: "/user/list", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType !== 1 },
+            { label: t("registerUser"), key: "/user/register", icon: <FileSearchOutlined />, hidden: (userInfo && userInfo?.userType === 2) || userInfo?.userType === 3 },
+            { label: t("userList"), key: "/user/list", icon: <FileSearchOutlined />, hidden: (userInfo && userInfo?.userType === 2) || userInfo?.userType === 3 },
           ],
         },
         {
           label: t("company"),
           key: "/company",
           icon: <FileSearchOutlined />,
-          hidden: userInfo && userInfo.userType !== 1,
+          hidden: (userInfo && userInfo && userInfo?.userType === 2) || userInfo?.userType === 3,
           children: [
-            { label: t("addCompany"), key: "/company/add", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType !== 1 },
-            { label: t("companyList"), key: "/company/list", icon: <FileSearchOutlined />, hidden: userInfo && userInfo.userType !== 1 },
+            { label: t("addCompany"), key: "/company/add", icon: <FileSearchOutlined />, hidden: (userInfo && userInfo && userInfo?.userType === 2) || userInfo?.userType === 3 },
+            { label: t("companyList"), key: "/company/list", icon: <FileSearchOutlined />, hidden: (userInfo && userInfo && userInfo?.userType === 2) || userInfo?.userType === 3 },
           ],
         },
         {
