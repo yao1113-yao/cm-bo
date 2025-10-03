@@ -94,7 +94,7 @@ export const useMaybank = () => {
       hidden: false,
       align: "center",
       render: (text: number, record) => {
-        return <div style={{ fontWeight: "600", color: text > 0 ? (record?.mBank === "PMY" ? "green" : "red") : "" }}>{formatNumber(text)}</div>;
+        return <div style={{ fontWeight: "600", color: text > 0 ? (record?.bankCode === "PMY" ? "green" : "red") : "black" }}>{formatNumber(text)}</div>;
       },
     },
     {
@@ -103,7 +103,7 @@ export const useMaybank = () => {
       hidden: false,
       align: "center",
       render: (text: number, record) => {
-        return <div style={{ fontWeight: "600", color: text > 0 ? (record?.mBank === "PMY" ? "red" : "green") : "" }}>{formatNumber(text)}</div>;
+        return <div style={{ fontWeight: "600", color: text > 0 ? (record?.bankCode === "PMY" ? "red" : "green") : "" }}>{formatNumber(text)}</div>;
       },
     },
     {

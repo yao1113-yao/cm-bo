@@ -1,13 +1,14 @@
 import CommonButton from "../../../components/CommonButton";
 import { useBankRecord } from "./hook/useBankRecord";
 import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Statistic, Table } from "antd";
-import { DownCircleOutlined, LeftCircleOutlined, DollarOutlined } from "@ant-design/icons";
+import { DownCircleOutlined, LeftCircleOutlined, DollarOutlined, FileOutlined } from "@ant-design/icons";
 import OpenBankRecord from "./modal/OpenbankRecord";
 import EditTransaction from "./modal/EditTransaction";
+import { handleExportExcel } from "../../../function/CommonFunction";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, companyList, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
+  const { t, userInfo, companyList, userInput, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
 
   return (
     <Card>
@@ -66,6 +67,10 @@ const BankRecord = () => {
         &nbsp;
         <Button icon={<DownCircleOutlined />} type="primary" style={{ background: "black" }} onClick={() => handleSearchByFilter("yesterday")}>
           {t("yesterday")}
+        </Button>
+        &nbsp;
+        <Button icon={<FileOutlined />} type="primary" style={{ background: "green", marginLeft: "10px" }} onClick={() => handleExportExcel("Deposit Withdraw Record", userInput, apiData)}>
+          {t("Export Excel")}
         </Button>
       </Form>
 

@@ -30,6 +30,7 @@ export const useBankRecord = () => {
   const [timer, setTimer] = useState<number>(5);
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
   const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
+  const [userInput, setUserInput] = useState<any>();
 
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
@@ -457,6 +458,7 @@ export const useBankRecord = () => {
 
   async function handleGetBankRecordMarketingList(values: any) {
     setIsLoading(true);
+    const input = { ...values };
 
     const object = {
       UserID: userID,
@@ -469,6 +471,8 @@ export const useBankRecord = () => {
       // bankCode: values?.bank,
       // remark: values?.remark,
     };
+    setUserInput(input);
+
     await bankApi("/bank-marketing-list", object)
       .then((result) => {
         setApiData(result.data);
@@ -491,5 +495,5 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, companyList, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
+  return { t, userInfo, companyList, userInput, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
 };

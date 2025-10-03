@@ -77,6 +77,7 @@ export interface ITransactionType {
   bankRemark: string;
   bankAmount: number;
   bankOut: number;
+  bankCode: string;
   isManual: number;
   isLater: number;
   isSeen: number;

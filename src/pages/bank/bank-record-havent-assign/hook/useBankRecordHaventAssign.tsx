@@ -5,7 +5,7 @@ import { Api } from "../../../../context/ApiContext";
 import dayjs from "dayjs";
 import { bankApi } from "../../../../service/CallApi";
 import { IBankRecordHaventAssign, ICompanyBankType } from "../../../../type/main.interface";
-import { formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
 import { getAllBankList } from "../../../../function/ApiFunction";
 
 export const useBankRecordHaventAssign = () => {
@@ -58,6 +58,14 @@ export const useBankRecordHaventAssign = () => {
   }
 
   const columns: TableProps<IBankRecordHaventAssign>["columns"] = [
+    {
+      title: "createDate",
+      dataIndex: "createDate",
+      align: "center",
+      render: (text: Date) => {
+        return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
     {
       title: "bankCode",
       dataIndex: "bankCode",
