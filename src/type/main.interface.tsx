@@ -196,6 +196,7 @@ export interface ILogType {
 
 export interface ITeamCaseType {
   srno: number;
+  mDevice: string;
   companyID: string;
   totalCase: number;
   totalDepositCase: number;

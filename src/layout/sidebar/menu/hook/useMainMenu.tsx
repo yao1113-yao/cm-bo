@@ -49,6 +49,12 @@ export const useMainMenu = () => {
           icon: <DashboardOutlined />,
         },
         {
+          label: t("Device Case"),
+          key: "/device/case",
+          hidden: userInfo && userInfo.userType < 4 && userInfo?.userType !== 1,
+          icon: <DashboardOutlined />,
+        },
+        {
           label: t("Team Kiosk Balance"),
           key: "/team/kiosk-balance",
           hidden: userInfo && userInfo.userType < 4 && userInfo?.userType !== 1,

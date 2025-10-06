@@ -28,6 +28,7 @@ import Error from "./pages/report/error/Error";
 import UserList from "./pages/setting/user/list/List";
 import CompanyList from "./pages/setting/company/list/List";
 import BankRecordHaventAssign from "./pages/bank/bank-record-havent-assign/BankRecordHaventAssign";
+import DeviceCase from "./pages/report/device-case/DeviceCase";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -65,6 +66,7 @@ function App() {
         { path: "/bank-adjustment", element: <Protected roles={[1, 2, 4, 5]} component={<BankErrorReport />} /> },
         { path: "/report/daily", element: <Protected roles={[1, 4, 5]} component={<DailyReport />} /> },
         { path: "/team/case", element: <Protected roles={[1, 4, 5]} component={<TeamCase />} /> },
+        { path: "/device/case", element: <Protected roles={[1, 4, 5]} component={<DeviceCase />} /> },
         { path: "/team/kiosk-balance", element: <Protected roles={[1, 4, 5]} component={<TeamKioskBalance />} /> },
         { path: "/team/bank-balance", element: <Protected roles={[1, 4, 5]} component={<TeamBankBalance />} /> },
         { path: "/error-report", element: <Protected roles={[1, 2, 4, 5]} component={<ErrorReport />} /> },
