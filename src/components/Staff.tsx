@@ -18,7 +18,7 @@ const Staff = ({ list, required = false, selectAll = true, label = "staff" }: IS
         {selectAll && <Select.Option value={0}>{t("all")}</Select.Option>}
         {list?.map((items: any) => (
           <Select.Option value={items.srno} key={items.srno}>
-            {items?.userID}
+            {items?.userID} ({items?.userType === 2 ? "Cashier" : "Marketing"})
           </Select.Option>
         ))}
       </Select>

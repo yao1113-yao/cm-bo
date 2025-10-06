@@ -6,9 +6,10 @@ import { useState } from "react";
 import { useStaffSalesReport } from "./hook/useStaffSalesReport";
 import ExpandData from "./ExpandData";
 import { handleExportExcel } from "../../../../function/CommonFunction";
+import Staff from "../../../../components/Staff";
 
 const StaffSalesReport = () => {
-  const { t, form, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails } = useStaffSalesReport();
+  const { t, form, isLoading, userInput, allStaffList, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails } = useStaffSalesReport();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -31,9 +32,7 @@ const StaffSalesReport = () => {
             </Form.Item>
           </Col>
           <Col xs={6}>
-            <Form.Item label={t("staffCode")} name="staffCode">
-              <Input disabled />
-            </Form.Item>
+            <Staff list={allStaffList} required={true} selectAll={true} label="staffSrno" />
           </Col>
         </Row>
         <CommonButton text="Submit" />

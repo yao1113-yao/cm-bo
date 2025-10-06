@@ -1,13 +1,16 @@
 import { Form, message, TableProps } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { formatIndex, formatString, searchDateRange } from "../../../../../function/CommonFunction";
-import { ITeamSalesDetailsType, ITotalValueType } from "../../../../../type/main.interface";
+import { ITeamSalesDetailsType, ITotalValueType, IUserType } from "../../../../../type/main.interface";
 import { reportApi } from "../../../../../service/CallApi";
+import { getAllStaffList } from "../../../../../function/ApiFunction";
+import { Api } from "../../../../../context/ApiContext";
 
 export const useStaffSalesReport = () => {
   const { t } = useTranslation();
+  const { subdomain } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -17,12 +20,14 @@ export const useStaffSalesReport = () => {
   const [apiData, setApiData] = useState<ITeamSalesDetailsType[] | undefined>();
   const [apiData2, setApiData2] = useState<ITotalValueType | undefined>();
   const [userInput, setUserInput] = useState();
+  const [allStaffList, setAllStaffList] = useState<[IUserType] | undefined>();
 
   const initialValues = {
     searchDate: searchDateRange("day"),
-    staffCode: "all",
+    staffSrno: 0,
   };
   useEffect(() => {
+    getAllStaffList(setIsLoading, subdomain, setAllStaffList);
     handleGetTeamSalesDetails(initialValues);
   }, []);
 
@@ -34,7 +39,7 @@ export const useStaffSalesReport = () => {
       UserToken: userToken,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
-      staffCode: values?.staffCode,
+      staffSrno: values?.staffSrno,
     };
     await reportApi("/staff-sales", object)
       .then((result) => {
@@ -97,5 +102,5 @@ export const useStaffSalesReport = () => {
     },
   ];
 
-  return { t, form, isLoading, userInput, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails };
+  return { t, form, isLoading, userInput, allStaffList, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails };
 };
