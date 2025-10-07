@@ -25,25 +25,25 @@ const Dashboard = () => {
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "deposit" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("deposit")}>
-              {t("deposit")} <Badge count={count?.countDeposit}></Badge>
+              {t("deposit")} <Badge count={count?.countDeposit} style={{ fontSize: "18px", fontWeight: "600" }}></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "withdraw" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("withdraw")}>
-              {t("withdraw")} <Badge count={count?.countWithdraw}></Badge>
+              {t("withdraw")} <Badge count={count?.countWithdraw} style={{ fontSize: "18px", fontWeight: "600" }}></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "rekemen" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("rekemen")}>
-              {t("rekemen")} <Badge count={count?.countRekemen}></Badge>
+              {t("rekemen")} <Badge count={count?.countRekemen} style={{ fontSize: "18px", fontWeight: "600" }}></Badge>
             </Button>
           </Col>
 
           <Col xs={4}>
             <Button style={{ width: "100%", backgroundColor: type === "transfer" ? "#bfbfbf" : "" }} onClick={() => handleOnChangeType("transfer")}>
-              {t("transfer")} <Badge count={count?.countTransfer}></Badge>
+              {t("transfer")} <Badge count={count?.countTransfer} style={{ fontSize: "18px", fontWeight: "600" }}></Badge>
             </Button>
           </Col>
 
