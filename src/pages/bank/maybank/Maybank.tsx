@@ -123,7 +123,7 @@ const Maybank = () => {
           <Col xs={6}>
             {/* <Device list={allBankList} label="bank" selectAll={false} required /> */}
             <Form.Item label="bank" name="bank">
-              <Select>
+              <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={"select bank"} optionFilterProp="label">
                 {allBankList?.map((items) => {
                   return <Select.Option value={items.bankCode}>{items.bankCode}</Select.Option>;
                 })}

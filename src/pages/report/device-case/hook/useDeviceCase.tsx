@@ -59,8 +59,8 @@ export const useDeviceCase = () => {
     },
 
     {
-      title: t("deviceID"),
-      dataIndex: "mDevice",
+      title: t("companyID"),
+      dataIndex: "companyID",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
@@ -74,37 +74,68 @@ export const useDeviceCase = () => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
-
     {
-      title: t("totalDepositCase"),
-      dataIndex: "totalDepositCase",
+      title: t("001W"),
+      dataIndex: "m001W",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
-      title: t("totalWithdrawCase"),
-      dataIndex: "totalWithdrawCase",
+      title: t("002W"),
+      dataIndex: "m002W",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
-      title: t("totalDeposit(RM)"),
-      dataIndex: "totalDeposit",
+      title: t("003W"),
+      dataIndex: "m003W",
       ellipsis: true,
       render: (text: string) => {
-        return <div style={{ fontWeight: "600", color: "green" }}>{formatString(text)}</div>;
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
-      title: t("totalWithdraw(RM)"),
-      dataIndex: "totalWithdraw",
+      title: t("004W"),
+      dataIndex: "m004W",
       ellipsis: true,
       render: (text: string) => {
-        return <div style={{ fontWeight: "600", color: "red" }}>{formatString(text)}</div>;
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("001T"),
+      dataIndex: "m001T",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("002T"),
+      dataIndex: "m002T",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("003T"),
+      dataIndex: "m003T",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("004T"),
+      dataIndex: "m004T",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
   ];

@@ -202,7 +202,30 @@ export interface ITeamCaseType {
   totalDepositCase: number;
   totalWithdrawCase: number;
 }
-
+export interface IDeviceCaseType {
+  srno: number;
+  mDevice: string;
+  companyID: string;
+  totalCase: number;
+  m001W: string;
+  m002W: string;
+  m003W: string;
+  m004W: string;
+  m005W: string;
+  m006W: string;
+  m007W: string;
+  m008W: string;
+  m009W: string;
+  m001T: string;
+  m002T: string;
+  m003T: string;
+  m004T: string;
+  m005T: string;
+  m006T: string;
+  m007T: string;
+  m008T: string;
+  m009T: string;
+}
 export interface ITeamKioskBalance {
   srno: number;
   companyID: string;
