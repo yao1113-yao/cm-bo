@@ -73,7 +73,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
                     <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
                   </Tooltip>
                 </>
-              ) : record?.mStatus === "BOT PROCESSING" && dayjs().diff(record?.createDate, "hour") > 1 ? (
+              ) : record?.mStatus === "BOT PROCESSING" && dayjs().diff(record?.createDate, "hour") >= 1 ? (
                 <Tooltip title={t("reject")}>
                   <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
                 </Tooltip>
