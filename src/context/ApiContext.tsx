@@ -54,12 +54,14 @@ const ApiContext = ({ children }: IApiContextProps) => {
     const object = {
       UserID: localStorage.getItem("userID") ?? "",
       UserToken: localStorage.getItem("userToken") ?? "",
+      UserType: localStorage.getItem("userType") ?? "",
     };
     await userApi("/validate-token", object)
       .then((result) => {
         setUserInfo(result.data);
         setCompanyList(result.data2);
         localStorage.setItem("userToken", result.data.token);
+        localStorage.setItem("userType", result.data.userType);
       })
       .catch(() => {});
     setIsLoading(false);
