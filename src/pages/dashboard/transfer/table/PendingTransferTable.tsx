@@ -131,14 +131,14 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
-    // {
-    //   title: t("staff"),
-    //   dataIndex: "mStaff",
-    //   align: "center",
-    //   render: (text: string) => {
-    //     return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
-    //   },
-    // },
+    {
+      title: t("staff"),
+      dataIndex: "mStaff",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
     {
       title: t("game"),
       dataIndex: "mGame",
