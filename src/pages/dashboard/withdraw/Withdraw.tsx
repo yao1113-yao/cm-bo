@@ -136,6 +136,14 @@ const Withdraw = ({ type }: DepositProps) => {
     form.setFieldValue("credit", 0);
   }
 
+  const roundUpFormatter = (num: any) => {
+    // If the number is a decimal, round it up
+    if (typeof num === "number" && num % 1 !== 0) {
+      return Math.trunc(num);
+    }
+    return num;
+  };
+
   return (
     <>
       {contextHolder}
@@ -223,7 +231,16 @@ const Withdraw = ({ type }: DepositProps) => {
                     { min: 0, type: "number", message: t("cannotLessThan0") },
                   ]}
                 >
-                  <InputNumber style={{ width: "100%" }} />
+                  {cuciAllEnable ? (
+                    <InputNumber style={{ width: "100%" }} />
+                  ) : (
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      step={1}
+                      formatter={(value: any) => value.toString().split(".")[0]} // Removes any decimal part for display
+                      parser={(value: any) => parseInt(value, 10)}
+                    />
+                  )}
                 </Form.Item>
               </Col>
 
