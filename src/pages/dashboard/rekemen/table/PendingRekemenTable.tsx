@@ -10,6 +10,7 @@ import { FaHandPaper } from "react-icons/fa";
 import { mainApi } from "../../../../service/CallApi";
 import EditTransaction from "./modal/EditTransaction";
 import { handleEditingTransaction } from "../../../../function/ApiFunction";
+import dayjs from "dayjs";
 
 const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionRecord, handleGetTransactionRecord }: any) => {
   const { t } = useTranslation();
@@ -72,6 +73,10 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
                     <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
                   </Tooltip>
                 </>
+              ) : record?.mStatus === "BOT PROCESSING" && dayjs().diff(record?.createDate, "hour") > 1 ? (
+                <Tooltip title={t("reject")}>
+                  <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
+                </Tooltip>
               ) : (
                 ""
               )}
