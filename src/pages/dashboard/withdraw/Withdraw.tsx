@@ -136,14 +136,6 @@ const Withdraw = ({ type }: DepositProps) => {
     form.setFieldValue("credit", 0);
   }
 
-  const roundUpFormatter = (num: any) => {
-    // If the number is a decimal, round it up
-    if (typeof num === "number" && num % 1 !== 0) {
-      return Math.trunc(num);
-    }
-    return num;
-  };
-
   return (
     <>
       {contextHolder}
