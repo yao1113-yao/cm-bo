@@ -29,10 +29,11 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
   const [withdrawSplit, setWithdrawSplit] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<ITransactionType[] | undefined>([]);
 
-  const initialValues = { searchDate: [dayjs().subtract(6, "hour"), dayjs()], bank: selectedPendingDeposit?.MBank, amount: selectedPendingDeposit?.bankOut };
+  const initialValues = { searchDate: [dayjs().subtract(6, "hour"), dayjs()], bank: "all", amount: selectedPendingDeposit?.bankOut };
   console.log(isLoading, isDeviceLoading);
   useEffect(() => {
     getAllItemCodeList("MBank", setIsDeviceLoading, setAllBankList);
+    handleGetBankRecord(initialValues);
   }, []);
 
   const bankRecordColumns: TableProps<ITransactionType>["columns"] = [
