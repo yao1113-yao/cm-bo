@@ -24,6 +24,8 @@ const EditDepositTransaction = ({ messageApi, openEditTransaction, selectedPendi
 
   const initialValues = {
     mGame: selectedPendingDeposit?.mGame,
+    name: selectedPendingDeposit?.name,
+    hpNo: selectedPendingDeposit?.hpNo,
     gameID: selectedPendingDeposit?.gameID,
     inCredit: selectedPendingDeposit?.inCredit,
     freeCredit: selectedPendingDeposit?.freeCredit,
@@ -88,6 +90,18 @@ const EditDepositTransaction = ({ messageApi, openEditTransaction, selectedPendi
                     </Select.Option>
                   ))}
                 </Select>
+              </Form.Item>
+            </Col>
+
+            <Col xs={6}>
+              <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input autoComplete="off" />
+              </Form.Item>
+            </Col>
+
+            <Col xs={6}>
+              <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                <Input type="number" />
               </Form.Item>
             </Col>
             <Col xs={6}>
