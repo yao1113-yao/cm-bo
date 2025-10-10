@@ -284,6 +284,7 @@ export const useMatchBankLater = () => {
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktSrno: values?.mktSrno,
           remark: result.value,
         };
