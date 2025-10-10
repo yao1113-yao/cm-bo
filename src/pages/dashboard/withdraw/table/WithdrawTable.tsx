@@ -16,6 +16,7 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [viewReceipt, setViewReceipt] = useState<boolean>(false);
   const [selectedRecord, setSelectedRecord] = useState<ITransactionType | undefined>();
@@ -219,6 +220,7 @@ const WithdrawTable = ({ withdrawRecod, handleGetPendingTransactionRecord, handl
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
         };
         await mainApi("/show-record", object)

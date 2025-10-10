@@ -16,6 +16,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
@@ -28,8 +29,6 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
 
   useEffect(() => {
     handleGetBankRecord(initialValues);
-
-    console.log("first");
   }, []);
 
   const bankRecordColumns: TableProps<ITransactionType>["columns"] = [
@@ -106,8 +105,9 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
     // formData.append("mktDetailsSrno", selectedPendingDeposit?.mktDetailsSrno);
     // formData.append("bankRecordSrno", values?.bankRecordSrno);
     const object = {
-      userID: userID,
-      userToken: userToken,
+      UserID: userID,
+      UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       mktDetailsSrno: selectedPendingDeposit?.mktDetailsSrno,
       bankRecordSrno: values?.bankRecordSrno,
@@ -141,6 +141,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       Type: selectedPendingDeposit?.recordType === "Main" ? "DEPOSIT" : selectedPendingDeposit?.recordType,
       Bank: values?.mBank,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),

@@ -11,11 +11,13 @@ const EditBankBalance = ({ isLoading, form, openEditBankBalance, setOpenEditBank
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   async function handleBankOpeningBalance(values: any) {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       CompanyBankSrno: selectedRecord?.srno,
       balance: values?.amount,

@@ -12,6 +12,7 @@ const EditWithdrawTransaction = ({ messageApi, openEditTransaction, selectedPend
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const [form] = Form.useForm();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -27,6 +28,7 @@ const EditWithdrawTransaction = ({ messageApi, openEditTransaction, selectedPend
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       ...values,

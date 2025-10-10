@@ -5,6 +5,7 @@ export async function getAllGameProviderList(setIsGameLoading: any, setAllGameLi
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const subdomain = window.location.hostname.split(".")[0] === "testcm" ? "BEST1" : window.location.hostname.split(".")[0] === "localhost" ? "BEST1" : window.location.hostname.split(".")[0].toUpperCase();
 
   console.log("");
@@ -12,6 +13,7 @@ export async function getAllGameProviderList(setIsGameLoading: any, setAllGameLi
   const object = {
     userID: userID,
     userToken: userToken,
+    userType: userType,
     companyID: subdomain,
   };
 
@@ -31,10 +33,12 @@ export async function getAllItemCodeList(itemCode: string, setIsDeviceLoading: a
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const object = {
     userID: userID,
     userToken: userToken,
+    userType: userType,
     itemCode: itemCode,
   };
 
@@ -54,10 +58,12 @@ export async function getAllStaffList(setIsLoading: any, companyID: string, setA
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const object = {
     userID: userID,
     userToken: userToken,
+    userType: userType,
     CompanyID: companyID,
   };
 
@@ -77,10 +83,12 @@ export async function getAllBankList(companyID: string, bankCode: string, setIsD
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const object = {
     userID: userID,
     userToken: userToken,
+    userType: userType,
     companyID: companyID,
     bankCode: bankCode,
   };
@@ -99,9 +107,11 @@ export async function getAllBankList(companyID: string, bankCode: string, setIsD
 export async function handleEditingTransaction(values: any, status: number) {
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const object = {
     UserID: userID,
     UserToken: userToken,
+    userType: userType,
     mktDetailsSrno: values?.srno,
     status: status,
   };

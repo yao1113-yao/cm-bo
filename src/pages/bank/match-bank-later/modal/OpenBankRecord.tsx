@@ -18,6 +18,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const { subdomain } = useContext(Api);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
@@ -108,8 +109,9 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
     // formData.append("mktDetailsSrno", selectedPendingDeposit?.srno);
     // formData.append("bankRecordSrno", values?.bankRecordSrno);
     const object = {
-      userID: userID,
-      userToken: userToken,
+      UserID: userID,
+      UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       bankRecordSrno: values?.bankRecordSrno,
@@ -145,6 +147,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       Type: "Deposit",
       CompanyID: subdomain,
       Bank: values?.mBank,

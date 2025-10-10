@@ -18,6 +18,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
   const [messageApi, contextHolder] = message.useMessage();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openManualSuccess, setOpenManualSuccess] = useState<boolean>(false);
@@ -277,6 +278,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           companyID: subdomain,
         };
@@ -314,6 +316,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           status: 0,
           remark: result.value,
@@ -361,6 +364,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       gameID: values?.gameID ?? "",
       password: values?.password ?? "",

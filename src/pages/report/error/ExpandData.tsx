@@ -10,6 +10,7 @@ const ExpandData = ({ record, userInput }: any) => {
   const { t } = useTranslation();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setApiData] = useState<ITeamErrorReportSummaryType[] | undefined>();
@@ -24,6 +25,7 @@ const ExpandData = ({ record, userInput }: any) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: record?.companyID,
       staffCode: record?.userID,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),

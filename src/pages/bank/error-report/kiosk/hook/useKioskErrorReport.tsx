@@ -15,6 +15,7 @@ export const useKioskErrorReport = () => {
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const [form] = Form.useForm();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -106,6 +107,7 @@ export const useKioskErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       ...values,
     };
@@ -134,6 +136,7 @@ export const useKioskErrorReport = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),

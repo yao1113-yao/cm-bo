@@ -19,6 +19,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
@@ -226,6 +227,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           status: 1,
         };
@@ -267,6 +269,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           companyID: subdomain,
         };
@@ -300,6 +303,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
         };
         await mainApi("/insert-rekemen-manual-success", object)
@@ -336,6 +340,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           status: 0,
           remark: result.value,

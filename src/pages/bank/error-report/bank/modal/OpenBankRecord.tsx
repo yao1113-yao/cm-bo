@@ -16,6 +16,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
@@ -102,6 +103,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       bankAdjustmentSrno: selectedPendingDeposit?.srno,
       bankRecordSrno: values?.bankRecordSrno,
     };
@@ -129,6 +131,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       Bank: values?.bankCode,
       CompanyID: subdomain,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),

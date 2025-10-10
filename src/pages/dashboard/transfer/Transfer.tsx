@@ -23,6 +23,7 @@ const Transfer = ({ type }: DepositProps) => {
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
@@ -59,6 +60,7 @@ const Transfer = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       RecordType: "Transfer",
       Type: type,
       companyID: subdomain,
@@ -73,6 +75,7 @@ const Transfer = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       type: type,
       RecordType: "Transfer",
       companyID: subdomain,
@@ -96,6 +99,7 @@ const Transfer = ({ type }: DepositProps) => {
       const object = {
         UserID: userID,
         UserToken: userToken,
+        UserType: userType,
         RecordType: "Transfer",
         Type: type,
         companyID: subdomain,

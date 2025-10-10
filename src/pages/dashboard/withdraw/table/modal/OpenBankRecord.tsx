@@ -20,6 +20,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDeviceLoading, setIsDeviceLoading] = useState<boolean>(false);
@@ -111,6 +112,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
       const object = {
         userID: userID,
         userToken: userToken,
+        UserType: userType,
         companyID: subdomain,
         mktDetailsSrno: selectedPendingDeposit?.srno,
         ListAssignBank: selectedRow,
@@ -146,8 +148,9 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
   async function handleAssignBank(values: any) {
     setIsLoading(true);
     const object = {
-      userID: userID,
-      userToken: userToken,
+      UserID: userID,
+      UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       bankRecordSrno: values?.bankRecordSrno,
@@ -179,6 +182,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       CompanyID: subdomain,
       Type: "Withdraw",
       Bank: withdrawSplit ? "all" : values?.bank,

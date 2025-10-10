@@ -17,6 +17,7 @@ export const usePlayerRegister = () => {
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
@@ -97,6 +98,7 @@ export const usePlayerRegister = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       ...values,
     };
@@ -124,6 +126,7 @@ export const usePlayerRegister = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
     };
     await playerApi("/player-task-list", object)

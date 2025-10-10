@@ -12,6 +12,7 @@ export const useTeamBankBalance = () => {
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const [form] = Form.useForm();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -33,6 +34,7 @@ export const useTeamBankBalance = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: values?.companyID,
       min: values?.min,
       max: values?.max,

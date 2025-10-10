@@ -16,6 +16,7 @@ export const useKioskBalance = () => {
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const location = useLocation();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
@@ -91,6 +92,7 @@ export const useKioskBalance = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       gameName: values?.gameName,
     };
@@ -116,6 +118,7 @@ export const useKioskBalance = () => {
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           companyGPSrno: values?.srno,
         };
         await bankApi("/check-balance-gp", object)

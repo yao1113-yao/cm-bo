@@ -14,6 +14,11 @@ export default function ApiBaseUrl(domain: string) {
   };
 
   const onResponseError = (error: any) => {
+    if (error.code === "ERR_NETWORK" || error.message === "Network Error" || error.message.includes("ERR_NETWORK_CHANGED")) {
+      console.warn("Network changed or temporarily disconnected, ignored.");
+      return Promise.reject(error); // 让它安静地过，不弹任何错误框
+    }
+
     if (!error.response || error?.response?.status === 500) {
       Swal.fire({
         text: "Error 500. Please try again later.",

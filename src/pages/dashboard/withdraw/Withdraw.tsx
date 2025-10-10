@@ -20,6 +20,7 @@ const Withdraw = ({ type }: DepositProps) => {
   const [form] = Form.useForm();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const { userInfo, subdomain } = useContext(Api);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
@@ -66,6 +67,7 @@ const Withdraw = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       RecordType: "Main",
       Type: type,
       companyID: subdomain,
@@ -81,6 +83,7 @@ const Withdraw = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       type: type,
       RecordType: "Main",
       companyID: subdomain,
@@ -96,6 +99,7 @@ const Withdraw = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       RecordType: "Withdraw",
       Type: type,
       companyID: subdomain,

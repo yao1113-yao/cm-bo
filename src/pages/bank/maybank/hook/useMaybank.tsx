@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 export const useMaybank = () => {
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const { t } = useTranslation();
 
   const { companyList, subdomain } = useContext(Api);
@@ -152,6 +153,7 @@ export const useMaybank = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       bankCode: values?.bank,
@@ -183,6 +185,7 @@ export const useMaybank = () => {
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           Company: selectedCompany?.companyID,
           SpreedSheetID: selectedCompany?.spreedSheetID,
           Bank: bankSelected,
@@ -224,6 +227,7 @@ export const useMaybank = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       BankRecordSrno: values?.srno,
     };
     await bankApi("/update-debit-credit", object)
@@ -256,6 +260,7 @@ export const useMaybank = () => {
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           bankRecordSrno: record?.srno,
         };
         await bankApi("/delete-bank-record", object)

@@ -23,6 +23,7 @@ const Deposit = ({ type }: DepositProps) => {
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
@@ -60,6 +61,7 @@ const Deposit = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       type: type,
       RecordType: "Main",
       companyID: subdomain,
@@ -75,6 +77,7 @@ const Deposit = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       type: type,
       RecordType: "Main",
       companyID: subdomain,
@@ -90,6 +93,7 @@ const Deposit = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       RecordType: "Main",
       Type: type,

@@ -20,6 +20,7 @@ const Rekemen = ({ type }: DepositProps) => {
   const { userInfo, subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
@@ -58,6 +59,7 @@ const Rekemen = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       RecordType: "Rekemen",
       Type: type,
       companyID: subdomain,
@@ -73,6 +75,7 @@ const Rekemen = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       type: type,
       RecordType: "Rekemen",
       companyID: subdomain,
@@ -88,6 +91,7 @@ const Rekemen = ({ type }: DepositProps) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       RecordType: "Rekemen",
       Type: type,
       companyID: subdomain,

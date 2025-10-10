@@ -23,6 +23,7 @@ export const usePlayerList = () => {
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const location = useLocation();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -205,6 +206,7 @@ export const usePlayerList = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       loginID: values?.loginID,
       Status: values?.status,

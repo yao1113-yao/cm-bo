@@ -11,11 +11,13 @@ const EditKioskBalance = ({ isLoading, openEditKioskBalance, setOpenEditKioskBal
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   async function handleKioskOpeningBalance(values: any) {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       CompanyGPSrno: selectedRecord?.srno,
       balance: values?.amount,

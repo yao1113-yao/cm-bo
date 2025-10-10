@@ -13,6 +13,7 @@ export const useBankBalance = () => {
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const location = useLocation();
   const [form] = Form.useForm();
 
@@ -100,6 +101,7 @@ export const useBankBalance = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       bankCode: values?.bank,
     };

@@ -20,6 +20,7 @@ export const useBankRecord = () => {
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setApiData] = useState<ITransactionType[]>([]);
@@ -331,6 +332,7 @@ export const useBankRecord = () => {
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktSrno: values?.mktSrno,
         };
         await mainApi("/show-record", object)
@@ -388,6 +390,7 @@ export const useBankRecord = () => {
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktSrno: values?.mktSrno,
         };
         await bankApi("/take-out-bank", object)
@@ -463,6 +466,7 @@ export const useBankRecord = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: userInfo?.userType === 2 ? subdomain : values?.companyID,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),

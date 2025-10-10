@@ -24,6 +24,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
@@ -328,6 +329,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           status: 1,
         };
@@ -387,6 +389,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           IsLater: type === "sendToBot" ? 0 : 1,
           companyID: subdomain,
@@ -426,6 +429,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktSrno: values?.mktSrno,
           companyID: subdomain,
         };
@@ -463,6 +467,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           IsLater: 1,
           companyID: subdomain,
@@ -506,6 +511,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       companyID: subdomain,
       gameID: values?.gameID,
@@ -550,6 +556,7 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           status: 0,
           remark: result.value,

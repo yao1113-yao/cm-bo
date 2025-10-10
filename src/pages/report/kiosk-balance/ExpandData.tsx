@@ -6,6 +6,7 @@ import { Card, Descriptions, message } from "antd";
 const ExpandData = ({ record, userInput }: any) => {
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setApiData] = useState<ITeamKioskBalance[] | undefined>();
@@ -20,6 +21,7 @@ const ExpandData = ({ record, userInput }: any) => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: record?.companyID,
       min: values?.min,
       max: values?.max,

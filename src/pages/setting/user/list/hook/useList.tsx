@@ -16,6 +16,7 @@ export const useList = () => {
   const { t } = useTranslation();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -32,14 +33,16 @@ export const useList = () => {
   async function handleGetUserList(values: any) {
     setIsLoading(true);
     const input = {
-      userID: userID,
-      userToken: userToken,
+      UserID: userID,
+      UserToken: userToken,
+      UserType: userType,
       ...values,
     };
     setUserInput(input);
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       searchUserID: values?.searchUserID,
       Status: values?.status,
     };
@@ -148,6 +151,7 @@ export const useList = () => {
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       UpdateUserSrno: values?.srno,
       status: status,
     };

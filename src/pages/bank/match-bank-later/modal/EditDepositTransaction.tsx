@@ -11,6 +11,7 @@ const EditDepositTransaction = ({ messageApi, openEditTransaction, selectedPendi
   const { t } = useTranslation();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
   const [form] = Form.useForm();
   const { subdomain } = useContext(Api);
 
@@ -34,10 +35,10 @@ const EditDepositTransaction = ({ messageApi, openEditTransaction, selectedPendi
 
   async function handleEditTransactionDetails(values: any) {
     setIsLoading(true);
-    console.log(values);
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       companyID: subdomain,
       mktDetailsSrno: selectedPendingDeposit?.srno,
       ...values,

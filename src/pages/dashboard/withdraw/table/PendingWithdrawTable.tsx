@@ -19,6 +19,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
@@ -303,6 +304,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           status: 1,
         };
@@ -344,12 +346,13 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktSrno: values?.mktSrno,
           companyID: subdomain,
         };
         await mainApi("/cancel-task", object)
           .then((result: any) => {
-            handleGetPendingTransactionRecord("deposit");
+            handleGetPendingTransactionRecord("withdraw");
             messageApi.open({
               type: "success",
               content: result.message,
@@ -417,6 +420,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           companyID: subdomain,
         };
@@ -450,6 +454,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           companyID: subdomain,
         };
@@ -480,6 +485,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
     const object = {
       UserID: userID,
       UserToken: userToken,
+      UserType: userType,
       Type: "Withdraw",
       CompanyID: subdomain,
       Bank: values?.mBank,
@@ -513,6 +519,7 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           status: 0,
           remark: result.value,
