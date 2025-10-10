@@ -233,6 +233,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
         const object = {
           UserID: userID,
           UserToken: userToken,
+          UserType: userType,
           mktDetailsSrno: values?.srno,
           status: 1,
         };
@@ -323,8 +324,8 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
         };
         await mainApi("/update-transaction-status", object)
           .then(() => {
-            handleGetPendingTransactionRecord("rekemen");
-            handleGetTransactionRecord("rekemen");
+            handleGetPendingTransactionRecord("transfer");
+            handleGetTransactionRecord("transfer");
             messageApi.open({
               type: "success",
               content: "done",
