@@ -1,8 +1,8 @@
 import { Col, Form, Input, InputNumber, Modal, Row, Select } from "antd";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { IGameProviderType } from "../../../../type/main.interface";
-import { getAllGameProviderList, handleEditingTransaction } from "../../../../function/ApiFunction";
+import { ICompanyBankType, IGameProviderType } from "../../../../type/main.interface";
+import { getAllBankList, getAllGameProviderList, handleEditingTransaction } from "../../../../function/ApiFunction";
 import { mainApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
 import { Api } from "../../../../context/ApiContext";
@@ -17,8 +17,11 @@ const EditDepositTransaction = ({ messageApi, openEditTransaction, selectedPendi
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
+  const [allBankList, setAllBankList] = useState<[ICompanyBankType] | undefined>();
 
   useEffect(() => {
+    getAllBankList(subdomain, "", setIsLoading, setAllBankList);
+
     getAllGameProviderList(setIsLoading, setAllGameList);
   }, []);
 
@@ -32,6 +35,7 @@ const EditDepositTransaction = ({ messageApi, openEditTransaction, selectedPendi
     bonus: selectedPendingDeposit?.bonusPer * 100,
     total: selectedPendingDeposit?.total,
     cuci: selectedPendingDeposit?.cuci,
+    bank: selectedPendingDeposit?.mBank,
     remark: selectedPendingDeposit?.remark,
   };
 
@@ -139,13 +143,24 @@ const EditDepositTransaction = ({ messageApi, openEditTransaction, selectedPendi
                 <InputNumber style={{ width: "100%" }} disabled />
               </Form.Item>
             </Col>
+
+            <Col xs={6}>
+              <Form.Item label="bank" name="bank">
+                <Select filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("bank")} optionFilterProp="label">
+                  {allBankList?.map((items) => {
+                    return <Select.Option value={items.bankCode}>{items.bankCode}</Select.Option>;
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+
             <Col xs={6}>
               <Form.Item label={t("remark")} name="remark">
                 <Input style={{ width: "100%" }} autoComplete="off" />
               </Form.Item>
             </Col>
           </Row>
-          <CommonButton text="search" />
+          <CommonButton text="submit" />
         </Form>
       </Modal>
     </div>

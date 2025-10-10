@@ -285,7 +285,6 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
         };
         await mainApi("/insert-withdraw-task", object)
           .then(() => {
-            console.log("first");
             handleGetPendingTransactionRecord("Transfer");
             messageApi.open({
               type: "success",
