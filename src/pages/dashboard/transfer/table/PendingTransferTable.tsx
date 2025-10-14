@@ -283,7 +283,7 @@ const PendingTransferTable = ({ pendingTransferRecod, handleGetPendingTransactio
           mktDetailsSrno: values?.srno,
           companyID: subdomain,
         };
-        await mainApi("/insert-withdraw-task", object)
+        await mainApi(values?.isFreeCredit === 1 ? "/insert-deposit-task" : "/insert-withdraw-task", object)
           .then(() => {
             handleGetPendingTransactionRecord("Transfer");
             messageApi.open({

@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Api } from "../../../../context/ApiContext";
 import { IGameProviderType } from "../../../../type/main.interface";
 import { getAllGameProviderList, handleEditingTransaction } from "../../../../function/ApiFunction";
-import { mainApi } from "../../../../service/CallApi";
+import { bankApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
 
 const EditTransaction = ({ messageApi, openEditTransaction, allBankList, selectedPendingDeposit, setOpenEditTransaction, handleGetBankRecordMarketingList }: any) => {
@@ -49,11 +49,11 @@ const EditTransaction = ({ messageApi, openEditTransaction, allBankList, selecte
       ...values,
     };
     console.log(object);
-    await mainApi("/edit-deposit-transaction-details", object)
+    await bankApi("/edit-matchbanklater-deposit", object)
       .then(() => {
         messageApi.open({
           type: "success",
-          content: "edit-deposit-transaction-details",
+          content: "edit-matchbanklater-deposit",
         });
         handleOnCloseModal();
         handleGetBankRecordMarketingList(initialValues);
