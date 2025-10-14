@@ -19,7 +19,7 @@ export default function ApiBaseUrl(domain: string) {
       return Promise.reject(error); // 让它安静地过，不弹任何错误框
     }
 
-    if (!error.response || error?.response?.status === 500) {
+    if (error?.response?.status === 500) {
       Swal.fire({
         text: "Error 500. Please try again later.",
         icon: "error",
