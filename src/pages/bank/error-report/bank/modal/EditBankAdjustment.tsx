@@ -1,5 +1,5 @@
 import { Col, Form, Input, Modal, Row } from "antd";
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import CommonButton from "../../../../../components/CommonButton";
 import Device from "../../../../../components/Device";
 import { LogApi } from "../../../../../service/CallApi";
