@@ -4,15 +4,16 @@ import Staff from "../../../../components/Staff";
 import { useBankErrorReport } from "./hook/useBankErrorReport";
 import Device from "../../../../components/Device";
 import OpenBankRecord from "./modal/OpenBankRecord";
+import EditBankAdjustment from "./modal/EditBankAdjustment";
 
 const { RangePicker } = DatePicker;
 const BankErrorReport = () => {
-  const { t, isLoading, messageApi, isKioskReportLoading, contextHolder, form, allBankList, allStaffList, apiData, selectedPendingDeposit, openBankRecord, setOpenBankRecord, initialValues, columns, handleInsertBankError, handleGetBankErrorReport } = useBankErrorReport();
+  const { t, isLoading, messageApi, isKioskReportLoading, contextHolder, form, allBankList, allStaffList, apiData, selectedPendingDeposit, openBankRecord, setOpenBankRecord, editBankAdjustment, setEditBankAdjustment, initialValues, columns, handleInsertBankError, handleGetBankErrorReport } = useBankErrorReport();
 
   return (
     <div>
       {contextHolder}
-      <Card title={t("addBankAdjustment")} loading={isLoading}>
+      <Card title={t("addBankAdjustment")} loading={isKioskReportLoading}>
         <Form layout="vertical" form={form} onFinish={handleInsertBankError}>
           <Row gutter={20}>
             <Col xs={6}>
@@ -50,7 +51,7 @@ const BankErrorReport = () => {
         </Form>
       </Card>
       <Divider> Bank Adjustment Report</Divider>
-      <Card loading={isKioskReportLoading}>
+      <Card loading={isLoading}>
         <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankErrorReport}>
           <Row gutter={20}>
             <Col xs={6}>
@@ -83,6 +84,7 @@ const BankErrorReport = () => {
 
       {/* open bank list assign bank */}
       {openBankRecord && <OpenBankRecord messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetBankErrorReport={handleGetBankErrorReport} />}
+      {editBankAdjustment && <EditBankAdjustment messageApi={messageApi} selectedPendingDeposit={selectedPendingDeposit} editBankAdjustment={editBankAdjustment} setEditBankAdjustment={setEditBankAdjustment} handleGetBankErrorReport={handleGetBankErrorReport} allBankList={allBankList} />}
     </div>
   );
 };

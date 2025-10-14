@@ -1,14 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Button, Form, message, TableProps, Tooltip } from "antd";
+import { Button, Form, message, Space, TableProps, Tooltip } from "antd";
 import { IBankErrorType, IDeviceType, ILogType, IUserType } from "../../../../../type/main.interface";
 import { getAllItemCodeList, getAllStaffList } from "../../../../../function/ApiFunction";
 import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
-import { BankOutlined } from "@ant-design/icons";
+import { BankOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
+import Swal from "sweetalert2";
 
 export const useBankErrorReport = () => {
   const { t } = useTranslation();
@@ -26,6 +27,7 @@ export const useBankErrorReport = () => {
   const [allStaffList, setAllStaffList] = useState<[IUserType] | undefined>();
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ILogType | undefined>();
   const [openBankRecord, setOpenBankRecord] = useState<boolean>(false);
+  const [editBankAdjustment, setEditBankAdjustment] = useState<boolean>(false);
 
   const initialValues = {
     searchDate: [dayjs().subtract(6, "hour"), dayjs()],
@@ -48,9 +50,18 @@ export const useBankErrorReport = () => {
       render: (record) => {
         return (
           record?.bankRecordSrno === 0 && (
-            <Tooltip title={t("assignBank")}>
-              <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
-            </Tooltip>
+            <Space>
+              <Tooltip title={t("assignBank")}>
+                <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)}></Button>
+              </Tooltip>
+
+              <Tooltip title={t("edit")}>
+                <Button icon={<EditOutlined />} onClick={() => OpenEditAdjustmentModal(record)}></Button>
+              </Tooltip>
+              <Tooltip title={t("delete")}>
+                <Button icon={<DeleteOutlined />} onClick={() => handleDeleteBankRecord(record)}></Button>
+              </Tooltip>
+            </Space>
           )
         );
       },
@@ -134,8 +145,52 @@ export const useBankErrorReport = () => {
     setOpenBankRecord(!openBankRecord);
   }
 
+  function OpenEditAdjustmentModal(values: any) {
+    setSelectedPendingDeposit(values);
+    setEditBankAdjustment(!editBankAdjustment);
+  }
+
+  function handleDeleteBankRecord(record: any) {
+    Swal.fire({
+      title: "Please confirm that data will be delete in system",
+      showCancelButton: true,
+      confirmButtonText: "Submit",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setKioskReportIsLoading(true);
+        const object = {
+          UserID: userID,
+          UserToken: userToken,
+          UserType: userType,
+          bankAdjustmentSrno: record?.srno,
+        };
+        await LogApi("/delete-bank-adjustment", object)
+          .then(() => {
+            form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
+            handleGetBankErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, bank: "all", remark: "" });
+            setKioskReportIsLoading(false);
+
+            messageApi.open({
+              type: "success",
+              content: "Success",
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            messageApi.open({
+              type: "error",
+              content: error.response.data.message,
+            });
+          });
+        setKioskReportIsLoading(false);
+      }
+    });
+
+    setKioskReportIsLoading(false);
+  }
+
   async function handleInsertBankError(values: any) {
-    setIsLoading(true);
+    setKioskReportIsLoading(true);
     const object = {
       UserID: userID,
       UserToken: userToken,
@@ -163,7 +218,7 @@ export const useBankErrorReport = () => {
           content: "player ID not found",
         });
       });
-    setIsLoading(false);
+    setKioskReportIsLoading(false);
   }
 
   async function handleGetBankErrorReport(values: any) {
@@ -192,5 +247,5 @@ export const useBankErrorReport = () => {
     setKioskReportIsLoading(false);
   }
 
-  return { t, messageApi, contextHolder, isLoading, isKioskReportLoading, form, allBankList, allStaffList, apiData, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, initialValues, columns, handleInsertBankError, handleGetBankErrorReport };
+  return { t, messageApi, contextHolder, isLoading, isKioskReportLoading, form, allBankList, allStaffList, apiData, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, editBankAdjustment, setEditBankAdjustment, initialValues, columns, handleInsertBankError, handleGetBankErrorReport };
 };
