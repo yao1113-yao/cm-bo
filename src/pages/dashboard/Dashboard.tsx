@@ -7,12 +7,27 @@ import Rekemen from "./rekemen/Rekemen";
 import Transfer from "./transfer/Transfer";
 import All from "./all/All";
 import ChangePassword from "./change-password/ChangePassword";
+import { useContext, useEffect, useState } from "react";
+import { Api } from "../../context/ApiContext";
+import { ICompanyType } from "../../type/main.interface";
 
 const Dashboard = () => {
   const { t, type, userInfo, handleOnChangeType, count } = useDashboard();
+  const { companyList, subdomain } = useContext(Api);
+  const [selectedCompany, setSelectedCompany] = useState<ICompanyType | undefined>();
 
+  // }, []);
+
+  useEffect(() => {
+    const temp = companyList?.filter((items: any) => items.companyID === subdomain);
+    if (temp !== undefined) {
+      setSelectedCompany(temp[0]);
+    }
+  }, []);
   return (
     <div className="dashboard-container">
+      {selectedCompany?.liveChatUrl ? <iframe src={selectedCompany?.liveChatUrl} width="100%" height={280} /> : "Please contact admin to open google sheet"}
+
       <Card className="user-input">
         <Row gutter={20}>
           {userInfo?.userType !== 3 && (

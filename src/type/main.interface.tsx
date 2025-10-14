@@ -121,6 +121,7 @@ export interface ICompanyType {
   companyID: string;
   spreedSheetID: string;
   googleSheetUrl: string;
+  liveChatUrl: string;
   status: number;
   ip: string;
   createBy: string;
