@@ -10,11 +10,13 @@ import ChangePassword from "./change-password/ChangePassword";
 import { useContext, useEffect, useState } from "react";
 import { Api } from "../../context/ApiContext";
 import { ICompanyType } from "../../type/main.interface";
+import { TiMinusOutline, TiPlusOutline } from "react-icons/ti";
 
 const Dashboard = () => {
   const { t, type, userInfo, handleOnChangeType, count } = useDashboard();
   const { companyList, subdomain } = useContext(Api);
   const [selectedCompany, setSelectedCompany] = useState<ICompanyType | undefined>();
+  const [showLiveChat, setShowLiveChat] = useState<boolean>(true);
 
   // }, []);
 
@@ -26,7 +28,8 @@ const Dashboard = () => {
   }, []);
   return (
     <div className="dashboard-container">
-      {selectedCompany?.liveChatUrl ? <iframe src={selectedCompany?.liveChatUrl} width="100%" height={280} /> : "Please contact admin to open google sheet"}
+      <div>{showLiveChat ? <TiMinusOutline onClick={() => setShowLiveChat(!showLiveChat)} /> : <TiPlusOutline onClick={() => setShowLiveChat(!showLiveChat)} />}</div>
+      {selectedCompany?.liveChatUrl && showLiveChat ? <iframe src={selectedCompany?.liveChatUrl} width="100%" height={280} /> : "Hide the sheet"}
 
       <Card className="user-input">
         <Row gutter={20}>
