@@ -60,6 +60,10 @@ const Withdraw = ({ type }: DepositProps) => {
       form.setFieldValue("total", Number(total) ? total : 0);
       form.setFieldValue("cuci", Number(minCuci) ? minCuci : 0);
     }
+
+    if ("credit" in current && !cuciAllEnable) {
+      form.setFieldValue("cashOut", all.credit);
+    }
   }
 
   async function handleGetTransactionRecord(type: string) {
@@ -138,6 +142,7 @@ const Withdraw = ({ type }: DepositProps) => {
   function handleCheckFreeCredit() {
     setCuciAllEnable(!cuciAllEnable);
     form.setFieldValue("credit", 0);
+    form.setFieldValue("cashOut", 0);
   }
 
   return (
@@ -233,6 +238,7 @@ const Withdraw = ({ type }: DepositProps) => {
                     <InputNumber
                       style={{ width: "100%" }}
                       step={1}
+                      disabled
                       formatter={(value: any) => value.toString().split(".")[0]} // Removes any decimal part for display
                       parser={(value: any) => parseInt(value, 10)}
                     />
