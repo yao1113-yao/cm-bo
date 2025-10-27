@@ -77,28 +77,30 @@ const BankRecord = () => {
 
       <Divider>Bank Record</Divider>
 
-      <Row style={{ paddingBottom: "20px" }}>
-        <Col xs={3}>
-          <Statistic title="Total Deposit" value={apiData2?.totalDeposit} prefix={<DollarOutlined />} valueStyle={{ color: "green" }} />
-        </Col>
-        <Col xs={3}>
-          <Statistic title="Total Withdraw" value={apiData2?.totalWithdraw} prefix={<DollarOutlined />} valueStyle={{ color: "red" }} />
-        </Col>
-        <Col xs={3}>
-          <Statistic title="Total Bonus" value={apiData2?.totalBonus} prefix={<DollarOutlined />} valueStyle={{ color: "red" }} />
-        </Col>
-        <Col xs={3}>
-          <Statistic title="Total Profit" value={apiData2?.totalProfit} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalProfit ?? 0 < 0 ? "red" : apiData2?.totalProfit ?? 0 > 0 ? "green" : "black" }} />
-        </Col>
+      {userInfo?.userType !== 3 && (
+        <Row style={{ paddingBottom: "20px" }}>
+          <Col xs={3}>
+            <Statistic title="Total Deposit" value={apiData2?.totalDeposit} prefix={<DollarOutlined />} valueStyle={{ color: "green" }} />
+          </Col>
+          <Col xs={3}>
+            <Statistic title="Total Withdraw" value={apiData2?.totalWithdraw} prefix={<DollarOutlined />} valueStyle={{ color: "red" }} />
+          </Col>
+          <Col xs={3}>
+            <Statistic title="Total Bonus" value={apiData2?.totalBonus} prefix={<DollarOutlined />} valueStyle={{ color: "red" }} />
+          </Col>
+          <Col xs={3}>
+            <Statistic title="Total Profit" value={apiData2?.totalProfit} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalProfit ?? 0 < 0 ? "red" : apiData2?.totalProfit ?? 0 > 0 ? "green" : "black" }} />
+          </Col>
 
-        <Col xs={3}>
-          <Statistic title="Total Marketing BankIn" value={apiData2?.totalMktBankIn} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalMktBankIn === apiData2?.totalDeposit ? "green" : "red" }} />
-        </Col>
+          <Col xs={3}>
+            <Statistic title="Total Marketing BankIn" value={apiData2?.totalMktBankIn} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalMktBankIn === apiData2?.totalDeposit ? "green" : "red" }} />
+          </Col>
 
-        <Col xs={3}>
-          <Statistic title="Total Marketing BankOut" value={apiData2?.totalMktBankOut} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalMktBankOut === apiData2?.totalWithdraw ? "green" : "red" }} />
-        </Col>
-      </Row>
+          <Col xs={3}>
+            <Statistic title="Total Marketing BankOut" value={apiData2?.totalMktBankOut} prefix={<DollarOutlined />} valueStyle={{ color: apiData2?.totalMktBankOut === apiData2?.totalWithdraw ? "green" : "red" }} />
+          </Col>
+        </Row>
+      )}
 
       <Card loading={isLoading}>
         <Table columns={columns} dataSource={apiData} rowKey="" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} pagination={pagination} onChange={handleTableChange} />
