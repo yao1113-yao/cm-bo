@@ -131,10 +131,10 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
             content: "Assign Success",
           });
         })
-        .catch(() => {
+        .catch((error) => {
           messageApi.open({
             type: "error",
-            content: "error",
+            content: error.response.data.message,
           });
         });
     } else {
@@ -169,10 +169,10 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
           content: "Assign Success",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         messageApi.open({
           type: "error",
-          content: "error",
+          content: error.response.data.message,
         });
       });
     setIsLoading(false);
@@ -196,10 +196,10 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
         setOpenBankRecord(true);
         setBankRecord(result.data);
       })
-      .catch(() => {
+      .catch((error) => {
         messageApi.open({
           type: "error",
-          content: "bank record not found",
+          content: error.response.data.message,
         });
       });
     setIsLoading(false);

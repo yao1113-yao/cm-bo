@@ -420,10 +420,10 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
               content: "sent",
             });
           })
-          .catch(() => {
+          .catch((error) => {
             messageApi.open({
               type: "error",
-              content: "",
+              content: error.response.data.message,
             });
           });
         setIsLoading(false);
@@ -495,10 +495,10 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
               content: "sent",
             });
           })
-          .catch(() => {
+          .catch((error) => {
             messageApi.open({
               type: "error",
-              content: "",
+              content: error.response.data.message,
             });
           });
         setIsLoading(false);
@@ -547,10 +547,10 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
           content: "done",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         messageApi.open({
           type: "error",
-          content: "",
+          content: error.response.data.message,
         });
       });
     setIsLoading(false);
@@ -586,10 +586,10 @@ const PendingDepositTable = ({ pendingDepositRecod, handleGetPendingTransactionR
               content: "done",
             });
           })
-          .catch(() => {
+          .catch((error) => {
             messageApi.open({
               type: "error",
-              content: "",
+              content: error.response.data.message,
             });
           });
       }

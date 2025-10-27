@@ -128,10 +128,10 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
           content: "Assign Success",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         messageApi.open({
           type: "error",
-          content: "player ID not found",
+          content: error.response.data.message,
         });
       });
     setIsLoading(false);
@@ -161,10 +161,10 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
       .then((result: any) => {
         setBankRecord(result.data);
       })
-      .catch(() => {
+      .catch((error) => {
         messageApi.open({
           type: "error",
-          content: "player ID not found",
+          content: error.response.data.message,
         });
       });
     setIsLoading(false);

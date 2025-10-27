@@ -123,10 +123,10 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
           content: "Assign Success",
         });
       })
-      .catch(() => {
+      .catch((error) => {
         messageApi.open({
           type: "error",
-          content: "assign bank error",
+          content: error.response.data.message,
         });
       });
     setIsLoading(false);
