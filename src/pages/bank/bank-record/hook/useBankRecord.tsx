@@ -492,10 +492,10 @@ export const useBankRecord = () => {
     console.log(values);
     if (values === "day") {
       form.setFieldValue("searchDate", searchDateRange(values));
-      handleGetBankRecordMarketingList({ searchDate: searchDateRange(values), type: form.getFieldValue("type"), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });
+      handleGetBankRecordMarketingList({ searchDate: searchDateRange(values), type: form.getFieldValue("type"), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark"), keyword: form.getFieldValue("keyword") });
     } else {
       form.setFieldValue("searchDate", [dayjs().startOf("day").add(-1, "day"), dayjs().endOf("day").add(-1, "day")]);
-      handleGetBankRecordMarketingList({ searchDate: [dayjs().startOf("day").add(-1, "day"), dayjs().endOf("day").add(-1, "day")], type: form.getFieldValue("type"), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark") });
+      handleGetBankRecordMarketingList({ searchDate: [dayjs().startOf("day").add(-1, "day"), dayjs().endOf("day").add(-1, "day")], type: form.getFieldValue("type"), bank: form.getFieldValue("bank"), remark: form.getFieldValue("remark"), keyword: form.getFieldValue("keyword") });
     }
   }
 
