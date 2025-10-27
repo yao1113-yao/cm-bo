@@ -148,7 +148,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
       UserID: userID,
       UserToken: userToken,
       UserType: userType,
-      Type: selectedPendingDeposit?.recordType,
+      Type: selectedPendingDeposit?.recordType === "Main" ? "Deposit" : "Withdraw",
       CompanyID: subdomain,
       Bank: values?.mBank,
 
