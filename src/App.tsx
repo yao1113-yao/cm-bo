@@ -59,7 +59,7 @@ function App() {
         { path: "/company-bank", element: <Protected roles={[2]} component={<BankBalance />} /> },
         { path: "/kiosk-balance", element: <Protected roles={[2]} component={<KioskBalance />} /> },
         { path: "/kiosk-log", element: <Protected roles={[1, 2]} component={<KioskLog />} /> },
-        { path: "/bank-marketing", element: <Protected roles={[2, 4, 5]} component={<BankRecord />} /> },
+        { path: "/bank-marketing", element: <Protected roles={[2, 3, 4, 5]} component={<BankRecord />} /> },
         { path: "/rekemen-record", element: <Protected roles={[1, 2, 4, 5]} component={<RekemenRecord />} /> },
         { path: "/transfer-record", element: <Protected roles={[1, 2, 4, 5]} component={<TransferRecord />} /> },
         { path: "/kiosk-adjustment", element: <Protected roles={[1, 2, 4, 5]} component={<KioskErrorReport />} /> },

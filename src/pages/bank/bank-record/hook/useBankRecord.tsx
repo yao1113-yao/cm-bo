@@ -123,7 +123,7 @@ export const useBankRecord = () => {
       title: t("companyID"),
       dataIndex: "companyID",
       align: "center",
-      hidden: userInfo && userInfo?.userType === 2,
+      hidden: (userInfo && userInfo?.userType === 2) || userInfo?.userType === 3,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
@@ -467,7 +467,7 @@ export const useBankRecord = () => {
       UserID: userID,
       UserToken: userToken,
       UserType: userType,
-      companyID: userInfo?.userType === 2 ? subdomain : values?.companyID,
+      companyID: userInfo?.userType === 2 || userInfo?.userType === 3 ? subdomain : values?.companyID,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       type: values?.type,
