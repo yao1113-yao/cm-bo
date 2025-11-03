@@ -1,7 +1,7 @@
 import CommonButton from "../../../components/CommonButton";
 import { useBankRecord } from "./hook/useBankRecord";
 import { Button, Card, Col, DatePicker, Divider, Form, Input, Row, Select, Statistic, Table } from "antd";
-import { DownCircleOutlined, LeftCircleOutlined, DollarOutlined, FileOutlined } from "@ant-design/icons";
+import { DownCircleOutlined, LeftCircleOutlined, DollarOutlined, FileOutlined, EditOutlined } from "@ant-design/icons";
 import OpenBankRecord from "./modal/OpenbankRecord";
 import EditTransaction from "./modal/EditTransaction";
 import { handleExportExcel } from "../../../function/CommonFunction";
@@ -73,6 +73,11 @@ const BankRecord = () => {
         <Button icon={<FileOutlined />} type="primary" style={{ background: "green", marginLeft: "10px" }} onClick={() => handleExportExcel("Deposit Withdraw Record", userInput, apiData)}>
           {t("Export Excel")}
         </Button>
+        {selected?.length > 0 && (
+          <Button icon={<EditOutlined />} type="primary" style={{ background: "red", marginLeft: "10px" }} onClick={() => setChangeStaffCodeModal(true)}>
+            {t("Edit Staff Code")}
+          </Button>
+        )}
       </Form>
 
       <Divider>Bank Record</Divider>
@@ -107,7 +112,7 @@ const BankRecord = () => {
           <Table
             columns={columns}
             dataSource={apiData}
-            rowKey="srno"
+            rowKey="mktDetailsSrno"
             scroll={{ x: true }}
             rowClassName={rowClassName}
             rowHoverable={false}

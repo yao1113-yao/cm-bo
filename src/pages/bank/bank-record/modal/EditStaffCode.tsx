@@ -30,8 +30,8 @@ const EditStaffCode = ({ messageApi, changeStaffCodeModal, selected, setChangeSt
       UserToken: userToken,
       UserType: userType,
       companyID: subdomain,
-      ListStaffCodeSrno: selected,
-      staffCode: values?.staffCode,
+      ListMktDetailsSrno: selected,
+      staffSrno: values?.staffSrno,
     };
     console.log(object);
     await bankApi("/edit-staff-code", object)
@@ -41,7 +41,7 @@ const EditStaffCode = ({ messageApi, changeStaffCodeModal, selected, setChangeSt
           content: "edit-staff-code",
         });
         setChangeStaffCodeModal(false);
-        setSelected(undefined);
+        setSelected([]);
         handleGetBankRecordMarketingList(userInput);
       })
       .catch((error) => {
@@ -59,13 +59,16 @@ const EditStaffCode = ({ messageApi, changeStaffCodeModal, selected, setChangeSt
         <Form form={form} layout="vertical" onFinish={handleEditTransactionDetails}>
           <Row gutter={20}>
             <Col xs={6}>
-              <Form.Item label={t("staffCode")} name="staffCode" rules={[{ required: true }]}>
+              <Form.Item label={t("staffCode")} name="staffSrno" rules={[{ required: true }]}>
                 <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("game")} optionFilterProp="label">
-                  {allStaffList?.map((items: any) => (
-                    <Select.Option value={items.gameName} key={items.gameName}>
-                      {items?.gameName}
-                    </Select.Option>
-                  ))}
+                  {allStaffList?.map(
+                    (items: any) =>
+                      items?.userType === 3 && (
+                        <Select.Option value={items.srno} key={items.userID}>
+                          {items?.userID}
+                        </Select.Option>
+                      )
+                  )}
                 </Select>
               </Form.Item>
             </Col>
