@@ -5,10 +5,11 @@ import { DownCircleOutlined, LeftCircleOutlined, DollarOutlined, FileOutlined } 
 import OpenBankRecord from "./modal/OpenbankRecord";
 import EditTransaction from "./modal/EditTransaction";
 import { handleExportExcel } from "../../../function/CommonFunction";
+import EditStaffCode from "./modal/EditStaffCode";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, companyList, userInput, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount } = useBankRecord();
+  const { t, userInfo, companyList, userInput, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount, changeStaffCodeModal, setChangeStaffCodeModal, handleCheckingCheckBox, selected, setSelected } = useBankRecord();
 
   return (
     <Card>
@@ -21,19 +22,18 @@ const BankRecord = () => {
               <RangePicker style={{ width: "100%" }} showTime />
             </Form.Item>
           </Col>
-          {(userInfo && userInfo?.userType !== 2) ||
-            (userInfo?.userType !== 3 && (
-              <Col xs={6}>
-                <Form.Item label={t("companyID")} name="companyID">
-                  <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("companyID")} optionFilterProp="label">
-                    <Select.Option value="all">All</Select.Option>
-                    {companyList?.map((items) => {
-                      return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
-                    })}
-                  </Select>
-                </Form.Item>
-              </Col>
-            ))}
+          {userInfo && userInfo?.userType !== 2 && userInfo?.userType !== 3 && (
+            <Col xs={6}>
+              <Form.Item label={t("companyID")} name="searchCompanyID">
+                <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("companyID")} optionFilterProp="label">
+                  <Select.Option value="all">All</Select.Option>
+                  {companyList?.map((items) => {
+                    return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+          )}
 
           <Col xs={6}>
             <Form.Item label={t("type")} name="type">
@@ -103,12 +103,32 @@ const BankRecord = () => {
       )}
 
       <Card loading={isLoading}>
-        <Table columns={columns} dataSource={apiData} rowKey="" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} pagination={pagination} onChange={handleTableChange} />
+        {userInfo?.userType === 4 || userInfo?.userType === 5 ? (
+          <Table
+            columns={columns}
+            dataSource={apiData}
+            rowKey="srno"
+            scroll={{ x: true }}
+            rowClassName={rowClassName}
+            rowHoverable={false}
+            pagination={pagination}
+            onChange={handleTableChange}
+            rowSelection={{
+              type: "checkbox",
+              onChange: (selected) => {
+                handleCheckingCheckBox(selected);
+              },
+            }}
+          />
+        ) : (
+          <Table columns={columns} dataSource={apiData} rowKey="srno" scroll={{ x: true }} rowClassName={rowClassName} rowHoverable={false} pagination={pagination} onChange={handleTableChange} />
+        )}
       </Card>
 
       {openBankRecord && <OpenBankRecord messageApi={messageApi} isCheckAllAmount={isCheckAllAmount} allBankList={allBankList} setIsCheckAllAmount={setIsCheckAllAmount} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
 
       {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} allBankList={allBankList} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
+      {changeStaffCodeModal && <EditStaffCode messageApi={messageApi} changeStaffCodeModal={changeStaffCodeModal} selected={selected} setChangeStaffCodeModal={setChangeStaffCodeModal} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} setSelected={setSelected} userInput={userInput} />}
     </Card>
   );
 };

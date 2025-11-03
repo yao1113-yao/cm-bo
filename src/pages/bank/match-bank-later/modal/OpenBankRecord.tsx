@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { BankOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { IDeviceType, ITransactionType } from "../../../../type/main.interface";
-import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatDateTime, formatIndex, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { mainApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
 import { getAllItemCodeList } from "../../../../function/ApiFunction";
@@ -25,7 +25,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
   const [allBankList, setAllBankList] = useState<[IDeviceType] | undefined>();
   console.log(isLoading);
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     mBank: selectedPendingDeposit?.mBank,
     amount: selectedPendingDeposit?.inCredit,
   };
@@ -120,7 +120,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
       .then(() => {
         handleOnCloseModal();
         handleGetMatchBankLaterList({
-          searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+          searchDate: searchDateRange("day"),
           remark: "",
         });
         messageApi.open({

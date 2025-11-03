@@ -22,7 +22,7 @@ export const useTransferRecord = () => {
   //   const [apiData2, setApiData2] = useState<ICompanyGPType[] | undefined>();
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     companyID: "all",
     gameName: "all",
     gameLoginID: "",

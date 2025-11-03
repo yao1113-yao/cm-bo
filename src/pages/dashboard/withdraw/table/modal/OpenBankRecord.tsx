@@ -1,5 +1,5 @@
 import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select, Space, Table, TableProps, Tooltip } from "antd";
-import { formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
+import { formatIndex, formatNumber, formatString, searchDateRange } from "../../../../../function/CommonFunction";
 import { useContext, useEffect, useState } from "react";
 import { IDeviceType, ITransactionType } from "../../../../../type/main.interface";
 import { BankOutlined, SendOutlined } from "@ant-design/icons";
@@ -29,7 +29,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
   const [withdrawSplit, setWithdrawSplit] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<ITransactionType[] | undefined>([]);
 
-  const initialValues = { searchDate: [dayjs().subtract(6, "hour"), dayjs()], bank: "all", amount: selectedPendingDeposit?.bankOut };
+  const initialValues = { searchDate: searchDateRange("day"), bank: "all", amount: selectedPendingDeposit?.bankOut };
   console.log(isLoading, isDeviceLoading);
   useEffect(() => {
     getAllItemCodeList("MBank", setIsDeviceLoading, setAllBankList);

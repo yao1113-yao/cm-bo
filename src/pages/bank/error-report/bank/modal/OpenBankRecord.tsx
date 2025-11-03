@@ -1,5 +1,5 @@
 import { Button, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
-import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
+import { formatDateTime, formatIndex, formatNumber, formatString, searchDateRange } from "../../../../../function/CommonFunction";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../../type/main.interface";
@@ -22,7 +22,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     bankCode: selectedPendingDeposit?.bankCode,
     amount: selectedPendingDeposit?.amount,
   };
@@ -111,7 +111,7 @@ const OpenBankRecord = ({ messageApi, selectedPendingDeposit, openBankRecord, se
     await LogApi("/assign-bank-adjustment", object)
       .then(() => {
         setOpenBankRecord(false);
-        handleGetBankErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, bank: "all", remark: "" });
+        handleGetBankErrorReport({ searchDate: searchDateRange("day"), staffSrno: 0, bank: "all", remark: "" });
         messageApi.open({
           type: "success",
           content: "Assign Success",

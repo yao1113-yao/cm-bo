@@ -10,7 +10,7 @@ import { Api } from "../../../../../context/ApiContext";
 
 export const useStaffSalesReport = () => {
   const { t } = useTranslation();
-  const { subdomain } = useContext(Api);
+  const { subdomain, companyList } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -25,6 +25,7 @@ export const useStaffSalesReport = () => {
 
   const initialValues = {
     searchDate: searchDateRange("day"),
+    companyID: "all",
     staffSrno: 0,
   };
   useEffect(() => {
@@ -42,6 +43,7 @@ export const useStaffSalesReport = () => {
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       staffSrno: values?.staffSrno,
+      companyID: values?.companyID,
     };
     await reportApi("/staff-sales", object)
       .then((result) => {
@@ -104,5 +106,5 @@ export const useStaffSalesReport = () => {
     },
   ];
 
-  return { t, form, isLoading, userInput, allStaffList, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails };
+  return { t, form, companyList, isLoading, userInput, allStaffList, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails };
 };

@@ -78,6 +78,7 @@ const ExpandData = ({ record, userInput }: any) => {
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       staffCode: record?.userID,
+      companyID: userInput?.companyID,
     };
     await reportApi("/staff-sales-details", object)
       .then((result) => {

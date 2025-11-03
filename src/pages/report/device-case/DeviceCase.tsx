@@ -6,7 +6,7 @@ import ExpandData from "./ExpandData";
 const { RangePicker } = DatePicker;
 
 const DeviceCase = () => {
-  const { t, form, isLoading, initialValues, userInput, columns, apiData, allDeviceList, handleGetTeamCase } = useDeviceCase();
+  const { t, form, companyList, isLoading, initialValues, userInput, columns, apiData, allDeviceList, handleGetTeamCase } = useDeviceCase();
 
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
@@ -26,6 +26,16 @@ const DeviceCase = () => {
           <Col xs={6}>
             <Form.Item label={t("searchDate")} name="searchDate">
               <RangePicker style={{ width: "100%" }} showTime />
+            </Form.Item>
+          </Col>
+          <Col xs={6}>
+            <Form.Item label={t("companyID")} name="companyID">
+              <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("companyID")} optionFilterProp="label">
+                <Select.Option value="all">All</Select.Option>
+                {companyList?.map((items) => {
+                  return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                })}
+              </Select>
             </Form.Item>
           </Col>
 

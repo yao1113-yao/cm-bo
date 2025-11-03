@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Form, message, Space, TableProps, Tooltip } from "antd";
 import { IBankErrorType, IDeviceType, ILogType, IUserType } from "../../../../../type/main.interface";
 import { getAllItemCodeList, getAllStaffList } from "../../../../../function/ApiFunction";
-import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
 import { BankOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 export const useBankErrorReport = () => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-  const { subdomain } = useContext(Api);
+  const { subdomain, userInfo, companyList } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const userType = localStorage.getItem("userType");
@@ -30,10 +30,11 @@ export const useBankErrorReport = () => {
   const [editBankAdjustment, setEditBankAdjustment] = useState<boolean>(false);
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     staffSrno: 0,
     bank: "all",
     remark: "",
+    searchCompanyID: "all",
   };
 
   useEffect(() => {
@@ -64,6 +65,15 @@ export const useBankErrorReport = () => {
             </Space>
           )
         );
+      },
+    },
+    {
+      title: t("companyID"),
+      dataIndex: "companyID",
+      ellipsis: true,
+      hidden: userInfo?.userType === 2,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
@@ -167,7 +177,7 @@ export const useBankErrorReport = () => {
         await LogApi("/delete-bank-adjustment", object)
           .then(() => {
             form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
-            handleGetBankErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, bank: "all", remark: "" });
+            handleGetBankErrorReport({ searchDate: searchDateRange("day"), staffSrno: 0, bank: "all", remark: "" });
             setKioskReportIsLoading(false);
 
             messageApi.open({
@@ -210,7 +220,7 @@ export const useBankErrorReport = () => {
           content: "Insert Success",
         });
         form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
-        handleGetBankErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, bank: "all", remark: "" });
+        handleGetBankErrorReport({ searchDate: searchDateRange("day"), staffSrno: 0, bank: "all", remark: "" });
       })
       .catch(() => {
         messageApi.open({
@@ -234,6 +244,7 @@ export const useBankErrorReport = () => {
       staffSrno: values?.staffSrno,
       bankCode: values?.bank,
       remark: values?.remark,
+      searchCompanyID: values?.searchCompanyID,
       type: "all",
     };
     await LogApi("/bank-adjustment-list", object)
@@ -247,5 +258,5 @@ export const useBankErrorReport = () => {
     setKioskReportIsLoading(false);
   }
 
-  return { t, messageApi, contextHolder, isLoading, isKioskReportLoading, form, allBankList, allStaffList, apiData, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, editBankAdjustment, setEditBankAdjustment, initialValues, columns, handleInsertBankError, handleGetBankErrorReport };
+  return { t, userInfo, companyList, messageApi, contextHolder, isLoading, isKioskReportLoading, form, allBankList, allStaffList, apiData, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, editBankAdjustment, setEditBankAdjustment, initialValues, columns, handleInsertBankError, handleGetBankErrorReport };
 };

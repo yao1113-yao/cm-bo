@@ -5,6 +5,7 @@ import Device from "../../../../../components/Device";
 import { LogApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
 import dayjs from "dayjs";
+import { searchDateRange } from "../../../../../function/CommonFunction";
 
 const EditBankAdjustment = ({ messageApi, selectedPendingDeposit, editBankAdjustment, setEditBankAdjustment, handleGetBankErrorReport, allBankList }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -34,7 +35,7 @@ const EditBankAdjustment = ({ messageApi, selectedPendingDeposit, editBankAdjust
           content: "Edit Success",
         });
         form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
-        handleGetBankErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, bank: "all", remark: "" });
+        handleGetBankErrorReport({ searchDate: searchDateRange("day"), staffSrno: 0, bank: "all", remark: "" });
         setEditBankAdjustment(false);
       })
       .catch(() => {

@@ -31,7 +31,7 @@ export const useMatchBankLater = () => {
   const [openEditTransaction, setOpenEditTransaction] = useState<boolean>(false);
   const [userInput, setUserInput] = useState();
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     remark: "",
   };
   useEffect(() => {

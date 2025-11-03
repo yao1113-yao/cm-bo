@@ -1,4 +1,4 @@
-import { Button, Card, Col, DatePicker, Divider, Form, Row, Statistic, Table } from "antd";
+import { Button, Card, Col, DatePicker, Divider, Form, Row, Select, Statistic, Table } from "antd";
 import CommonButton from "../../../../components/CommonButton";
 import { DollarOutlined, FileOutlined } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
@@ -9,7 +9,7 @@ import { handleExportExcel } from "../../../../function/CommonFunction";
 import Staff from "../../../../components/Staff";
 
 const StaffSalesReport = () => {
-  const { t, form, isLoading, userInput, allStaffList, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails } = useStaffSalesReport();
+  const { t, form, companyList, isLoading, userInput, allStaffList, initialValues, columns, apiData, apiData2, handleGetTeamSalesDetails } = useStaffSalesReport();
   const [expandedRowKeys, setExpandedRowKeys] = useState<string[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -31,6 +31,17 @@ const StaffSalesReport = () => {
               <RangePicker style={{ width: "100%" }} showTime />
             </Form.Item>
           </Col>
+          <Col xs={6}>
+            <Form.Item label={t("companyID")} name="companyID">
+              <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("companyID")} optionFilterProp="label">
+                <Select.Option value="all">All</Select.Option>
+                {companyList?.map((items) => {
+                  return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                })}
+              </Select>
+            </Form.Item>
+          </Col>
+
           <Col xs={6}>
             <Staff list={allStaffList} required={true} selectAll={true} label="staffSrno" />
           </Col>

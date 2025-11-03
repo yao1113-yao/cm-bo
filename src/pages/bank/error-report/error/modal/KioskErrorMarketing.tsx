@@ -1,5 +1,5 @@
-import { Button, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
-import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
+import { Button, Col, DatePicker, Form, Input, Modal, Row, Space, Spin, Table, TableProps, Tooltip } from "antd";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../../function/CommonFunction";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IErrorKioskMarketingRecord } from "../../../../../type/main.interface";
@@ -22,7 +22,7 @@ const KioskErrorMarketing = ({ messageApi, selectedKioskError, openErrorMarketin
   const [bankRecord, setBankRecord] = useState<IErrorKioskMarketingRecord[] | undefined>([]);
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     amount: selectedKioskError?.amount,
     remark: "",
   };
@@ -139,7 +139,7 @@ const KioskErrorMarketing = ({ messageApi, selectedKioskError, openErrorMarketin
     await LogApi("/assgin-kiosk-error-marketing-record", object)
       .then(() => {
         setOpenErrorMarketingRecord(false);
-        handleGetBankErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, bank: "all", remark: "" });
+        handleGetBankErrorReport({ searchDate: searchDateRange("day"), staffSrno: 0, bank: "all", remark: "" });
         messageApi.open({
           type: "success",
           content: "Assign Success",
@@ -185,29 +185,32 @@ const KioskErrorMarketing = ({ messageApi, selectedKioskError, openErrorMarketin
 
   return (
     <>
-      <Modal width="70vw" open={openErrorMarketingRecord} onCancel={() => handleOnCloseModal()} footer={null} closable={false} loading={isLoading}>
-        <Form layout="vertical" initialValues={initialValues} onFinish={handleGetKioskMarketingRecord}>
-          <Row gutter={10}>
-            <Col xs={6}>
-              <Form.Item label={t("searchDate")} name="searchDate">
-                <RangePicker style={{ width: "100%" }} showTime />
-              </Form.Item>
-            </Col>
+      <Modal width="70vw" open={openErrorMarketingRecord} onCancel={() => handleOnCloseModal()} footer={null} closable={false}>
+        {" "}
+        <Spin spinning={isLoading}>
+          <Form layout="vertical" initialValues={initialValues} onFinish={handleGetKioskMarketingRecord}>
+            <Row gutter={10}>
+              <Col xs={6}>
+                <Form.Item label={t("searchDate")} name="searchDate">
+                  <RangePicker style={{ width: "100%" }} showTime />
+                </Form.Item>
+              </Col>
 
-            <Col xs={6}>
-              <Form.Item label={t("amount")} name="amount">
-                <Input disabled />
-              </Form.Item>
-            </Col>
+              <Col xs={6}>
+                <Form.Item label={t("amount")} name="amount">
+                  <Input disabled />
+                </Form.Item>
+              </Col>
 
-            <Col xs={6}>
-              <Form.Item label=" ">
-                <CommonButton text="search" />
-              </Form.Item>
-            </Col>
-          </Row>
-        </Form>
-        <Table columns={bankRecordColumns} dataSource={bankRecord}></Table>
+              <Col xs={6}>
+                <Form.Item label=" ">
+                  <CommonButton text="search" />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form>
+          <Table columns={bankRecordColumns} dataSource={bankRecord}></Table>{" "}
+        </Spin>
       </Modal>
     </>
   );

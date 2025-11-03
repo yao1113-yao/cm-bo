@@ -4,7 +4,7 @@ import { Button, Form, message, Space, TableProps, Tooltip } from "antd";
 import { ICompanyBankType, ICompanyType, ITransactionType } from "../../../../type/main.interface";
 import { getAllBankList } from "../../../../function/ApiFunction";
 import { Api } from "../../../../context/ApiContext";
-import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { useTranslation } from "react-i18next";
 import { RightOutlined, LeftOutlined, CloseOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
@@ -30,7 +30,7 @@ export const useMaybank = () => {
   const [bankRecordList, setBankRecordList] = useState<[ITransactionType] | undefined>();
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     bank: "",
   };
 
@@ -194,7 +194,7 @@ export const useMaybank = () => {
             form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
 
             handleGetBankRecordList({
-              searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+              searchDate: searchDateRange("day"),
               bank: bankSelected === "AFFIN MAX" ? "AFFIN" : bankSelected === "CIMB NEW BIZ" ? "CIMB" : bankSelected === "CIMB OLD BIZ" ? "CIMB" : bankSelected === "RHB TOKEN" ? "RHB" : bankSelected === "PBB TOKEN" ? "PBB" : bankSelected,
             });
             setIsLoading(false);
@@ -236,7 +236,7 @@ export const useMaybank = () => {
           content: "Success",
         });
         form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
-        handleGetBankRecordList({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], bank: bankSelected });
+        handleGetBankRecordList({ searchDate: searchDateRange("day"), bank: bankSelected });
       })
       .catch((error) => {
         console.log(error);
@@ -266,7 +266,7 @@ export const useMaybank = () => {
           .then(() => {
             form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
             setIsLoading(false);
-            handleGetBankRecordList({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], bank: bankSelected });
+            handleGetBankRecordList({ searchDate: searchDateRange("day"), bank: bankSelected });
             form2.setFieldValue("bank", bankSelected);
             messageApi.open({
               type: "success",

@@ -1,14 +1,16 @@
 import { Form, message, TableProps } from "antd";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { IDeviceType, ITeamCaseType } from "../../../../type/main.interface";
 import { formatIndex, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { reportApi } from "../../../../service/CallApi";
 import dayjs from "dayjs";
 import { getAllItemCodeList } from "../../../../function/ApiFunction";
+import { Api } from "../../../../context/ApiContext";
 
 export const useDeviceCase = () => {
   const { t } = useTranslation();
+  const { companyList } = useContext(Api);
 
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -22,6 +24,7 @@ export const useDeviceCase = () => {
 
   const initialValues = {
     searchDate: searchDateRange("day"),
+    companyID: "all",
     deviceID: "all",
   };
   useEffect(() => {
@@ -40,6 +43,7 @@ export const useDeviceCase = () => {
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       deviceID: values?.deviceID,
+      companyID: values?.companyID,
     };
     await reportApi("/device-case", object)
       .then((result) => {
@@ -158,5 +162,5 @@ export const useDeviceCase = () => {
     },
   ];
 
-  return { t, form, isLoading, initialValues, columns, userInput, apiData, allDeviceList, handleGetTeamCase };
+  return { t, companyList, form, isLoading, initialValues, columns, userInput, apiData, allDeviceList, handleGetTeamCase };
 };

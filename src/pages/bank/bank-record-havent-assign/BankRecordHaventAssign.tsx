@@ -1,10 +1,10 @@
-import { Card, Col, DatePicker, Form, Input, InputNumber, Row, Select, Table } from "antd";
+import { Card, Col, DatePicker, Divider, Form, Input, InputNumber, Row, Select, Table } from "antd";
 import { useBankRecordHaventAssign } from "./hook/useBankRecordHaventAssign";
 import CommonButton from "../../../components/CommonButton";
 const { RangePicker } = DatePicker;
 
 const BankRecordHaventAssign = () => {
-  const { form, contextHolder, isLoading, initialValues, allBankList, apiData, columns, handleGetBankRecordHaventAssingList } = useBankRecordHaventAssign();
+  const { form, contextHolder, userInfo, companyList, isLoading, initialValues, allBankList, apiData, columns, handleGetBankRecordHaventAssingList } = useBankRecordHaventAssign();
   return (
     <Card loading={isLoading}>
       {contextHolder}
@@ -15,6 +15,18 @@ const BankRecordHaventAssign = () => {
               <RangePicker style={{ width: "100%" }} showTime />
             </Form.Item>
           </Col>
+          {userInfo && userInfo?.userType > 3 && (
+            <Col xs={6}>
+              <Form.Item label={"companyID"} name="searchCompanyID">
+                <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={"select" + " " + "companyID"} optionFilterProp="label">
+                  <Select.Option value="all">All</Select.Option>
+                  {companyList?.map((items) => {
+                    return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                  })}
+                </Select>
+              </Form.Item>
+            </Col>
+          )}
           <Col xs={6}>
             {/* <Device list={allBankList} label="bank" selectAll={false} required /> */}
             <Form.Item label="bank" name="bankCode">
@@ -36,11 +48,10 @@ const BankRecordHaventAssign = () => {
               <InputNumber style={{ width: "100%" }} />
             </Form.Item>
           </Col>
-          <Col>
-            <CommonButton text="Search" />
-          </Col>
         </Row>
+        <CommonButton text="Search" />
       </Form>
+      <Divider />
       <Table dataSource={apiData} columns={columns} />
     </Card>
   );

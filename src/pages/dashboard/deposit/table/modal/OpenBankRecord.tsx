@@ -1,5 +1,5 @@
 import { Button, Checkbox, Col, DatePicker, Form, Input, Modal, Row, Space, Table, TableProps, Tooltip } from "antd";
-import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../../function/CommonFunction";
+import { formatDateTime, formatIndex, formatNumber, formatString, searchDateRange } from "../../../../../function/CommonFunction";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ITransactionType } from "../../../../../type/main.interface";
@@ -22,7 +22,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, sel
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     mBank: selectedPendingDeposit?.mBank,
     amount: selectedPendingDeposit?.bankOut,
   };

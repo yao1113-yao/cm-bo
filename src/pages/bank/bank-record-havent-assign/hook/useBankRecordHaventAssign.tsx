@@ -5,13 +5,13 @@ import { Api } from "../../../../context/ApiContext";
 import dayjs from "dayjs";
 import { bankApi } from "../../../../service/CallApi";
 import { IBankRecordHaventAssign, ICompanyBankType } from "../../../../type/main.interface";
-import { formatDateTime, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { getAllBankList } from "../../../../function/ApiFunction";
 
 export const useBankRecordHaventAssign = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const { subdomain } = useContext(Api);
+  const { subdomain, userInfo, companyList } = useContext(Api);
   const [messageApi, contextHolder] = message.useMessage();
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
@@ -22,7 +22,8 @@ export const useBankRecordHaventAssign = () => {
   const [apiData, setApiData] = useState<IBankRecordHaventAssign[]>([]);
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
+    searchCompanyID: "all",
     bankCode: "all",
     bankRemark: "",
     bankAmount: 0,
@@ -41,6 +42,7 @@ export const useBankRecordHaventAssign = () => {
       companyID: subdomain,
       startDate: dayjs(values?.searchDate[0]).format("YYYY-MM-DD HH:mm:ss"),
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
+      searchCompanyID: values?.searchCompanyID,
       bankCode: values?.bankCode,
       bankRemark: values?.bankRemark,
       bankAmount: values?.bankAmount,
@@ -66,6 +68,14 @@ export const useBankRecordHaventAssign = () => {
       align: "center",
       render: (text: Date) => {
         return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+    {
+      title: "companyID",
+      dataIndex: "companyID",
+      align: "center",
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
@@ -112,5 +122,5 @@ export const useBankRecordHaventAssign = () => {
     },
   ];
 
-  return { t, form, contextHolder, isLoading, apiData, allBankList, initialValues, columns, handleGetBankRecordHaventAssingList };
+  return { t, form, contextHolder, userInfo, companyList, isLoading, apiData, allBankList, initialValues, columns, handleGetBankRecordHaventAssingList };
 };

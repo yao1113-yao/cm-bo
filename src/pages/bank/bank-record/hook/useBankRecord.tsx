@@ -35,17 +35,21 @@ export const useBankRecord = () => {
 
   const [selectedPendingDeposit, setSelectedPendingDeposit] = useState<ITransactionType | undefined>();
   const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
+  const [selected, setSelected] = useState<ITransactionType[]>([]);
+  const [changeStaffCodeModal, setChangeStaffCodeModal] = useState<boolean>(false);
+
   const handleTableChange = (pagination: any) => {
     setPagination(pagination);
   };
   let count = 5;
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     companyID: "all",
     bank: "all",
     type: "all",
     remark: "",
     keyword: "",
+    searchCompanyID: "all",
   };
   useEffect(() => {
     getAllItemCodeList("MBank", setIsLoading, setAllBankList);
@@ -472,6 +476,7 @@ export const useBankRecord = () => {
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       type: values?.type,
       keyword: values?.keyword,
+      searchCompanyID: values?.searchCompanyID,
       // bankCode: values?.bank,
       // remark: values?.remark,
     };
@@ -499,5 +504,11 @@ export const useBankRecord = () => {
     }
   }
 
-  return { t, userInfo, companyList, userInput, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount };
+  function handleCheckingCheckBox(item: any) {
+    setSelected(item);
+  }
+
+  console.log(selected);
+
+  return { t, userInfo, companyList, userInput, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount, changeStaffCodeModal, setChangeStaffCodeModal, handleCheckingCheckBox, selected, setSelected };
 };

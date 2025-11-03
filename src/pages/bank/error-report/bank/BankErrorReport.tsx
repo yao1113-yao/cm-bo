@@ -8,48 +8,51 @@ import EditBankAdjustment from "./modal/EditBankAdjustment";
 
 const { RangePicker } = DatePicker;
 const BankErrorReport = () => {
-  const { t, isLoading, messageApi, isKioskReportLoading, contextHolder, form, allBankList, allStaffList, apiData, selectedPendingDeposit, openBankRecord, setOpenBankRecord, editBankAdjustment, setEditBankAdjustment, initialValues, columns, handleInsertBankError, handleGetBankErrorReport } = useBankErrorReport();
+  const { t, userInfo, companyList, isLoading, messageApi, isKioskReportLoading, contextHolder, form, allBankList, allStaffList, apiData, selectedPendingDeposit, openBankRecord, setOpenBankRecord, editBankAdjustment, setEditBankAdjustment, initialValues, columns, handleInsertBankError, handleGetBankErrorReport } = useBankErrorReport();
 
   return (
     <div>
       {contextHolder}
-      <Card title={t("addBankAdjustment")} loading={isKioskReportLoading}>
-        <Form layout="vertical" form={form} onFinish={handleInsertBankError}>
-          <Row gutter={20}>
-            <Col xs={6}>
-              <Form.Item label={t("type")} name="type" rules={[{ required: true }]}>
-                <Select defaultActiveFirstOption={true} filterOption={(inputValue: any, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("type")} optionFilterProp="label">
-                  <Select.Option value="Payment">Payment</Select.Option>
-                  <Select.Option value="Error">Error</Select.Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col xs={6}>
-              <Device list={allBankList} label="bank" selectAll={false} required />
-            </Col>
-            {/* 
+      {userInfo && userInfo?.userType === 2 && (
+        <Card title={t("addBankAdjustment")} loading={isKioskReportLoading}>
+          <Form layout="vertical" form={form} onFinish={handleInsertBankError}>
+            <Row gutter={20}>
+              <Col xs={6}>
+                <Form.Item label={t("type")} name="type" rules={[{ required: true }]}>
+                  <Select defaultActiveFirstOption={true} filterOption={(inputValue: any, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("type")} optionFilterProp="label">
+                    <Select.Option value="Payment">Payment</Select.Option>
+                    <Select.Option value="Error">Error</Select.Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+
+              <Col xs={6}>
+                <Device list={allBankList} label="bank" selectAll={false} required />
+              </Col>
+              {/* 
             <Col xs={6}>
               <Staff list={allStaffList} selectAll={false} label="staffSrno" required={false} />
             </Col> */}
-            <Col xs={6}>
-              <Form.Item label={t("amount")} name="amount" required>
-                <InputNumber style={{ width: "100%" }} />
-              </Form.Item>
-            </Col>
-            <Col xs={6}>
-              <Form.Item label={t("remark")} name="remark" required>
-                <Input />
-              </Form.Item>
-            </Col>
-          </Row>
+              <Col xs={6}>
+                <Form.Item label={t("amount")} name="amount" required>
+                  <InputNumber style={{ width: "100%" }} />
+                </Form.Item>
+              </Col>
+              <Col xs={6}>
+                <Form.Item label={t("remark")} name="remark" required>
+                  <Input />
+                </Form.Item>
+              </Col>
+            </Row>
 
-          <div style={{ fontWeight: "500", color: "red" }}>
-            *Reminder: &nbsp;<span style={{ fontSize: "18px", color: "green" }}>Positve</span> is add point to kiosk , <span style={{ fontSize: "18px", color: "green" }}> Negative</span> is deduct point to Bank
-          </div>
+            <div style={{ fontWeight: "500", color: "red" }}>
+              *Reminder: &nbsp;<span style={{ fontSize: "18px", color: "green" }}>Positve</span> is add point to kiosk , <span style={{ fontSize: "18px", color: "green" }}> Negative</span> is deduct point to Bank
+            </div>
 
-          <CommonButton text="Add" />
-        </Form>
-      </Card>
+            <CommonButton text="Add" />
+          </Form>
+        </Card>
+      )}
       <Divider> Bank Adjustment Report</Divider>
       <Card loading={isLoading}>
         <Form layout="vertical" initialValues={initialValues} onFinish={handleGetBankErrorReport}>
@@ -59,14 +62,25 @@ const BankErrorReport = () => {
                 <RangePicker style={{ width: "100%" }} showTime />
               </Form.Item>
             </Col>
+
+            {userInfo && userInfo?.userType > 3 && (
+              <Col xs={6}>
+                <Form.Item label={"companyID"} name="searchCompanyID">
+                  <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={"select" + " " + "companyID"} optionFilterProp="label">
+                    <Select.Option value="all">All</Select.Option>
+                    {companyList?.map((items) => {
+                      return <Select.Option value={items.companyID}>{items.companyID}</Select.Option>;
+                    })}
+                  </Select>
+                </Form.Item>
+              </Col>
+            )}
             <Col xs={6}>
               <Device list={allBankList} label="bank" selectAll={true} required />
             </Col>
-
             <Col xs={6}>
               <Staff list={allStaffList} required={true} selectAll={true} label="staffSrno" />
             </Col>
-
             <Col xs={6}>
               <Form.Item label={t("remark")} name="remark" required>
                 <Input />

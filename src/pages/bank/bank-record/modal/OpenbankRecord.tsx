@@ -5,7 +5,7 @@ import { BankOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import { Api } from "../../../../context/ApiContext";
 import { ITransactionType } from "../../../../type/main.interface";
-import { formatDateTime, formatIndex, formatNumber, formatString } from "../../../../function/CommonFunction";
+import { formatDateTime, formatIndex, formatNumber, formatString, searchDateRange } from "../../../../function/CommonFunction";
 import { mainApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
 
@@ -22,7 +22,7 @@ const OpenBankRecord = ({ messageApi, isCheckAllAmount, setIsCheckAllAmount, all
   const [bankRecord, setBankRecord] = useState<ITransactionType[] | undefined>([]);
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     mBank: selectedPendingDeposit?.mBank,
     amount: selectedPendingDeposit?.recordType === "Main" ? selectedPendingDeposit?.mktBankIn : selectedPendingDeposit?.mktBankOut,
   };

@@ -26,7 +26,7 @@ export const useKioskLog = () => {
 
   const [userInput, setUserInput] = useState();
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     gameName: "all",
     remark: "all",
   };

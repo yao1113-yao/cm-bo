@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Form, message, TableProps } from "antd";
 import { IGameProviderType, ILogType, IUserType } from "../../../../../type/main.interface";
 import { getAllGameProviderList, getAllStaffList } from "../../../../../function/ApiFunction";
-import { formatDateTime, formatNumber, formatString } from "../../../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../../../function/CommonFunction";
 import { LogApi } from "../../../../../service/CallApi";
 import { Api } from "../../../../../context/ApiContext";
 import dayjs from "dayjs";
@@ -12,7 +12,7 @@ import dayjs from "dayjs";
 export const useKioskErrorReport = () => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-  const { subdomain } = useContext(Api);
+  const { subdomain, userInfo, companyList } = useContext(Api);
   const userID = localStorage.getItem("userID");
   const userToken = localStorage.getItem("userToken");
   const userType = localStorage.getItem("userType");
@@ -25,8 +25,9 @@ export const useKioskErrorReport = () => {
   const [allStaffList, setAllStaffList] = useState<[IUserType] | undefined>();
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     staffSrno: 0,
+    searchCompanyID: "all",
     gameName: "all",
     remark: "",
   };
@@ -43,6 +44,15 @@ export const useKioskErrorReport = () => {
       hidden: false,
       render: (text: any) => {
         return <div style={{ fontWeight: "600" }}>{formatDateTime(text)}</div>;
+      },
+    },
+    {
+      title: t("companyID"),
+      dataIndex: "companyID",
+      ellipsis: true,
+      hidden: userInfo?.userType === 2,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
       },
     },
     {
@@ -119,7 +129,7 @@ export const useKioskErrorReport = () => {
           content: "success",
         });
         form.setFieldValue("searchDate", [dayjs().subtract(6, "hour"), dayjs()]);
-        handleGetKioskErrorReport({ searchDate: [dayjs().subtract(6, "hour"), dayjs()], staffSrno: 0, gameName: "all", remark: "" });
+        handleGetKioskErrorReport({ searchDate: searchDateRange("day"), staffSrno: 0, gameName: "all", remark: "" });
       })
       .catch(() => {
         messageApi.open({
@@ -142,6 +152,7 @@ export const useKioskErrorReport = () => {
       endDate: dayjs(values?.searchDate[1]).format("YYYY-MM-DD HH:mm:ss"),
       gameName: values?.gameName,
       remark: values?.remark,
+      searchCompanyID: values?.searchCompanyID,
     };
     await LogApi("/kiosk-adjustment-list", object)
       .then((result) => {
@@ -154,5 +165,5 @@ export const useKioskErrorReport = () => {
     setKioskReportIsLoading(false);
   }
 
-  return { t, contextHolder, isLoading, isKioskReportLoading, form, allGameList, allStaffList, apiData, initialValues, columns, handleInsertKioskError, handleGetKioskErrorReport };
+  return { t, contextHolder, userInfo, companyList, isLoading, isKioskReportLoading, form, allGameList, allStaffList, apiData, initialValues, columns, handleInsertKioskError, handleGetKioskErrorReport };
 };

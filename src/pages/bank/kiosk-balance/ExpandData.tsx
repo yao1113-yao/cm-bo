@@ -6,7 +6,7 @@ import { Api } from "../../../context/ApiContext";
 import { useContext, useEffect, useState } from "react";
 import { IKioskLogType } from "../../../type/main.interface";
 import dayjs from "dayjs";
-import { formatDateTime, formatNumber, formatString } from "../../../function/CommonFunction";
+import { formatDateTime, formatNumber, formatString, searchDateRange } from "../../../function/CommonFunction";
 import { AccountBookOutlined } from "@ant-design/icons";
 import CheckTransaction from "./modal/CheckTransaction";
 
@@ -27,7 +27,7 @@ const ExpandData = ({ record }: any) => {
   //   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
 
   const initialValues = {
-    searchDate: [dayjs().subtract(6, "hour"), dayjs()],
+    searchDate: searchDateRange("day"),
     gameName: "all",
     remark: "all",
   };
