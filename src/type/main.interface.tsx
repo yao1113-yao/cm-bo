@@ -68,6 +68,7 @@ export interface ITransactionType {
   beforeBalance: number;
   afterBalance: number;
   createBy: string;
+  updateBy: string;
   sysRemark1: string;
   createDate: Date;
   recordType: string;
