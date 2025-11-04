@@ -6,10 +6,11 @@ import OpenBankRecord from "./modal/OpenbankRecord";
 import EditTransaction from "./modal/EditTransaction";
 import { handleExportExcel } from "../../../function/CommonFunction";
 import EditStaffCode from "./modal/EditStaffCode";
+import EditCashierCode from "./modal/EditCashierCode";
 
 const { RangePicker } = DatePicker;
 const BankRecord = () => {
-  const { t, userInfo, companyList, userInput, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount, changeStaffCodeModal, setChangeStaffCodeModal, handleCheckingCheckBox, selected, setSelected } = useBankRecord();
+  const { t, userInfo, companyList, userInput, form, contextHolder, allBankList, isLoading, apiData, apiData2, openEditTransaction, setOpenEditTransaction, columns, initialValues, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount, changeStaffCodeModal, setChangeStaffCodeModal, changeCashierModal, setChangeCashierModal, handleCheckingCheckBox, selected, setSelected } = useBankRecord();
 
   return (
     <Card>
@@ -74,9 +75,14 @@ const BankRecord = () => {
           {t("Export Excel")}
         </Button>
         {selected?.length > 0 && (
-          <Button icon={<EditOutlined />} type="primary" style={{ background: "red", marginLeft: "10px" }} onClick={() => setChangeStaffCodeModal(true)}>
-            {t("Edit Staff Code")}
-          </Button>
+          <>
+            <Button icon={<EditOutlined />} type="primary" style={{ background: "#003eb3", marginLeft: "10px" }} onClick={() => setChangeStaffCodeModal(true)}>
+              {t("Edit Marketing Code")}
+            </Button>
+            <Button icon={<EditOutlined />} type="primary" style={{ background: "red", marginLeft: "10px" }} onClick={() => setChangeCashierModal(true)}>
+              {t("Edit Cashier Code")}
+            </Button>
+          </>
         )}
       </Form>
 
@@ -134,6 +140,7 @@ const BankRecord = () => {
 
       {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} allBankList={allBankList} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
       {changeStaffCodeModal && <EditStaffCode messageApi={messageApi} changeStaffCodeModal={changeStaffCodeModal} selected={selected} setChangeStaffCodeModal={setChangeStaffCodeModal} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} setSelected={setSelected} userInput={userInput} />}
+      {changeCashierModal && <EditCashierCode messageApi={messageApi} changeCashierModal={changeCashierModal} selected={selected} setChangeCashierModal={setChangeCashierModal} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} setSelected={setSelected} userInput={userInput} />}
     </Card>
   );
 };

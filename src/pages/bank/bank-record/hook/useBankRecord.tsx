@@ -37,6 +37,7 @@ export const useBankRecord = () => {
   const [isCheckAllAmount, setIsCheckAllAmount] = useState<boolean>(false);
   const [selected, setSelected] = useState<ITransactionType[]>([]);
   const [changeStaffCodeModal, setChangeStaffCodeModal] = useState<boolean>(false);
+  const [changeCashierModal, setChangeCashierModal] = useState<boolean>(false);
 
   const handleTableChange = (pagination: any) => {
     setPagination(pagination);
@@ -141,7 +142,16 @@ export const useBankRecord = () => {
       },
     },
     {
-      title: t("staff"),
+      title: t("Cashier"),
+      dataIndex: "updateBy",
+      align: "center",
+      hidden: (userInfo && userInfo?.userType === 2) || userInfo?.userType === 3,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("Marketing"),
       dataIndex: "mStaff",
       align: "center",
       render: (text: string) => {
@@ -510,5 +520,5 @@ export const useBankRecord = () => {
 
   console.log(selected);
 
-  return { t, userInfo, companyList, userInput, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount, changeStaffCodeModal, setChangeStaffCodeModal, handleCheckingCheckBox, selected, setSelected };
+  return { t, userInfo, companyList, userInput, form, contextHolder, isLoading, allBankList, apiData, setApiData, apiData2, openEditTransaction, setOpenEditTransaction, initialValues, timer, columns, handleGetBankRecordMarketingList, handleSearchByFilter, rowClassName, pagination, handleTableChange, selectedPendingDeposit, setSelectedPendingDeposit, openBankRecord, setOpenBankRecord, messageApi, isCheckAllAmount, setIsCheckAllAmount, changeStaffCodeModal, setChangeStaffCodeModal, changeCashierModal, setChangeCashierModal, handleCheckingCheckBox, selected, setSelected };
 };

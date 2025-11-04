@@ -7,7 +7,7 @@ import { IUserType } from "../../../../type/main.interface";
 import CommonButton from "../../../../components/CommonButton";
 import { bankApi } from "../../../../service/CallApi";
 
-const EditStaffCode = ({ messageApi, changeStaffCodeModal, selected, setChangeStaffCodeModal, handleGetBankRecordMarketingList, setSelected, userInput }: any) => {
+const EditCashierCode = ({ messageApi, changeCashierModal, selected, setChangeCashierModal, handleGetBankRecordMarketingList, setSelected, userInput }: any) => {
   const { t } = useTranslation();
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
@@ -24,7 +24,6 @@ const EditStaffCode = ({ messageApi, changeStaffCodeModal, selected, setChangeSt
 
   async function handleEditTransactionDetails(values: any) {
     setIsLoading(true);
-    console.log(values);
     const object = {
       UserID: userID,
       UserToken: userToken,
@@ -34,13 +33,13 @@ const EditStaffCode = ({ messageApi, changeStaffCodeModal, selected, setChangeSt
       staffSrno: values?.staffSrno,
     };
     console.log(object);
-    await bankApi("/edit-staff-code", object)
+    await bankApi("/edit-cashier-code", object)
       .then(() => {
         messageApi.open({
           type: "success",
-          content: "edit-staff-code",
+          content: "edit-cashier-code",
         });
-        setChangeStaffCodeModal(false);
+        setChangeCashierModal(false);
         setSelected([]);
         handleGetBankRecordMarketingList(userInput);
       })
@@ -54,7 +53,7 @@ const EditStaffCode = ({ messageApi, changeStaffCodeModal, selected, setChangeSt
   }
 
   return (
-    <Modal width="70vw" open={changeStaffCodeModal} onCancel={() => setChangeStaffCodeModal(false)} footer={null} closable={false} title={t("Edit Staff Code")}>
+    <Modal width="70vw" open={changeCashierModal} onCancel={() => setChangeCashierModal(false)} footer={null} closable={false} title={t("Edit Cashier Code")}>
       <Spin spinning={isLoading}>
         <Form form={form} layout="vertical" onFinish={handleEditTransactionDetails}>
           <Row gutter={20}>
@@ -80,4 +79,4 @@ const EditStaffCode = ({ messageApi, changeStaffCodeModal, selected, setChangeSt
   );
 };
 
-export default EditStaffCode;
+export default EditCashierCode;
