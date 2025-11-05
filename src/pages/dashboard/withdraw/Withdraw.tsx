@@ -1,4 +1,4 @@
-import { Checkbox, Col, Divider, Form, Input, InputNumber, message, Row, Space, Spin } from "antd";
+import { Button, Checkbox, Col, Divider, Form, Input, InputNumber, message, Row, Space, Spin, Tooltip } from "antd";
 import CommonButton from "../../../components/CommonButton";
 import Device from "../../../components/Device";
 import GameProvider from "../../../components/GameProvider";
@@ -10,6 +10,7 @@ import { getAllGameProviderList, getAllItemCodeList } from "../../../function/Ap
 import WithdrawTable from "./table/WithdrawTable";
 import PendingWithdrawTable from "./table/PendingWithdrawTable";
 import { Api } from "../../../context/ApiContext";
+import { IoSearchOutline } from "react-icons/io5";
 
 interface DepositProps extends React.HTMLAttributes<HTMLElement> {
   type: string;
@@ -145,6 +146,42 @@ const Withdraw = ({ type }: DepositProps) => {
     form.setFieldValue("cashOut", 0);
   }
 
+  async function handleSearchPLayerID() {
+    if (form.getFieldValue("gameLoginID")) {
+      setIsLoading(true);
+      const object = {
+        UserID: userID,
+        UserToken: userToken,
+        UserType: userType,
+        GameID: form.getFieldValue("gameLoginID"),
+      };
+      await mainApi("/search-game-id", object)
+        .then((result) => {
+          form.setFieldValue("name", result.data[0].name);
+          form.setFieldValue("hpNo", result.data[0].phone);
+          form.setFieldValue("device", result.data[0].mDevice);
+          messageApi.open({
+            type: "success",
+            content: "success",
+          });
+        })
+        .catch((error) => {
+          messageApi.open({
+            type: "error",
+            content: error?.response?.data?.message,
+          });
+          form.resetFields();
+        });
+      setIsLoading(false);
+    } else {
+      messageApi.open({
+        type: "warning",
+        content: "gameLoginID cannot be empty",
+      });
+      form.resetFields();
+    }
+  }
+
   return (
     <>
       {contextHolder}
@@ -158,7 +195,16 @@ const Withdraw = ({ type }: DepositProps) => {
 
               <Col xs={3}>
                 <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                  <Input autoComplete="off" />
+                  <Row justify="space-between">
+                    <Col xs={20}>
+                      <Input autoComplete="off" style={{ width: "100%" }} />
+                    </Col>
+                    <Col xs={4} style={{ textAlign: "end" }}>
+                      <Tooltip title="Search ID">
+                        <Button icon={<IoSearchOutline />} onClick={() => handleSearchPLayerID()}></Button>
+                      </Tooltip>
+                    </Col>
+                  </Row>
                 </Form.Item>
               </Col>
 

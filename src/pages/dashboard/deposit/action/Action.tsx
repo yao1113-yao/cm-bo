@@ -1,12 +1,18 @@
-import { Checkbox, Col, Form, Input, InputNumber, Row, Select, Space } from "antd";
+import { Button, Checkbox, Col, Form, Input, InputNumber, message, Row, Select, Space, Tooltip } from "antd";
 
-import { MinusCircleOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined, SearchOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
+import { mainApi } from "../../../../service/CallApi";
 
 const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form, welcomeBonusEnable, setWelcomeBonusEnable, hiBonusEnable, setHiBonusEnable, ...rest }: any) => {
   const { t } = useTranslation();
+  const userID = localStorage.getItem("userID");
+  const userToken = localStorage.getItem("userToken");
+  const userType = localStorage.getItem("userType");
+  const [messageApi, contextHolder] = message.useMessage();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [newIDEnable, setNewIDEnable] = useState<boolean>(false);
   const [freeCreditEnable, setFreeCreditEnable] = useState<boolean>(false);
 
@@ -31,8 +37,6 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
       users[0].customerBankAccName = "";
       users[0].customerBankAccNo = "";
     }
-
-    console.log(users);
   }
 
   function handleCheckHiBonus() {
@@ -47,12 +51,60 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
       users[0].customerBankAccName = "";
       users[0].customerBankAccNo = "";
     }
+  }
 
-    console.log(users);
+  async function handleSearchPLayerID(key: number) {
+    const fields = form.getFieldsValue();
+    const { users } = fields;
+
+    if (!users[key]?.gameLoginID) {
+      messageApi.warning("gameLoginID cannot be empty");
+      return;
+    }
+
+    setIsLoading(true);
+    const object = {
+      UserID: userID,
+      UserToken: userToken,
+      UserType: userType,
+      GameID: users[key].gameLoginID,
+    };
+
+    try {
+      const result = await mainApi("/search-game-id", object);
+      const res = result.data?.[0];
+
+      if (res) {
+        const newUsers = [...users];
+        newUsers[key] = {
+          ...newUsers[key],
+          name: res.name,
+          hpNo: res.phone,
+          device: res.mDevice,
+        };
+        form.setFieldsValue({ users: newUsers });
+        messageApi.success("Success");
+      }
+    } catch (error: any) {
+      // only clear when failed
+      form.resetFields([["users", key, "gameLoginID"]]);
+
+      // if you want to clear the other fields too
+      form.setFields([
+        { name: ["users", key, "name"], value: "" },
+        { name: ["users", key, "hpNo"], value: "" },
+        { name: ["users", key, "device"], value: "" },
+      ]);
+
+      messageApi.error(error?.response?.data?.message || "Search failed");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
     <>
+      {contextHolder}
       <Row gutter={10}>
         <Col xs={4}>
           <Form.Item label={t("game")} name={[name, "game"]} rules={[{ required: true }]}>
@@ -79,7 +131,16 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
             name={[name, "gameLoginID"]}
             rules={[{ required: !newIDEnable, message: t("pleaseSelect") }]}
           >
-            <Input disabled={newIDEnable} autoComplete="off" />
+            <Row justify="space-between">
+              <Col xs={20}>
+                <Input disabled={newIDEnable} autoComplete="off" style={{ width: "100%" }} />
+              </Col>
+              <Col xs={4} style={{ textAlign: "end" }}>
+                <Tooltip title="Search ID">
+                  <Button icon={<SearchOutlined />} disabled={newIDEnable} onClick={() => handleSearchPLayerID(name)} loading={isLoading}></Button>
+                </Tooltip>
+              </Col>
+            </Row>
           </Form.Item>
         </Col>
 
