@@ -107,6 +107,14 @@ export const useTransferRecord = () => {
         return <div style={{ fontWeight: "600" }}>{formatNumber(text)}</div>;
       },
     },
+    {
+      title: t("remark"),
+      dataIndex: "remark",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
 
     // {
     //   title: t("action"),
