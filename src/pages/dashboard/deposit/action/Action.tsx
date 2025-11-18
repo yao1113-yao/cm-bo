@@ -220,7 +220,7 @@ const Action = ({ onChange, allGameList, allDeviceList, key, name, remove, form,
             name={[name, "bonusPer"]}
             rules={[{ required: true, message: t("pleaseSelect") }]}
           >
-            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, name, "bonusPer")} max={name === 0 && welcomeBonusEnable ? 30 : name === 0 && hiBonusEnable ? 100 : 25} />
+            <InputNumber style={{ width: "100%" }} onChange={(e) => onChange(e, name, "bonusPer")} max={welcomeBonusEnable ? 30 : hiBonusEnable ? 100 : 25} />
           </Form.Item>
         </Col>
 

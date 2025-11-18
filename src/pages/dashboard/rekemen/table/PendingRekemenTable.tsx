@@ -208,6 +208,15 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
       },
     },
     {
+      title: t("remark"),
+      dataIndex: "remark",
+      align: "center",
+
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("createDate"),
       dataIndex: "createDate",
       align: "center",
@@ -317,6 +326,7 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
               type: "success",
               content: "done",
             });
+            setIsLoading(false);
           })
           .catch(() => {
             messageApi.open({

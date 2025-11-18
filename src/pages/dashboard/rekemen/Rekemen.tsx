@@ -137,6 +137,12 @@ const Rekemen = ({ type }: DepositProps) => {
                   <InputNumber style={{ width: "100%" }} />
                 </Form.Item>
               </Col>
+
+              <Col xs={3}>
+                <Form.Item label={t("remark")} name="remark" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                  <Input autoComplete="off" />
+                </Form.Item>
+              </Col>
             </Row>
             <Divider>Details</Divider>
 
