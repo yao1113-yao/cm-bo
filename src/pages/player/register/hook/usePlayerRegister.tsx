@@ -20,6 +20,7 @@ export const usePlayerRegister = () => {
   const userType = localStorage.getItem("userType");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFreeID, setIsFreeID] = useState<boolean>(false);
   const [allGameList, setAllGameList] = useState<[IGameProviderType] | undefined>();
   const [apiData, setApiData] = useState<IPlayerTask[] | undefined>();
 
@@ -94,30 +95,40 @@ export const usePlayerRegister = () => {
   ];
 
   async function handleRegisterPlayer(values: any) {
-    setIsLoading(true);
-    const object = {
-      UserID: userID,
-      UserToken: userToken,
-      UserType: userType,
-      companyID: subdomain,
-      ...values,
-    };
-    await playerApi("/register-player", object)
-      .then((result: any) => {
-        messageApi.open({
-          type: "success",
-          content: result?.message,
-        });
-        handleGetPlayerTaskList();
-      })
-      .catch((error) => {
-        messageApi.open({
-          type: "error",
-          content: error?.response?.data?.message,
-        });
-        setIsLoading(false);
+    if ((values?.game === "MYBOSS2" && values?.password !== undefined) || (values?.game === "NUTZCLUB" && values?.password !== undefined)) {
+      messageApi.open({
+        type: "warning",
+        content: "Myboss And Nutzclub cannot set password",
       });
-    setIsLoading(false);
+    } else {
+      // console.log((values?.game !== "MYBOSS2" && values?.password !== "") || (values?.game !== "NUTZCLUB" && values?.password !== ""));
+      setIsLoading(true);
+      const object = {
+        UserID: userID,
+        UserToken: userToken,
+        UserType: userType,
+        companyID: subdomain,
+        IsFreeID: isFreeID ? 1 : 0,
+        ...values,
+      };
+      await playerApi("/register-player", object)
+        .then((result: any) => {
+          messageApi.open({
+            type: "success",
+            content: result?.message,
+          });
+          handleGetPlayerTaskList();
+          setIsFreeID(false);
+        })
+        .catch((error) => {
+          messageApi.open({
+            type: "error",
+            content: error?.response?.data?.message,
+          });
+          setIsLoading(false);
+        });
+      setIsLoading(false);
+    }
   }
 
   async function handleGetPlayerTaskList() {
@@ -139,5 +150,5 @@ export const usePlayerRegister = () => {
       });
   }
 
-  return { t, userInfo, contextHolder, isLoading, allGameList, columns, apiData, handleRegisterPlayer };
+  return { t, userInfo, contextHolder, isLoading, allGameList, columns, isFreeID, setIsFreeID, apiData, handleRegisterPlayer };
 };

@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Form, Input, InputNumber, Row, Table } from "antd";
+import { Card, Col, Divider, Form, Input, InputNumber, Row, Switch, Table } from "antd";
 import { usePlayerRegister } from "./hook/usePlayerRegister";
 import GameProvider from "../../../components/GameProvider";
 import CommonButton from "../../../components/CommonButton";
@@ -6,7 +6,7 @@ import { useState } from "react";
 import ExpandData from "./ExpandData";
 
 const PlayerRegister = () => {
-  const { t, userInfo, contextHolder, isLoading, allGameList, columns, apiData, handleRegisterPlayer } = usePlayerRegister();
+  const { t, userInfo, contextHolder, isLoading, allGameList, isFreeID, setIsFreeID, columns, apiData, handleRegisterPlayer } = usePlayerRegister();
   const [expandedRowKeys, setExpandedRowKeys] = useState<number[]>([]);
 
   function handleTableRowExpand(expended: any, record: any) {
@@ -18,12 +18,21 @@ const PlayerRegister = () => {
 
     setExpandedRowKeys(keys);
   }
+
+  function onChange(values: boolean) {
+    setIsFreeID(values);
+  }
+
+  console.log(isFreeID);
+
   return (
     <>
       {contextHolder}
 
       <Card title={t("registerPlayer")} loading={isLoading}>
         <Form layout="vertical" onFinish={handleRegisterPlayer}>
+          FreeID &nbsp;&nbsp;&nbsp;
+          <Switch checked={isFreeID} onChange={onChange} title="Free ID" />
           <Row gutter={10}>
             <Col xs={4}>
               <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
@@ -35,7 +44,6 @@ const PlayerRegister = () => {
                 </Form.Item>
               </Col>
             )}
-
             <Col xs={4}>
               <Form.Item
                 label={t("countPlayer")}
@@ -50,6 +58,11 @@ const PlayerRegister = () => {
               </Form.Item>
             </Col>
 
+            <Col xs={4}>
+              <Form.Item label={t("password")} name="password">
+                <Input maxLength={6} />
+              </Form.Item>
+            </Col>
             <Col xs={4}>
               <Form.Item label={t("name")} name="name">
                 <Input />
@@ -67,7 +80,6 @@ const PlayerRegister = () => {
               </Form.Item>
             </Col>
           </Row>
-
           <CommonButton text="submit" />
         </Form>
       </Card>
