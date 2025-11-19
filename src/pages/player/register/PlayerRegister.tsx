@@ -60,7 +60,7 @@ const PlayerRegister = () => {
 
             <Col xs={4}>
               <Form.Item label={t("password")} name="password">
-                <Input maxLength={6} />
+                <Input maxLength={8} />
               </Form.Item>
             </Col>
             <Col xs={4}>
