@@ -82,7 +82,7 @@ const PlayerRegister = () => {
           </Row>
           <CommonButton text="submit" />
         </Form>
-        <div style={{ color: "red", fontWeight: "600", fontSize: "16px" }}>*** Password have to be this format Example : (Ab1234) only 6 character</div>
+        <div style={{ color: "red", fontWeight: "600", fontSize: "16px" }}>*** Password have to be this format Example : (Aa123123) only 8 character</div>
       </Card>
 
       {userInfo?.userType === 3 && (
