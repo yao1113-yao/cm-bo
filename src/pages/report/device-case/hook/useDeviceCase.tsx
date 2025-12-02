@@ -121,6 +121,14 @@ export const useDeviceCase = () => {
       },
     },
     {
+      title: t("006W"),
+      dataIndex: "m006W",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
       title: t("001T"),
       dataIndex: "m001T",
       ellipsis: true,
@@ -155,6 +163,14 @@ export const useDeviceCase = () => {
     {
       title: t("005T"),
       dataIndex: "m005T",
+      ellipsis: true,
+      render: (text: string) => {
+        return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
+      },
+    },
+    {
+      title: t("006T"),
+      dataIndex: "m006T",
       ellipsis: true,
       render: (text: string) => {
         return <div style={{ fontWeight: "600" }}>{formatString(text)}</div>;
