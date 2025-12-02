@@ -62,7 +62,7 @@ const EditCashierCode = ({ messageApi, changeCashierModal, selected, setChangeCa
                 <Select defaultActiveFirstOption={true} filterOption={(inputValue, option: any) => option.props.children.toString().toLowerCase().includes(inputValue.toLowerCase())} showSearch style={{ width: "100%" }} placeholder={t("select") + " " + t("game")} optionFilterProp="label">
                   {allStaffList?.map(
                     (items: any) =>
-                      items?.userType === 3 && (
+                      items?.userType === 2 && (
                         <Select.Option value={items.srno} key={items.userID}>
                           {items?.userID}
                         </Select.Option>
