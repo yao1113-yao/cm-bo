@@ -119,6 +119,12 @@ const PendingWithdrawTable = ({ pendingWithdrawRecod, handleGetPendingTransactio
                   <Tooltip title={t("manualSuccess")}>
                     <Button icon={<FaHandPaper />} onClick={() => handleGetBankRecord(record, "manualSucccess")} disabled={record?.isEditing === 1 || record?.bankAccountStatus === 3}></Button>
                   </Tooltip>
+
+                  <Tooltip title={t("editDetails")}>
+                    <Button onClick={() => OpenModalEditTransaction(record)}>
+                      <EditOutlined />
+                    </Button>
+                  </Tooltip>
                   <Tooltip title={t("reject")}>
                     <Button icon={<CloseOutlined />} onClick={() => handleRejectTransaction(record)}></Button>
                   </Tooltip>

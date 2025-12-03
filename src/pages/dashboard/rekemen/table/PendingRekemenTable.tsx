@@ -44,11 +44,19 @@ const PendingRekemenTable = ({ pendingRekemenRecod, handleGetPendingTransactionR
                 </Tooltip>
               </>
             ) : (
-              <Tooltip title={t("Noted")}>
-                <Button onClick={() => handleNotedTransaction(record)}>
-                  <CheckOutlined />
-                </Button>
-              </Tooltip>
+              <>
+                <Tooltip title={t("Noted")}>
+                  <Button onClick={() => handleNotedTransaction(record)}>
+                    <CheckOutlined />
+                  </Button>
+                </Tooltip>
+
+                <Tooltip title={t("editDetails")}>
+                  <Button onClick={() => OpenModalEditTransaction(record)}>
+                    <EditOutlined />
+                  </Button>
+                </Tooltip>
+              </>
             )}
           </Space>
         );

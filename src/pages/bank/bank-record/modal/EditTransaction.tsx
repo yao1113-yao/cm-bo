@@ -7,7 +7,7 @@ import { getAllGameProviderList, handleEditingTransaction } from "../../../../fu
 import { bankApi } from "../../../../service/CallApi";
 import CommonButton from "../../../../components/CommonButton";
 
-const EditTransaction = ({ messageApi, openEditTransaction, allBankList, selectedPendingDeposit, setOpenEditTransaction, handleGetBankRecordMarketingList }: any) => {
+const EditTransaction = ({ messageApi, openEditTransaction, allBankList, selectedPendingDeposit, setOpenEditTransaction, userInput, handleGetBankRecordMarketingList }: any) => {
   const { t } = useTranslation();
   const { subdomain } = useContext(Api);
   const userID = localStorage.getItem("userID");
@@ -53,10 +53,10 @@ const EditTransaction = ({ messageApi, openEditTransaction, allBankList, selecte
       .then(() => {
         messageApi.open({
           type: "success",
-          content: "edit-matchbanklater-deposit",
+          content: "edit-deposit",
         });
         handleOnCloseModal();
-        handleGetBankRecordMarketingList(initialValues);
+        handleGetBankRecordMarketingList(userInput);
       })
       .catch(() => {
         messageApi.open({

@@ -138,7 +138,7 @@ const BankRecord = () => {
 
       {openBankRecord && <OpenBankRecord messageApi={messageApi} isCheckAllAmount={isCheckAllAmount} allBankList={allBankList} setIsCheckAllAmount={setIsCheckAllAmount} selectedPendingDeposit={selectedPendingDeposit} openBankRecord={openBankRecord} setOpenBankRecord={setOpenBankRecord} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
 
-      {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} allBankList={allBankList} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
+      {openEditTransaction && <EditTransaction messageApi={messageApi} openEditTransaction={openEditTransaction} allBankList={allBankList} selectedPendingDeposit={selectedPendingDeposit} setOpenEditTransaction={setOpenEditTransaction} userInput={userInput} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} />}
       {changeStaffCodeModal && <EditStaffCode messageApi={messageApi} changeStaffCodeModal={changeStaffCodeModal} selected={selected} setChangeStaffCodeModal={setChangeStaffCodeModal} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} setSelected={setSelected} userInput={userInput} />}
       {changeCashierModal && <EditCashierCode messageApi={messageApi} changeCashierModal={changeCashierModal} selected={selected} setChangeCashierModal={setChangeCashierModal} handleGetBankRecordMarketingList={handleGetBankRecordMarketingList} setSelected={setSelected} userInput={userInput} />}
     </Card>

@@ -84,14 +84,16 @@ export const useBankRecord = () => {
                 <Tooltip title={t("assignBank")}>
                   <Button icon={<BankOutlined />} onClick={() => OpenModalBankRecord(record)} disabled={record?.isEditing === 1}></Button>
                 </Tooltip>
+
+                <Tooltip title={t("editRecord")}>
+                  <Button icon={<EditOutlined />} onClick={() => OpenModalEditTransaction(record)} disabled={record?.isEditing === 1}></Button>
+                </Tooltip>
               </>
             )}
-
+            {/* 
             {record?.credit > record?.mktBankIn && (
-              <Tooltip title={t("editRecord")}>
-                <Button icon={<EditOutlined />} onClick={() => OpenModalEditTransaction(record)} disabled={record?.isEditing === 1}></Button>
-              </Tooltip>
-            )}
+             
+            )} */}
           </Space>
         ) : (
           ""
