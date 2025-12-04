@@ -302,7 +302,7 @@ export const useBankRecord = () => {
       dataIndex: "bonusPer",
       align: "center",
       render: (text: number) => {
-        return <div style={{ fontWeight: "600" }}>{formatNumber(text * 100)}</div>;
+        return <div style={{ fontWeight: "600" }}>{formatString(text * 100 + " %")}</div>;
       },
     },
     {

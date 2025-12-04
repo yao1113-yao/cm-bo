@@ -28,6 +28,7 @@ const Transfer = ({ type }: DepositProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
   const [freeCredit, setFreeCredit] = useState<boolean>(false);
+  const [transferNotSame, setTransferNotSame] = useState<boolean>(false);
 
   // const [creditAmount, setCreditAmount] = useState<number>(0);
 
@@ -94,7 +95,7 @@ const Transfer = ({ type }: DepositProps) => {
     users.map((items: any) => {
       credit += Number(items.credit);
     });
-    if (values?.credit === credit || freeCredit) {
+    if (values?.credit === credit || freeCredit || transferNotSame) {
       setIsActionLoading(true);
       const object = {
         UserID: userID,
@@ -112,6 +113,7 @@ const Transfer = ({ type }: DepositProps) => {
           content: "sent",
         });
         handleGetPendingTransactionRecord("Transfer");
+        setTransferNotSame(false);
         form.resetFields();
       });
       setIsActionLoading(false);
@@ -153,6 +155,11 @@ const Transfer = ({ type }: DepositProps) => {
     //   console.log(key, users[key].credit);
     // }
   };
+  function handleOnChangeTransferNotSameAmount() {
+    setTransferNotSame(!transferNotSame);
+    form.resetFields();
+  }
+
   function handleOnChangeFreeCredit() {
     setFreeCredit(!freeCredit);
     form.resetFields();
@@ -176,55 +183,58 @@ const Transfer = ({ type }: DepositProps) => {
             form={form}
           >
             {!freeCredit && (
-              <Row gutter={10}>
-                <Col xs={3}>
-                  <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
-                </Col>
+              <>
+                <Checkbox checked={transferNotSame} onChange={handleOnChangeTransferNotSameAmount}>
+                  <div>&nbsp;transfer not same amount</div>
+                </Checkbox>
 
-                <Col xs={3}>
-                  <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                    <Input autoComplete="off" />
-                  </Form.Item>
-                </Col>
+                <Row gutter={10}>
+                  <Col xs={3}>
+                    <GameProvider list={allGameList} required={true} selectAll={false} label="game" />
+                  </Col>
 
-                <Col xs={3}>
-                  <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                    <Input autoComplete="off" />
-                  </Form.Item>
-                </Col>
+                  <Col xs={3}>
+                    <Form.Item label={t("gameLoginID")} name="gameLoginID" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                      <Input autoComplete="off" />
+                    </Form.Item>
+                  </Col>
 
-                <Col xs={3}>
-                  <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                    <Input type="number" autoComplete="off" />
-                  </Form.Item>
-                </Col>
+                  <Col xs={3}>
+                    <Form.Item label={t("name")} name="name" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                      <Input autoComplete="off" />
+                    </Form.Item>
+                  </Col>
 
-                <Col xs={3}>
-                  <Form.Item label={t("device")} name="device" rules={[{ required: true }]}>
-                    <Select>
-                      {allDeviceList?.map((items: any) => (
-                        <Select.Option value={items.item} key={items.item}>
-                          {items?.item}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
+                  <Col xs={3}>
+                    <Form.Item label={t("hpNo")} name="hpNo" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                      <Input type="number" autoComplete="off" />
+                    </Form.Item>
+                  </Col>
 
-                <Col xs={3}>
-                  <Form.Item label={t("credit")} name="credit" rules={[{ required: true, message: t("pleaseSelect") }]}>
-                    <InputNumber style={{ width: "100%" }} prefix="-" onChange={handleOnChangeCreditAmount} />
-                  </Form.Item>
-                </Col>
-              </Row>
+                  <Col xs={3}>
+                    <Form.Item label={t("device")} name="device" rules={[{ required: true }]}>
+                      <Select>
+                        {allDeviceList?.map((items: any) => (
+                          <Select.Option value={items.item} key={items.item}>
+                            {items?.item}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+
+                  <Col xs={3}>
+                    <Form.Item label={t("credit")} name="credit" rules={[{ required: true, message: t("pleaseSelect") }]}>
+                      <InputNumber style={{ width: "100%" }} prefix="-" onChange={handleOnChangeCreditAmount} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </>
             )}
-
             <Divider>{t("toID")}</Divider>
-
             <Checkbox onChange={handleOnChangeFreeCredit}>
               <div>&nbsp;Free Credit</div>
             </Checkbox>
-
             <Form.List name="users">
               {(fields, { add, remove }) => (
                 <>
@@ -241,7 +251,6 @@ const Transfer = ({ type }: DepositProps) => {
                 </>
               )}
             </Form.List>
-
             <Row>
               <CommonButton text="submit" />
             </Row>
