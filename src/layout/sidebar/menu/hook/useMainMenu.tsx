@@ -157,6 +157,12 @@ export const useMainMenu = () => {
           icon: <FileSearchOutlined />,
           hidden: userInfo && userInfo.userType === 3,
         },
+        {
+          label: t("Rebate Record"),
+          key: "/rebate-record",
+          icon: <FileSearchOutlined />,
+          hidden: userInfo && userInfo.userType >= 3,
+        },
       ],
     },
     {

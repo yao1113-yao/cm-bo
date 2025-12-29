@@ -29,6 +29,7 @@ import UserList from "./pages/setting/user/list/List";
 import CompanyList from "./pages/setting/company/list/List";
 import BankRecordHaventAssign from "./pages/bank/bank-record-havent-assign/BankRecordHaventAssign";
 import DeviceCase from "./pages/report/device-case/DeviceCase";
+import RebateRecord from "./pages/bank/rebate-record/RebateRecord";
 
 interface IProtectedType {
   roles: Array<number>;
@@ -56,6 +57,7 @@ function App() {
         { path: "/bank-transaction", element: <Protected roles={[2]} component={<Bank />} /> },
         { path: "/bank-transaction/havent-assign", element: <Protected roles={[2, 4, 5]} component={<BankRecordHaventAssign />} /> },
         { path: "/match-bank-later", element: <Protected roles={[1, 2]} component={<MatchBankLater />} /> },
+        { path: "/rebate-record", element: <Protected roles={[1, 2]} component={<RebateRecord />} /> },
         { path: "/company-bank", element: <Protected roles={[2]} component={<BankBalance />} /> },
         { path: "/kiosk-balance", element: <Protected roles={[2]} component={<KioskBalance />} /> },
         { path: "/kiosk-log", element: <Protected roles={[1, 2]} component={<KioskLog />} /> },

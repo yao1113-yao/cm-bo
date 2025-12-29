@@ -347,3 +347,20 @@ export interface IPlayerTask {
   updateDate: Date;
   gameName: string;
 }
+
+export interface IRebateRecordType {
+  srno: number;
+  game: string;
+  gameID: string;
+  name: string;
+  hpNo: string;
+  mDevice: string;
+  freePoint: string;
+  minCuci: number;
+  maxCuci: number;
+  bank: string;
+  bankIn: number;
+  bankOut: number;
+  rebatePercentage: number;
+  rebateAmount: number;
+}
