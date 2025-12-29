@@ -1,6 +1,6 @@
 import CommonButton from "../../../components/CommonButton";
 import { useRebateRecord } from "./hook/useRebateRecord";
-import { Button, Card, Col, DatePicker, Divider, Form, Row, Space, Spin, Table } from "antd";
+import { Button, Card, Col, DatePicker, Divider, Form, Row, Spin, Table } from "antd";
 import { FileOutlined } from "@ant-design/icons";
 import { handleExportExcel } from "../../../function/CommonFunction";
 const { RangePicker } = DatePicker;
